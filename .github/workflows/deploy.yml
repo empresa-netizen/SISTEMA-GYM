@@ -42,8 +42,19 @@ jobs:
           node-version: '20'
           cache: npm
 
+      - name: Ensure Laravel writable paths
+        run: |
+          mkdir -p storage/framework/{sessions,views,cache/data,testing} storage/logs bootstrap/cache
+          chmod -R 777 storage bootstrap/cache
+
       - name: Install Composer (production)
-        run: composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
+        run: composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-scripts
+
+      - name: Discover packages
+        run: |
+          test -f .env || cp .env.example .env
+          php -r "file_exists('vendor/autoload.php') || exit(0);"
+          php artisan package:discover --ansi || true
 
       - name: Build assets
         run: |
