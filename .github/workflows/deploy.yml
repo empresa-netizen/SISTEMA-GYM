@@ -1,5 +1,8 @@
 name: Deploy
 
+# Manual only — avoids auto-deploys without server secrets.
+# Run after CI is green: Actions → Deploy → Run workflow.
+
 on:
   workflow_dispatch:
     inputs:
@@ -11,23 +14,16 @@ on:
         options:
           - production
           - staging
-  push:
-    branches: [main]
-    paths-ignore:
-      - '**.md'
-      - 'docs/**'
+      skip_remote:
+        description: Skip SSH/rsync (build-only dry run)
+        required: true
+        default: true
+        type: boolean
 
 jobs:
-  ci-gate:
-    name: CI gate
-    uses: ./.github/workflows/ci.yml
-
-  deploy:
-    name: Deploy via SSH/Rsync
-    needs: ci-gate
+  build:
+    name: Production build
     runs-on: ubuntu-latest
-    environment: ${{ github.event.inputs.environment || 'production' }}
-    if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
 
     steps:
       - name: Checkout
@@ -53,25 +49,68 @@ jobs:
         run: |
           npm ci
           NODE_ENV=production npm run build
-          test -f public/build/manifest.json || test -f public/build/.vite/manifest.json
+          if [ ! -f public/build/manifest.json ] && [ -f public/build/.vite/manifest.json ]; then
+            cp public/build/.vite/manifest.json public/build/manifest.json
+          fi
+          test -f public/build/manifest.json
+          test -f public/build/css/app.min.css
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-build
+          path: |
+            public/build
+            vendor
+          retention-days: 3
+          if-no-files-found: error
+
+  deploy:
+    name: Deploy via SSH/Rsync
+    needs: build
+    runs-on: ubuntu-latest
+    if: ${{ inputs.skip_remote == false }}
+    environment: ${{ inputs.environment }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: production-build
+
+      - name: Setup PHP (for composer on artifact fallback)
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer:v2
+
+      - name: Ensure vendor present
+        run: |
+          if [ ! -d vendor ]; then
+            composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
+          fi
 
       - name: Configure SSH
-        if: ${{ secrets.DEPLOY_HOST != '' }}
         env:
           DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
         run: |
+          test -n "$DEPLOY_SSH_KEY" || { echo "Missing DEPLOY_SSH_KEY secret"; exit 1; }
+          test -n "${{ secrets.DEPLOY_HOST }}" || { echo "Missing DEPLOY_HOST secret"; exit 1; }
           mkdir -p ~/.ssh
-          echo "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
 
       - name: Rsync to server
-        if: ${{ secrets.DEPLOY_HOST != '' }}
         env:
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
         run: |
+          test -n "$DEPLOY_USER" && test -n "$DEPLOY_HOST" && test -n "$DEPLOY_PATH"
           rsync -az --delete \
             --exclude='.git' \
             --exclude='.github' \
@@ -86,7 +125,6 @@ jobs:
             ./ "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/"
 
       - name: Remote post-deploy
-        if: ${{ secrets.DEPLOY_HOST != '' }}
         env:
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
@@ -95,9 +133,3 @@ jobs:
           ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new \
             "${DEPLOY_USER}@${DEPLOY_HOST}" \
             "cd '${DEPLOY_PATH}' && chmod +x deploy.sh && ./deploy.sh --skip-assets"
-
-      - name: Skip notice (secrets missing)
-        if: ${{ secrets.DEPLOY_HOST == '' }}
-        run: |
-          echo "DEPLOY_HOST secret not set — build artifacts validated; remote deploy skipped."
-          echo "Configure repository secrets: DEPLOY_HOST, DEPLOY_USER, DEPLOY_PATH, DEPLOY_SSH_KEY"
