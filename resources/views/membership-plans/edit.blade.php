@@ -1,111 +1,98 @@
 @extends('layouts.master')
 
-@section('title')
-    Edit Membership Plan
-@endsection
+@section('title', 'Editar plano')
 
 @section('content')
-    @component('components.breadcrumb')
-        @slot('li_1')
-            Membership Plans
-        @endslot
-        @slot('title')
-            Edit Plan
-        @endslot
-    @endcomponent
+@php
+    $durationTypes = [
+        'daily' => 'Diário',
+        'weekly' => 'Semanal',
+        'monthly' => 'Mensal',
+        'quarterly' => 'Trimestral',
+        'half_yearly' => 'Semestral',
+        'yearly' => 'Anual',
+        'lifetime' => 'Vitalício',
+    ];
+@endphp
 
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title mb-0">Edit Membership Plan</h4>
+<div class="prime-clients-page">
+    <div class="prime-clients-toolbar">
+        <div class="prime-clients-toolbar__left">
+            <h1 class="prime-page-title mb-0">{{ $membershipPlan->name }}</h1>
+            <div class="prime-clients-counters">
+                <span class="prime-clients-counter">
+                    <i class="ri-pencil-line"></i>
+                    Editar plano de consultoria
+                </span>
+            </div>
+        </div>
+        <div class="prime-clients-toolbar__right">
+            <a href="{{ route('membership-plans.show', $membershipPlan) }}" class="prime-btn-ghost">
+                <i class="ri-eye-line"></i> Ver
+            </a>
+            <a href="{{ route('membership-plans.index') }}" class="prime-btn-ghost">
+                <i class="ri-arrow-left-line"></i> Voltar
+            </a>
+        </div>
+    </div>
+
+    <form action="{{ route('membership-plans.update', $membershipPlan->id) }}" method="POST" class="prime-form-stack">
+        @csrf
+        @method('PUT')
+
+        <div class="prime-panel prime-panel--compact">
+            <div class="prime-panel-label mb-3">Dados do plano</div>
+            <div class="prime-form-grid">
+                <div>
+                    <label for="name" class="prime-field-label">Nome do plano</label>
+                    <input type="text" class="prime-field @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name', $membershipPlan->name) }}" required>
+                    @error('name')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                 </div>
-                <div class="card-body">
-                    <form action="{{ route('membership-plans.update', $membershipPlan->id) }}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="name" class="form-label">Plan Name</label>
-                                <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
-                                    name="name" value="{{ old('name', $membershipPlan->name) }}" required>
-                                @error('name')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="price" class="form-label">Price</label>
-                                <input type="number" step="0.01" class="form-control @error('price') is-invalid @enderror"
-                                    id="price" name="price" value="{{ old('price', $membershipPlan->price) }}" required>
-                                @error('price')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="duration_type" class="form-label">Duration Type</label>
-                                <select class="form-select @error('duration_type') is-invalid @enderror" id="duration_type"
-                                    name="duration_type" required>
-                                    <option value="daily" {{ $membershipPlan->duration_type == 'daily' ? 'selected' : '' }}>Daily
-                                    </option>
-                                    <option value="weekly" {{ $membershipPlan->duration_type == 'weekly' ? 'selected' : '' }}>
-                                        Weekly</option>
-                                    <option value="monthly" {{ $membershipPlan->duration_type == 'monthly' ? 'selected' : '' }}>
-                                        Monthly</option>
-                                    <option value="quarterly"
-                                        {{ $membershipPlan->duration_type == 'quarterly' ? 'selected' : '' }}>Quarterly</option>
-                                    <option value="half_yearly"
-                                        {{ $membershipPlan->duration_type == 'half_yearly' ? 'selected' : '' }}>Half Yearly
-                                    </option>
-                                    <option value="yearly" {{ $membershipPlan->duration_type == 'yearly' ? 'selected' : '' }}>
-                                        Yearly</option>
-                                    <option value="lifetime" {{ $membershipPlan->duration_type == 'lifetime' ? 'selected' : '' }}>
-                                        Lifetime</option>
-                                </select>
-                                @error('duration_type')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="duration_value" class="form-label">Duration Value</label>
-                                <input type="number" class="form-control @error('duration_value') is-invalid @enderror"
-                                    id="duration_value" name="duration_value"
-                                    value="{{ old('duration_value', $membershipPlan->duration_value) }}" required>
-                                @error('duration_value')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-md-12 mb-3">
-                                <label for="description" class="form-label">Description</label>
-                                <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description"
-                                    rows="3">{{ old('description', $membershipPlan->description) }}</textarea>
-                                @error('description')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" role="switch" id="personal_training"
-                                        name="personal_training" value="1"
-                                        {{ old('personal_training', $membershipPlan->personal_training) ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="personal_training">Includes Personal Training</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" role="switch" id="is_active"
-                                        name="is_active" value="1"
-                                        {{ old('is_active', $membershipPlan->is_active) ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="is_active">Active</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="text-end">
-                            <a href="{{ route('membership-plans.index') }}" class="btn btn-light">Cancel</a>
-                            <button type="submit" class="btn btn-primary">Update Plan</button>
-                        </div>
-                    </form>
+                <div>
+                    <label for="price" class="prime-field-label">Preço (R$)</label>
+                    <input type="number" step="0.01" class="prime-field @error('price') is-invalid @enderror" id="price" name="price" value="{{ old('price', $membershipPlan->price) }}" required>
+                    @error('price')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                </div>
+                <div>
+                    <label for="duration_type" class="prime-field-label">Tipo de duração</label>
+                    <select class="prime-field @error('duration_type') is-invalid @enderror" id="duration_type" name="duration_type" required>
+                        @foreach($durationTypes as $value => $label)
+                            <option value="{{ $value }}" @selected(old('duration_type', $membershipPlan->duration_type) === $value)>{{ $label }}</option>
+                        @endforeach
+                    </select>
+                    @error('duration_type')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                </div>
+                <div>
+                    <label for="duration_value" class="prime-field-label">Quantidade</label>
+                    <input type="number" class="prime-field @error('duration_value') is-invalid @enderror" id="duration_value" name="duration_value" value="{{ old('duration_value', $membershipPlan->duration_value) }}" required>
+                    @error('duration_value')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                </div>
+                <div class="prime-form-grid__full">
+                    <label for="description" class="prime-field-label">Descrição</label>
+                    <textarea class="prime-field @error('description') is-invalid @enderror" id="description" name="description" rows="3">{{ old('description', $membershipPlan->description) }}</textarea>
+                    @error('description')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                 </div>
             </div>
         </div>
-    </div>
+
+        <div class="prime-panel prime-panel--compact">
+            <div class="prime-panel-label mb-3">Configurações</div>
+            <div class="prime-form-switches">
+                <label class="prime-switch">
+                    <input type="checkbox" id="personal_training" name="personal_training" value="1" @checked(old('personal_training', $membershipPlan->personal_training))>
+                    <span>Inclui treino personalizado</span>
+                </label>
+                <label class="prime-switch">
+                    <input type="checkbox" id="is_active" name="is_active" value="1" @checked(old('is_active', $membershipPlan->is_active))>
+                    <span>Plano ativo</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="prime-form-actions">
+            <a href="{{ route('membership-plans.index') }}" class="prime-btn-ghost">Cancelar</a>
+            <button type="submit" class="prime-btn-primary"><i class="ri-save-line"></i> Salvar plano</button>
+        </div>
+    </form>
+</div>
 @endsection

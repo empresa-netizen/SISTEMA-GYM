@@ -1,11 +1,6 @@
 <?php
 
-use App\Models\Category;
 use App\Models\MembershipPlan;
-use App\Models\PlatformSubscriptionTier;
-use App\Models\Product;
-use App\Models\ProductCategory;
-use App\Models\Tenant;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 
@@ -166,35 +161,37 @@ describe('CategoryDataTable', function () {
 
 /*
 |--------------------------------------------------------------------------
-| MembershipPlanDataTable Tests
+| MembershipPlan Index Tests
 |--------------------------------------------------------------------------
-| These tests verify the MembershipPlanDataTable page loads correctly with
-| proper structure and export functionality.
+| These tests verify the membership plans listing page loads correctly with
+| the Prime card UI (no Yajra DataTable).
 */
 
-describe('MembershipPlanDataTable', function () {
+describe('MembershipPlanIndex', function () {
     beforeEach(function () {
         $this->owner = User::factory()->create(['email_verified_at' => now()]);
         $this->owner->assignRole('owner');
     });
 
-    test('loads membership plan listing page with datatable structure', function () {
+    test('loads membership plan listing page with prime cards', function () {
+        MembershipPlan::create([
+            'parent_id' => $this->owner->id,
+            'name' => 'Prime Plan',
+            'price' => 199,
+            'duration_type' => 'monthly',
+            'duration_value' => 1,
+            'is_active' => true,
+        ]);
+
         $this->actingAs($this->owner)
             ->get(route('membership-plans.index'))
             ->assertOk()
-            ->assertSee('membership-table')
-            ->assertSee('datatables-basic');
+            ->assertSee('Meus produtos')
+            ->assertSee('Prime Plan')
+            ->assertSee('prime-product-card');
     });
 
-    test('datatable has export buttons', function () {
-        $this->actingAs($this->owner)
-            ->get(route('membership-plans.index'))
-            ->assertOk()
-            ->assertSee('Copy')
-            ->assertSee('Excel');
-    });
-
-    test('unauthenticated user cannot access membership plan datatable', function () {
+    test('unauthenticated user cannot access membership plan index', function () {
         $this->get(route('membership-plans.index'))
             ->assertRedirect(route('login'));
     });

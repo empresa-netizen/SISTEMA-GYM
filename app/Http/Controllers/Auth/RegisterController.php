@@ -8,6 +8,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Models\Role;
 
 class RegisterController extends Controller
 {
@@ -52,7 +53,7 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'avatar' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:1024'],
+            'avatar' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:1024'],
         ]);
     }
 
@@ -63,8 +64,9 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        // return request()->file('avatar');
-        if (request()->has('avatar')) {
+        $avatarName = 'avatar-1.jpg';
+
+        if (request()->hasFile('avatar')) {
             $avatar = request()->file('avatar');
             $avatarName = time().'.'.$avatar->getClientOriginalExtension();
             $avatarPath = public_path('/images/');
@@ -77,5 +79,14 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
             'avatar' => $avatarName,
         ]);
+    }
+
+    protected function registered($request, $user)
+    {
+        $role = Role::where('name', 'owner')->first();
+
+        if ($role) {
+            $user->assignRole($role);
+        }
     }
 }

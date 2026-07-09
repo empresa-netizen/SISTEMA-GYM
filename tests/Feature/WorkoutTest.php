@@ -36,7 +36,8 @@ test('owner can list workouts', function () {
     $this->actingAs($this->owner)
         ->get(route('workouts.index'))
         ->assertOk()
-        ->assertSee($workout->name);
+        ->assertSee('Prescrições de treino')
+        ->assertSee('Full Body');
 });
 
 test('owner can create workout with activities', function () {
@@ -98,7 +99,8 @@ test('owner can delete workout', function () {
 
     $this->actingAs($this->owner)
         ->delete(route('workouts.destroy', $workout))
-        ->assertRedirect(route('workouts.index'));
+        ->assertOk()
+        ->assertJson(['status' => true]);
 
     $this->assertModelMissing($workout);
 });
@@ -138,15 +140,15 @@ test('owner cannot access workouts from other tenant', function () {
 
     $this->actingAs($this->owner)
         ->get(route('workouts.show', $otherWorkout))
-        ->assertForbidden();
+        ->assertNotFound();
 
     $this->actingAs($this->owner)
         ->put(route('workouts.update', $otherWorkout), [
             'name' => 'Hacked',
         ])
-        ->assertForbidden();
+        ->assertNotFound();
 
     $this->actingAs($this->owner)
         ->delete(route('workouts.destroy', $otherWorkout))
-        ->assertForbidden();
+        ->assertNotFound();
 });

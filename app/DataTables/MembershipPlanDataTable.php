@@ -23,26 +23,38 @@ class MembershipPlanDataTable extends DataTable
             ->eloquent($query)
             ->addIndexColumn()
             ->editColumn('duration', function ($query) {
-                return $query->duration_value.' '.ucfirst($query->duration_type);
+                $types = [
+                    'daily' => 'dia(s)',
+                    'weekly' => 'semana(s)',
+                    'monthly' => 'mês(es)',
+                    'quarterly' => 'trimestre(s)',
+                    'half_yearly' => 'semestre(s)',
+                    'yearly' => 'ano(s)',
+                    'lifetime' => 'vitalício',
+                ];
+                $type = $types[$query->duration_type] ?? $query->duration_type;
+
+                return $query->duration_type === 'lifetime'
+                    ? 'Vitalício'
+                    : $query->duration_value.' '.$type;
+            })
+            ->editColumn('price', function ($query) {
+                return 'R$ '.number_format($query->price, 2, ',', '.');
             })
             ->addColumn('active', function ($query) {
-                if ($query->is_active) {
-                    return '<span class="badge bg-success">Active</span>';
-                } else {
-                    return '<span class="badge bg-secondary">Inactive</span>';
-                }
+                return $query->is_active
+                    ? '<span class="badge bg-success">Ativo</span>'
+                    : '<span class="badge bg-secondary">Inativo</span>';
             })
             ->addColumn('personal_training', function ($query) {
-                if ($query->personal_training) {
-                    return '<span class="badge bg-info">Yes</span>';
-                } else {
-                    return '<span class="badge bg-secondary">No</span>';
-                }
+                return $query->personal_training
+                    ? '<span class="badge bg-info">Sim</span>'
+                    : '<span class="badge bg-secondary">Não</span>';
             })
             ->addColumn('action', function ($query) {
                 return $query->action_buttons;
             })
-            ->rawColumns(['duration', 'active', 'personal_training', 'action']);
+            ->rawColumns(['duration', 'price', 'active', 'personal_training', 'action']);
     }
 
     public function query(MembershipPlan $model)
@@ -67,13 +79,13 @@ class MembershipPlanDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::computed('DT_RowIndex', 'No'),
-            Column::make('name')->title('Name'),
-            Column::make('price')->title('Price'),
-            Column::make('duration')->title('Duration'),
-            Column::make('active')->title('Active'),
-            Column::make('personal_training')->title('Personal Training'),
-            Column::computed('action', 'Action')
+            Column::computed('DT_RowIndex', '#'),
+            Column::make('name')->title('Nome'),
+            Column::make('price')->title('Preço'),
+            Column::make('duration')->title('Duração'),
+            Column::make('active')->title('Status'),
+            Column::make('personal_training')->title('Treino personalizado'),
+            Column::computed('action', 'Ações')
                 ->exportable(false)
                 ->printable(false)
                 ->searchable(false)

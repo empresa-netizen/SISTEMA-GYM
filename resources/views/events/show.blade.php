@@ -1,92 +1,52 @@
 @extends('layouts.master')
 
-@section('title')
-    Event Details
-@endsection
+@section('title', $event->title)
 
 @section('content')
-@component('components.breadcrumb')
-@slot('li_1')
-    Events
-@endslot
-@slot('title')
-    Event Details
-@endslot
-@endcomponent
+@php
+    $initials = collect(explode(' ', $event->title))->map(fn ($w) => mb_substr($w, 0, 1))->take(2)->implode('');
+    $statusMap = [
+        'scheduled' => ['Agendado', 'bg-info-subtle text-info'],
+        'ongoing' => ['Em andamento', 'bg-success-subtle text-success'],
+        'completed' => ['Concluído', 'bg-secondary-subtle text-secondary'],
+        'cancelled' => ['Cancelado', 'bg-danger-subtle text-danger'],
+    ];
+    $status = $statusMap[$event->status] ?? [ucfirst($event->status), 'bg-secondary'];
+@endphp
 
-<div class="row">
-    <div class="col-lg-12">
-        <div class="card">
-            <div class="card-header align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1">Event Information</h4>
-                <div class="flex-shrink-0">
-                    <a href="{{ route('events.edit', $event->id) }}" class="btn btn-primary btn-sm">
-                        <i class="ri-pencil-line align-middle me-1"></i> Edit Event
-                    </a>
-                    <a href="{{ route('events.index') }}" class="btn btn-secondary btn-sm ms-1">
-                        <i class="ri-arrow-left-line align-middle me-1"></i> Back to List
-                    </a>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4 text-center mb-4">
-                        <div class="profile-user position-relative d-inline-block mx-auto  mb-4">
-                            @if($event->image)
-                                <img src="{{ URL::asset('storage/' . $event->image) }}" class="rounded avatar-xl img-thumbnail user-profile-image" alt="event-image">
-                            @else
-                                <div class="avatar-xl">
-                                    <div class="avatar-title rounded bg-light text-primary text-uppercase fs-1">
-                                        {{ substr($event->title, 0, 2) }}
-                                    </div>
-                                </div>
-                            @endif
-                        </div>
-                        <h5 class="fs-16 mb-1">{{ $event->title }}</h5>
-                        <p class="text-muted mb-0">{{ $event->location ?? 'No location specified' }}</p>
-                    </div>
-                    <div class="col-md-8">
-                        <div class="table-responsive">
-                            <table class="table table-borderless mb-0">
-                                <tbody>
-                                    <tr>
-                                        <th class="ps-0" scope="row">Title :</th>
-                                        <td class="text-muted">{{ $event->title }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="ps-0" scope="row">Start Time :</th>
-                                        <td class="text-muted">{{ $event->start_time->format('d M, Y h:i A') }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="ps-0" scope="row">End Time :</th>
-                                        <td class="text-muted">{{ $event->end_time->format('d M, Y h:i A') }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="ps-0" scope="row">Participants :</th>
-                                        <td class="text-muted">{{ $event->registered_count }} / {{ $event->max_participants ?? 'Unlimited' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="ps-0" scope="row">Status :</th>
-                                        <td class="text-muted">
-                                            <span class="badge 
-                                                @if($event->status == 'scheduled') bg-info
-                                                @elseif($event->status == 'ongoing') bg-success
-                                                @elseif($event->status == 'completed') bg-secondary
-                                                @else bg-danger
-                                                @endif
-                                            ">{{ ucfirst($event->status) }}</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th class="ps-0" scope="row">Description :</th>
-                                        <td class="text-muted">{{ $event->description ?? 'N/A' }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+    <div>
+        <h1 class="prime-page-title">{{ $event->title }}</h1>
+        <p class="prime-page-sub">{{ $event->location ?? 'Sem local definido' }}</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{{ route('events.edit', $event) }}" class="btn btn-primary btn-sm"><i class="ri-pencil-line me-1"></i> Editar</a>
+        <a href="{{ route('events.schedule') }}" class="btn btn-outline-secondary btn-sm"><i class="ri-arrow-left-line"></i></a>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-lg-4">
+        <div class="prime-panel text-center">
+            @if($event->image)
+                <img src="{{ asset('storage/'.$event->image) }}" class="rounded mb-3 img-fluid" alt="">
+            @else
+                <div class="prime-list-avatar mx-auto mb-3" style="width:4rem;height:4rem;font-size:1.1rem">{{ strtoupper($initials) }}</div>
+            @endif
+            <span class="badge {{ $status[1] }}">{{ $status[0] }}</span>
+            @if($event->member)
+                <p class="small text-muted mt-3 mb-0">Cliente: <a href="{{ route('members.show', $event->member) }}">{{ $event->member->name }}</a></p>
+            @endif
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="prime-panel">
+            <dl class="prime-detail-grid mb-0">
+                <dt>Início</dt><dd>{{ $event->start_time->format('d/m/Y H:i') }}</dd>
+                <dt>Término</dt><dd>{{ $event->end_time->format('d/m/Y H:i') }}</dd>
+                <dt>Participantes</dt><dd>{{ $event->registered_count }} / {{ $event->max_participants ?? 'Ilimitado' }}</dd>
+                <dt>Descrição</dt><dd>{{ $event->description ?? '—' }}</dd>
+            </dl>
         </div>
     </div>
 </div>

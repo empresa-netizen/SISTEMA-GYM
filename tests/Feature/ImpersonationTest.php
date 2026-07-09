@@ -15,15 +15,15 @@ class ImpersonationTest extends TestCase
     {
         parent::setUp();
         // Create roles if they don't exist
-        if (! Role::where('name', 'admin')->exists()) {
-            Role::create(['name' => 'admin', 'guard_name' => 'web']);
+        if (! Role::where('name', 'super-admin')->exists()) {
+            Role::create(['name' => 'super-admin', 'guard_name' => 'web']);
         }
     }
 
     public function test_admin_can_impersonate_user()
     {
         $admin = User::factory()->create();
-        $admin->assignRole('admin');
+        $admin->assignRole('super-admin');
 
         $user = User::factory()->create();
 
@@ -38,7 +38,7 @@ class ImpersonationTest extends TestCase
     public function test_admin_can_leave_impersonation()
     {
         $admin = User::factory()->create();
-        $admin->assignRole('admin');
+        $admin->assignRole('super-admin');
 
         $user = User::factory()->create();
 

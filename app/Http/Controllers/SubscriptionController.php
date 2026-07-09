@@ -116,10 +116,23 @@ class SubscriptionController extends Controller
      */
     public function mySubscription(): View
     {
-        $member = Member::where('user_id', auth()->id())->firstOrFail();
-        $subscription = $member->subscriptions()->with('plan', 'transactions')->latest()->first();
+        $user = auth()->user();
+        $parentId = parentId();
+        $member = Member::where('user_id', $user->id)->first();
+        $subscription = $member?->subscriptions()->with('plan', 'transactions')->latest()->first();
+        $plans = SubscriptionPlan::where('parent_id', $parentId)
+            ->active()
+            ->orderByDesc('is_featured')
+            ->orderBy('price')
+            ->get();
+        $membersQuery = Member::where('parent_id', $parentId);
+        $memberStats = [
+            'active' => (clone $membersQuery)->active()->count(),
+            'total' => (clone $membersQuery)->count(),
+            'expired' => (clone $membersQuery)->expired()->count(),
+        ];
 
-        return view('subscriptions.my-subscription', compact('subscription'));
+        return view('subscriptions.my-subscription', compact('member', 'memberStats', 'plans', 'subscription', 'user'));
     }
 
     /**

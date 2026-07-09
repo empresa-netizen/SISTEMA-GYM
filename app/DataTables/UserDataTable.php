@@ -12,6 +12,8 @@ class UserDataTable extends DataTable
 {
     use DataTableConfigTrait;
 
+    private array $staffRoles = ['owner', 'manager', 'trainer', 'receptionist'];
+
     /**
      * Build the DataTable class.
      *
@@ -23,22 +25,17 @@ class UserDataTable extends DataTable
             ->eloquent($query)
             ->addIndexColumn()
             ->editColumn('name', function ($query) {
+                $initial = mb_strtoupper(mb_substr($query->name, 0, 1));
                 $html = '<div class="d-flex align-items-center">
                         <div class="flex-shrink-0 me-2">
-                            <div class="avatar-xs">
-                                <div class="avatar-title rounded-circle bg-soft-primary text-primary">';
-
-                $html .= substr($query->name, 0, 1);
-
-                $html .= '</div>
-                        </div>
+                            <div class="prime-collaborator-avatar">' . e($initial) . '</div>
                     </div>
                     <div class="flex-grow-1">';
 
-                $html .= $query->name;
+                $html .= '<div class="prime-collaborator-name">' . e($query->name) . '</div>';
 
                 if ($query->id == auth()->id()) {
-                    $html .= '<span class="badge bg-info ms-1">You</span>';
+                    $html .= '<span class="prime-collaborator-badge ms-1">Você</span>';
                 }
 
                 $html .= '</div>
@@ -48,22 +45,25 @@ class UserDataTable extends DataTable
             })
             ->editColumn('roles', function ($query) {
                 if (!$query->roles || $query->roles->isEmpty()) {
-                    return '<span class="badge bg-secondary">No Role</span>';
+                    return '<span class="prime-status-pill prime-status-pill--pending">Sem perfil</span>';
                 }
 
                 $badges = '';
                 foreach ($query->roles as $role) {
-                    $badges .= '<span class="badge bg-success me-1">' . ucfirst($role->name) . '</span>';
+                    $badges .= '<span class="prime-role-pill me-1">' . e($this->roleLabel($role->name)) . '</span>';
                 }
                 return $badges;
             })
+            ->addColumn('status', function ($query) {
+                return $this->statusBadge($query);
+            })
             ->addColumn('created', function ($query) {
-                return $query->created_at->format('M d, Y');
+                return $query->created_at->format('d/m/Y');
             })
             ->addColumn('action', function ($query) {
-                return $query->action_buttons;
+                return $this->actionButtons($query);
             })
-            ->rawColumns(['name', 'roles', 'created', 'action']);
+            ->rawColumns(['name', 'roles', 'status', 'created', 'action']);
     }
 
     public function query(User $model)
@@ -73,10 +73,12 @@ class UserDataTable extends DataTable
         $query = $model->newQuery()->with('roles')->where(function ($q) use ($parentId) {
             $q->where('parent_id', $parentId)
                 ->orWhere('id', $parentId);
+        })->whereHas('roles', function ($q) {
+            $q->whereIn('name', $this->staffRoles);
         });
 
-        if ($request->has('search_value')) {
-            $search = $request->search_value;
+        $search = $request->get('search_value', $request->get('search'));
+        if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                     ->orWhere('email', 'like', "%{$search}%");
@@ -88,6 +90,16 @@ class UserDataTable extends DataTable
             $query->role($request->role);
         }
 
+        if ($request->has('status') && $request->status != '') {
+            if ($request->status === 'active') {
+                $query->whereNotNull('email_verified_at');
+            }
+
+            if ($request->status === 'pending') {
+                $query->whereNull('email_verified_at');
+            }
+        }
+
         return $query->latest('users.created_at');
     }
 
@@ -95,7 +107,7 @@ class UserDataTable extends DataTable
     {
         return $this->builder()
             ->setTableId('user-table')
-            ->addTableClass('datatables-basic table table-striped')
+            ->addTableClass('datatables-basic table prime-collaborators-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->responsive(false)
@@ -107,16 +119,19 @@ class UserDataTable extends DataTable
     {
         return [
             Column::computed('DT_RowIndex', 'No'),
-            Column::make('name')->title('Name'),
+            Column::make('name')->title('Colaborador'),
             Column::make('email')->title('Email'),
-            Column::make('roles')->title('Role'),
-            Column::make('subscription')->title('Subscription'),
+            Column::make('roles')->title('Perfil'),
+            Column::computed('status')
+                ->title('Status')
+                ->searchable(false)
+                ->orderable(false),
             Column::make('created')
                 ->name('users.created_at')
-                ->title('Created')
+                ->title('Criado em')
                 ->orderable(true)
                 ->searchable(false),
-            Column::computed('action', 'Action')
+            Column::computed('action', 'Ações')
                 ->exportable(false)
                 ->printable(false)
                 ->searchable(false)
@@ -130,5 +145,48 @@ class UserDataTable extends DataTable
     protected function filename(): string
     {
         return 'User_' . date('YmdHis');
+    }
+
+    private function roleLabel(string $role): string
+    {
+        return [
+            'owner' => 'Proprietário',
+            'manager' => 'Gerente',
+            'trainer' => 'Treinador',
+            'receptionist' => 'Recepção',
+        ][$role] ?? ucfirst($role);
+    }
+
+    private function statusBadge(User $user): string
+    {
+        if ($user->email_verified_at) {
+            return '<span class="prime-status-pill prime-status-pill--active">Ativo</span>';
+        }
+
+        return '<span class="prime-status-pill prime-status-pill--pending">Pendente</span>';
+    }
+
+    private function actionButtons(User $user): string
+    {
+        $items = '';
+
+        if (auth()->user()->can('edit users')) {
+            $items .= '<li><a href="' . route('users.edit', $user) . '" class="dropdown-item"><i class="ri-pencil-line me-2"></i>Editar</a></li>';
+            $items .= '<li><a href="' . route('users.edit', $user) . '#password" class="dropdown-item"><i class="ri-lock-password-line me-2"></i>Alterar senha</a></li>';
+        }
+
+        if (auth()->user()->can('delete users') && $user->id != auth()->id()) {
+            $items .= '<li><button type="button" onclick="deleteRow(`' . route('users.destroy', $user) . '`,`' . csrf_token() . '`,`user-table`)" class="dropdown-item text-danger"><i class="ri-delete-bin-line me-2"></i>Excluir</button></li>';
+        }
+
+        if ($items === '') {
+            $items = '<li><span class="dropdown-item text-muted">Sem ações</span></li>';
+        }
+
+        return '<div class="dropdown prime-action-menu">'
+            . '<button class="prime-kebab" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Ações do colaborador"><i class="ri-more-2-fill"></i></button>'
+            . '<ul class="dropdown-menu dropdown-menu-end">'
+            . $items
+            . '</ul></div>';
     }
 }

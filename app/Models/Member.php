@@ -30,7 +30,7 @@ class Member extends Model
         'membership_start_date',
         'membership_end_date',
         'status',
-        'notes',
+        'coach_user_id',
     ];
 
     /**
@@ -115,6 +115,71 @@ class Member extends Model
         return $this->hasMany(Subscription::class);
     }
 
+    public function paymentTransactions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(PaymentTransaction::class);
+    }
+
+    public function workouts(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Workout::class);
+    }
+
+    public function anamnesis(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(MemberAnamnesis::class);
+    }
+
+    public function photos(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(MemberPhoto::class)->latest();
+    }
+
+    public function logbooks(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(MemberLogbook::class)->latest('logged_at');
+    }
+
+    public function dietPrescriptions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(DietPrescription::class)->latest();
+    }
+
+    public function cardioPlans(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(CardioPlan::class)->latest();
+    }
+
+    public function memberNotes(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(MemberNote::class)->latest('noted_at');
+    }
+
+    public function coach(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'coach_user_id');
+    }
+
+    public function feedbacks(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ClientFeedback::class)->latest();
+    }
+
+    public function healthRecords(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Health::class)->latest('measurement_date');
+    }
+
+    public function appointments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Event::class)->orderBy('start_time');
+    }
+
+    public function conversation(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Conversation::class);
+    }
+
     /**
      * Check if membership is active
      */
@@ -168,29 +233,28 @@ class Member extends Model
 
         // Delete button - check permission
         if (auth()->user()->can('delete members')) {
-            $buttons .= $this->deleteModel(route("members.destroy", $this), csrf_token(), "member-table");
+            $buttons .= $this->deleteModel(route('members.destroy', $this), csrf_token(), 'member-table');
         }
 
-
         return '<div class="d-inline-block">'
-            . '<a href="javascript:;" class="btn btn-sm btn-text-secondary rounded-pill btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-2-fill fs-17"></i></a>'
-            . '<ul class="dropdown-menu dropdown-menu-end m-0">'
-            . $buttons
-            . '</ul></div>';
+            .'<a href="javascript:;" class="btn btn-sm btn-text-secondary rounded-pill btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-2-fill fs-17"></i></a>'
+            .'<ul class="dropdown-menu dropdown-menu-end m-0">'
+            .$buttons
+            .'</ul></div>';
     }
 
     public function edit($customer)
     {
-        return '<li><a href="' . route('members.edit', $customer) . '" class="dropdown-item">Edit</a></li>';
+        return '<li><a href="'.route('members.edit', $customer).'" class="dropdown-item">Edit</a></li>';
     }
 
     public function view($customer)
     {
-        return '<li><a href="' . route('members.show', $customer) . '" class="dropdown-item">View</a></li>';
+        return '<li><a href="'.route('members.show', $customer).'" class="dropdown-item">View</a></li>';
     }
 
     public function deleteModel($route, $token, $dataTableId)
     {
-        return '<li><a href="#" onclick="deleteRow(`' . $route . '`,`' . $token . '`' . ',`' . $dataTableId . '`' . ')" title="Delete" class="dropdown-item text-danger">Delete</a></li>';
+        return '<li><a href="#" onclick="deleteRow(`'.$route.'`,`'.$token.'`'.',`'.$dataTableId.'`'.')" title="Delete" class="dropdown-item text-danger">Delete</a></li>';
     }
 }

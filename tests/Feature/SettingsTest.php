@@ -22,6 +22,16 @@ test('owner can list settings', function () {
         ->assertSee('My Gym');
 });
 
+test('owner can open account settings hub', function () {
+    $this->actingAs($this->owner)
+        ->get(route('account.settings'))
+        ->assertOk()
+        ->assertSee('Configurações')
+        ->assertSee('Identidade visual')
+        ->assertSee('Logs de E-mail')
+        ->assertSee('Central de Ajuda');
+});
+
 test('owner can update settings', function () {
     $this->actingAs($this->owner)
         ->post(route('settings.update'), [

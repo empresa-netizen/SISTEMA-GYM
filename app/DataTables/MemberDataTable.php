@@ -3,24 +3,32 @@
 namespace App\DataTables;
 
 use App\Models\Member;
-use App\Models\MembershipPlan;
 use App\Traits\DataTableConfigTrait;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-use Yajra\DataTables\EloquentDataTable;
-use Yajra\DataTables\Html\Builder as HtmlBuilder;
-use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Html\Editor\Editor;
-use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
 class MemberDataTable extends DataTable
 {
     use DataTableConfigTrait;
+
+    private function statusBadge(string $status): string
+    {
+        $labels = [
+            'active' => ['Ativo', 'bg-success'],
+            'inactive' => ['Inativo', 'bg-secondary'],
+            'expired' => ['Expirado', 'bg-danger'],
+            'suspended' => ['Suspenso', 'bg-warning text-dark'],
+        ];
+        [$label, $class] = $labels[$status] ?? [ucfirst($status), 'bg-secondary'];
+
+        return '<span class="badge '.$class.'">'.$label.'</span>';
+    }
+
     /**
      * Build the DataTable class.
      *
-     * @param QueryBuilder<Member> $query Results from query() method.
+     * @param  QueryBuilder<Member>  $query  Results from query() method.
      */
     public function dataTable($query)
     {
@@ -31,29 +39,22 @@ class MemberDataTable extends DataTable
                 if ($query->membershipPlan) {
                     return '<span class="badge bg-info">'.$query->membershipPlan->name.'</span>';
                 } else {
-                    return ' <span class="badge bg-secondary">No Plan</span>';
+                    return ' <span class="badge bg-secondary">Sem plano</span>';
                 }
             })
             ->addColumn('status', function ($query) {
-                if ($query->status) {
-                    return '<span class="badge bg-success">'.ucfirst($query->status).'</span>';
-                } elseif($query->status == 'inactive') {
-                    return '<span class="badge bg-secondary">'.ucfirst($query->status).'</span>';
-                }elseif($query->status == 'expired') {
-                    return '<span class="badge bg-danger">'.ucfirst($query->status).'</span>';
-                } else {
-                    return '<span class="badge bg-warning text-dark">'.ucfirst($query->status).'</span>';
-                }
+                return $this->statusBadge($query->status);
             })
             ->addColumn('expiry_date', function ($query) {
-               if ($query->membership_end_date){
-                   if ($query->isExpired()){
-                       return '<span class="badge bg-danger ms-1">Expired</span>';
-                   }
-                   return $query->membership_end_date->format('M d, Y');
-               } else {
-                   return ' <span class="text-muted">Lifetime</span>';
-               }
+                if ($query->membership_end_date) {
+                    if ($query->isExpired()) {
+                        return '<span class="badge bg-danger">Expirado</span>';
+                    }
+
+                    return $query->membership_end_date->format('d/m/Y');
+                } else {
+                    return ' <span class="text-muted">Vitalício</span>';
+                }
 
             })
             ->addColumn('action', function ($query) {
@@ -68,8 +69,7 @@ class MemberDataTable extends DataTable
 
         $request = $this->request;
 
-        $query =  $model->newQuery()->with('membershipPlan')->where('parent_id', $parentId);
-
+        $query = $model->newQuery()->with('membershipPlan')->where('parent_id', $parentId);
 
         if ($request->has('search_value')) {
             $search = $request->search_value;
@@ -91,6 +91,7 @@ class MemberDataTable extends DataTable
             $query->where('membership_plan_id', $request->plan);
         }
         $query = $query->latest();
+
         return $query;
     }
 
@@ -109,14 +110,14 @@ class MemberDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::computed('DT_RowIndex', 'No'),
-            Column::make('name')->title('Name'),
-            Column::make('email')->title('Email'),
-            Column::make('phone')->title('Phone'),
-            Column::make('membership_plan')->title('Plan'),
+            Column::computed('DT_RowIndex', '#'),
+            Column::make('name')->title('Nome'),
+            Column::make('email')->title('E-mail'),
+            Column::make('phone')->title('Telefone'),
+            Column::make('membership_plan')->title('Plano'),
             Column::make('status')->title('Status'),
-            Column::make('expiry_date')->title('Expiry Date'),
-            Column::computed('action', 'Action')
+            Column::make('expiry_date')->title('Vencimento'),
+            Column::computed('action', 'Ações')
                 ->exportable(false)
                 ->printable(false)
                 ->searchable(false)
@@ -129,6 +130,6 @@ class MemberDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Member_' . date('YmdHis');
+        return 'Member_'.date('YmdHis');
     }
 }

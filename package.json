@@ -1,13 +1,15 @@
 {
     "private": true,
-    "name": "velzon",
-    "version": "4.3.0",
+    "name": "mgteam-sistema-gym",
+    "version": "1.0.0",
     "type": "module",
-    "author": "Themesbrand",
+    "author": "MGTEAM",
     "scripts": {
         "clean": "rimraf public/build",
         "dev": "vite",
         "build": "npm run clean && vite build",
+        "build:prod": "NODE_ENV=production npm run build",
+        "ci:build": "npm ci && NODE_ENV=production npm run build",
         "build-rtl": "rtlcss public/build/css/app.min.css & rtlcss public/build/css/bootstrap.min.css"
     },
     "devDependencies": {

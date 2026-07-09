@@ -1,35 +1,45 @@
-
 import { defineConfig } from 'vite';
 import laravel, { refreshPaths } from 'laravel-vite-plugin';
-
 import fs from 'fs-extra';
 import path from 'path';
 
 const folder = {
-    src: "resources/", // source files
-    src_assets: "resources/", // source assets files
-    dist: "public/", // build files
-    dist_assets: "public/build/" //build assets files
+    src: 'resources/',
+    src_assets: 'resources/',
+    dist: 'public/',
+    dist_assets: 'public/build/',
 };
+
+const isProd = process.env.NODE_ENV === 'production';
 
 export default defineConfig({
     build: {
         manifest: true,
-        rtl: true,
         outDir: 'public/build/',
+        emptyOutDir: true,
         cssCodeSplit: true,
+        minify: 'esbuild',
+        sourcemap: false,
+        reportCompressedSize: false,
         rollupOptions: {
             output: {
-                assetFileNames: (css) => {
-                    if (css.name.split('.').pop() == 'css') {
-                        return 'css/' + `[name]` + '.min.' + 'css';
-                    } else {
-                        return 'icons/' + css.name;
+                assetFileNames: (assetInfo) => {
+                    const name = assetInfo.name || 'asset';
+                    if (name.split('.').pop() === 'css') {
+                        return 'css/[name].min.css';
                     }
+
+                    return 'icons/' + name;
                 },
-                entryFileNames: 'js/' + `[name]` + `.js`,
+                entryFileNames: 'js/[name].js',
+                chunkFileNames: 'js/[name]-[hash].js',
             },
         },
+    },
+    esbuild: {
+        // Remove console.* e debugger no build de produção
+        drop: isProd ? ['console', 'debugger'] : [],
+        legalComments: 'none',
     },
     css: {
         preprocessorOptions: {
@@ -44,26 +54,33 @@ export default defineConfig({
         },
     },
     plugins: [
-        laravel(
-            {
-                input: [
-                    'resources/scss/bootstrap.scss',
-                    'resources/scss/icons.scss',
-                    'resources/scss/app.scss',
-                    'resources/scss/custom.scss',
-                ],
-                refresh: [
-                    ...refreshPaths,
-                    'resources/views/**',
-                ],
-            }
-        ),
+        laravel({
+            input: [
+                'resources/scss/bootstrap.scss',
+                'resources/scss/icons.scss',
+                'resources/scss/app.scss',
+                'resources/scss/custom.scss',
+            ],
+            refresh: [
+                ...refreshPaths,
+                'resources/views/**',
+            ],
+        }),
         {
             name: 'copy-specific-packages',
             async writeBundle() {
+                // Laravel espera public/build/manifest.json; Vite 5 pode emitir em .vite/
+                try {
+                    const viteManifest = path.join(folder.dist_assets, '.vite', 'manifest.json');
+                    const laravelManifest = path.join(folder.dist_assets, 'manifest.json');
+                    if (await fs.pathExists(viteManifest)) {
+                        await fs.copy(viteManifest, laravelManifest);
+                    }
+                } catch (error) {
+                    console.error('Error copying Vite manifest:', error);
+                }
 
                 try {
-                    // Copy images, json, fonts, and js
                     await Promise.all([
                         fs.copy(folder.src_assets + 'fonts', folder.dist_assets + 'fonts'),
                         fs.copy(folder.src_assets + 'images', folder.dist_assets + 'images'),
@@ -74,7 +91,7 @@ export default defineConfig({
                     console.error('Error copying assets:', error);
                 }
 
-                const outputPath = path.resolve(__dirname, folder.dist_assets); // Adjust the destination path
+                const outputPath = path.resolve(__dirname, folder.dist_assets);
                 const configPath = path.resolve(__dirname, 'package-copy-config.json');
 
                 try {
@@ -83,15 +100,14 @@ export default defineConfig({
 
                     for (const packageName of packagesToCopy) {
                         const destPackagePath = path.join(outputPath, 'libs', packageName);
-
-                        const sourcePath = (fs.existsSync(path.join(__dirname, 'node_modules', packageName + "/dist"))) ?
-                            path.join(__dirname, 'node_modules', packageName + "/dist")
+                        const sourcePath = fs.existsSync(path.join(__dirname, 'node_modules', packageName + '/dist'))
+                            ? path.join(__dirname, 'node_modules', packageName + '/dist')
                             : path.join(__dirname, 'node_modules', packageName);
 
                         try {
                             await fs.access(sourcePath, fs.constants.F_OK);
                             await fs.copy(sourcePath, destPackagePath);
-                        } catch (error) {
+                        } catch {
                             console.error(`Package ${packageName} does not exist.`);
                         }
                     }
@@ -100,7 +116,5 @@ export default defineConfig({
                 }
             },
         },
-
     ],
 });
-

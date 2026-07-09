@@ -1,44 +1,51 @@
 @extends('layouts.master')
 
-@section('title') Support Tickets @endsection
+@section('title', 'Suporte')
 
 @section('content')
-@component('components.breadcrumb')
-@slot('li_1') Support @endslot
-@slot('title') Support Tickets @endslot
-@endcomponent
-
-<div class="row">
-    <div class="col-lg-12">
-        <div class="card">
-            <div class="card-header align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1">Support Tickets</h4>
-                <div class="flex-shrink-0">
-                    <a href="{{ route('support-tickets.create') }}" class="btn btn-success btn-sm">
-                        <i class="ri-add-line me-1"></i> Create Ticket
-                    </a>
-                </div>
-            </div>
-
-            <div class="card-body">
-                @if(session('success'))
-                    <div class="alert alert-success alert-dismissible fade show">
-                        <i class="ri-check-line me-2"></i> {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                @endif
-
-                <div class="table-responsive">
-                    {!! $dataTable->table() !!}
-                </div>
-
-
+<div class="prime-clients-page">
+    <div class="prime-clients-toolbar">
+        <div class="prime-clients-toolbar__left">
+            <h1 class="prime-page-title mb-0">Central de ajuda</h1>
+            <div class="prime-clients-counters">
+                <span class="prime-clients-counter">
+                    <i class="ri-customer-service-2-line"></i>
+                    FAQ e tickets
+                </span>
             </div>
         </div>
+        <div class="prime-clients-toolbar__right">
+            <a href="{{ route('support-tickets.create') }}" class="prime-btn-primary">
+                <i class="ri-add-line"></i> Novo ticket
+            </a>
+        </div>
+    </div>
+
+    <p class="prime-page-sub mb-0">Tickets de suporte e dúvidas.</p>
+
+    <div class="row g-2">
+        @foreach([
+            ['q' => 'Quais são as taxas cobradas por cada venda?', 'a' => 'No clone local as taxas são simuladas. No Prime original, consulte a aba Taxas e prazos.'],
+            ['q' => 'Como funciona a área financeira?', 'a' => 'Acesse Financeiro para ver saldo, transações, saques e relatórios.'],
+            ['q' => 'Como prescrever treinos?', 'a' => 'Vá em Treinos → Nova prescrição, escolha o cliente e adicione exercícios da biblioteca.'],
+            ['q' => 'Como cadastrar clientes?', 'a' => 'Clientes → Novo cliente, vincule ao plano de consultoria.'],
+        ] as $faq)
+        <div class="col-md-6">
+            <div class="prime-panel prime-panel--compact h-100">
+                <h6 class="mb-2">{{ $faq['q'] }}</h6>
+                <p class="text-muted small mb-0">{{ $faq['a'] }}</p>
+            </div>
+        </div>
+        @endforeach
+    </div>
+
+    <div class="prime-panel prime-panel--compact">
+        <div class="prime-panel-label mb-3">MEUS TICKETS</div>
+        <div class="table-responsive">{!! $dataTable->table() !!}</div>
     </div>
 </div>
 @endsection
 
 @section('script')
-    {!! $dataTable->scripts() !!}
+{!! $dataTable->scripts() !!}
 @endsection

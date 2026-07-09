@@ -1,42 +1,30 @@
 @extends('layouts.master')
 
-@section('title') Notice Board @endsection
+@section('title', 'Quadro de Avisos')
 
 @push('css')
 <link href="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
 @endpush
 
 @section('content')
-@component('components.breadcrumb')
-@slot('li_1') CRM @endslot
-@slot('li_1')
-    Management
-@endslot
-@slot('title')
-    Notice Board
-@endslot
-@endcomponent
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2 prime-page-header">
+    <div>
+        <h1 class="prime-page-title">Quadro de Avisos</h1>
+        <p class="prime-page-sub">Publique e acompanhe comunicados da MGTEAM FITNESS &amp; HEALTH.</p>
+    </div>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#noticeModal" onclick="openCreateModal()">
+        <i class="ri-add-line align-bottom me-1"></i> Novo aviso
+    </button>
+</div>
 
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <div class="d-flex align-items-center justify-content-between">
-                    <h4 class="card-title mb-0">Notice Board</h4>
-                    <div class="d-flex gap-2">
-                        <div class="search-box">
-                            <form action="{{ route('notice-boards.index') }}" method="GET">
-                                <input type="text" class="form-control search" name="search" value="{{ request('search') }}" placeholder="Search notices...">
-                                <i class="ri-search-line search-icon"></i>
-                            </form>
-                        </div>
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#noticeModal" onclick="openCreateModal()">
-                            <i class="ri-add-line align-bottom me-1"></i> Add Notice
-                        </button>
-                    </div>
-                </div>
+<div class="prime-panel mb-3">
+    <div class="prime-panel-body">
+        <form action="{{ route('notice-boards.index') }}" method="GET">
+            <div class="search-box">
+                <input type="text" class="form-control search" name="search" value="{{ request('search') }}" placeholder="Buscar avisos...">
+                <i class="ri-search-line search-icon"></i>
             </div>
-        </div>
+        </form>
     </div>
 </div>
 
@@ -46,7 +34,6 @@
             <div class="card card-height-100">
                 <div class="card-body">
                     <div class="d-flex flex-column h-100">
-                        {{-- Header with Priority and Actions --}}
                         <div class="d-flex justify-content-between mb-3">
                             <div>
                                 @php
@@ -65,17 +52,16 @@
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-end">
                                     <a class="dropdown-item" href="#" onclick="openEditModal({{ $notice->id }}); return false;">
-                                        <i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Edit
+                                        <i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Editar
                                     </a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item text-danger" href="#" onclick="deleteNotice({{ $notice->id }}); return false;">
-                                        <i class="ri-delete-bin-fill align-bottom me-2"></i> Remove
+                                        <i class="ri-delete-bin-fill align-bottom me-2"></i> Remover
                                     </a>
                                 </div>
                             </div>
                         </div>
 
-                        {{-- Notice Info --}}
                         <div class="mb-3">
                             <h5 class="mb-1 fs-16">
                                 <a href="#" class="text-body notice-title" data-bs-toggle="modal" data-bs-target="#viewNoticeModal" onclick="openViewModal('{{ $notice->id }}')">
@@ -88,7 +74,6 @@
                             </p>
                         </div>
 
-                        {{-- Content Preview --}}
                         <div class="mt-auto">
                             <p class="text-muted text-truncate-two-lines mb-0 notice-content">
                                 {{ Str::limit($notice->content, 100) }}
@@ -96,19 +81,18 @@
                         </div>
                     </div>
                 </div>
-                {{-- Card Footer --}}
                 <div class="card-footer bg-transparent border-top-dashed py-2">
                     <div class="d-flex align-items-center">
                         <div class="flex-grow-1">
                             @if($notice->is_active)
-                                <span class="badge bg-success-subtle text-success">Active</span>
+                                <span class="badge bg-success-subtle text-success">Ativo</span>
                             @else
-                                <span class="badge bg-danger-subtle text-danger">Inactive</span>
+                                <span class="badge bg-danger-subtle text-danger">Inativo</span>
                             @endif
                         </div>
                         <div class="flex-shrink-0">
                             <button type="button" class="btn btn-sm btn-soft-primary" data-bs-toggle="modal" data-bs-target="#viewNoticeModal" onclick="openViewModal('{{ $notice->id }}')">
-                                View Details
+                                Ver detalhes
                             </button>
                         </div>
                     </div>
@@ -117,15 +101,15 @@
         </div>
     @empty
         <div class="col-12">
-            <div class="card">
-                <div class="card-body text-center py-5">
+            <div class="prime-panel">
+                <div class="prime-panel-body text-center py-5">
                     <div class="mb-3">
                         <i class="ri-notification-3-line display-4 text-muted"></i>
                     </div>
-                    <h5>No Notices Found</h5>
-                    <p class="text-muted">Get started by adding your first notice.</p>
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#noticeModal" onclick="openCreateModal()">
-                        <i class="ri-add-line me-1"></i> Add Notice
+                    <h5>Nenhum aviso encontrado</h5>
+                    <p class="text-muted">Comece criando o primeiro aviso.</p>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#noticeModal" onclick="openCreateModal()">
+                        <i class="ri-add-line me-1"></i> Novo aviso
                     </button>
                 </div>
             </div>
@@ -133,56 +117,50 @@
     @endforelse
 </div>
 
-{{-- Pagination --}}
-<div class="row">
-    <div class="col-12">
-        <div class="mt-3">
-            {{ $notices->appends(request()->query())->links() }}
-        </div>
-    </div>
+<div class="mt-3">
+    {{ $notices->appends(request()->query())->links() }}
 </div>
 
-{{-- Notice Modal --}}
 <div class="modal fade" id="noticeModal" tabindex="-1" aria-labelledby="noticeModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="noticeModalLabel">Add Notice</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title" id="noticeModalLabel">Novo aviso</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
             <form id="noticeForm" method="POST" action="javascript:void(0);" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" id="noticeId" name="notice_id">
                 <input type="hidden" id="formMethod" name="_method" value="POST">
-                
+
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="title" class="form-label">Title <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="title" name="title" placeholder="Enter notice title">
+                        <label for="title" class="form-label">Titulo <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="title" name="title" placeholder="Informe o titulo do aviso">
                         <div class="invalid-feedback"></div>
                     </div>
 
                     <div class="mb-3">
-                        <label for="content" class="form-label">Content <span class="text-danger">*</span></label>
-                        <textarea class="form-control" id="content" name="content" rows="4" placeholder="Enter notice content"></textarea>
+                        <label for="content" class="form-label">Conteudo <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="content" name="content" rows="4" placeholder="Digite o conteudo"></textarea>
                         <div class="invalid-feedback"></div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="priority" class="form-label">Priority <span class="text-danger">*</span></label>
+                                <label for="priority" class="form-label">Prioridade <span class="text-danger">*</span></label>
                                 <select class="form-select" id="priority" name="priority">
-                                    <option value="low">Low</option>
-                                    <option value="medium">Medium</option>
-                                    <option value="high">High</option>
+                                    <option value="low">Baixa</option>
+                                    <option value="medium">Media</option>
+                                    <option value="high">Alta</option>
                                 </select>
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="publish_date" class="form-label">Publish Date <span class="text-danger">*</span></label>
+                                <label for="publish_date" class="form-label">Data de publicacao <span class="text-danger">*</span></label>
                                 <input type="date" class="form-control" id="publish_date" name="publish_date">
                                 <div class="invalid-feedback"></div>
                             </div>
@@ -192,7 +170,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="expiry_date" class="form-label">Expiry Date</label>
+                                <label for="expiry_date" class="form-label">Data de expiracao</label>
                                 <input type="date" class="form-control" id="expiry_date" name="expiry_date">
                                 <div class="invalid-feedback"></div>
                             </div>
@@ -202,22 +180,22 @@
                                 <label class="form-label d-block">Status</label>
                                 <div class="form-check form-switch form-switch-success">
                                     <input class="form-check-input" type="checkbox" role="switch" id="is_active" name="is_active" value="1" checked>
-                                    <label class="form-check-label" for="is_active">Active</label>
+                                    <label class="form-check-label" for="is_active">Ativo</label>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="mb-3">
-                        <label for="attachment" class="form-label">Attachment</label>
+                        <label for="attachment" class="form-label">Anexo</label>
                         <input type="file" class="form-control" id="attachment" name="attachment">
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-success" id="saveNoticeBtn">
-                        <i class="ri-save-line me-1"></i> Save Notice
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" id="saveNoticeBtn">
+                        <i class="ri-save-line me-1"></i> Salvar aviso
                     </button>
                 </div>
             </form>
@@ -225,17 +203,16 @@
     </div>
 </div>
 
-{{-- View Notice Modal --}}
 <div class="modal fade" id="viewNoticeModal" tabindex="-1" aria-labelledby="viewNoticeModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="viewNoticeModalLabel">Notice Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title" id="viewNoticeModalLabel">Detalhes do aviso</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
             <div class="modal-body">
                 <div class="mb-4">
-                    <h5 class="mb-1" id="view_title">Loading...</h5>
+                    <h5 class="mb-1" id="view_title">Carregando...</h5>
                     <div class="d-flex gap-2 mt-2">
                         <span class="badge" id="view_priority"></span>
                         <span class="badge" id="view_status"></span>
@@ -246,60 +223,58 @@
                     <table class="table table-borderless mb-0">
                         <tbody>
                             <tr>
-                                <th class="ps-0" style="width: 150px;">Publish Date</th>
+                                <th class="ps-0" style="width: 150px;">Publicacao</th>
                                 <td class="text-muted" id="view_publish_date">-</td>
                             </tr>
                             <tr>
-                                <th class="ps-0">Expiry Date</th>
+                                <th class="ps-0">Expiracao</th>
                                 <td class="text-muted" id="view_expiry_date">-</td>
                             </tr>
                             <tr>
-                                <th class="ps-0">Content</th>
+                                <th class="ps-0">Conteudo</th>
                                 <td class="text-muted" id="view_content">-</td>
                             </tr>
                             <tr id="view_attachment_row" style="display: none;">
-                                <th class="ps-0">Attachment</th>
-                                <td><a href="#" id="view_attachment_link" target="_blank" class="text-primary"><i class="ri-attachment-line me-1"></i> Download</a></td>
+                                <th class="ps-0">Anexo</th>
+                                <td><a href="#" id="view_attachment_link" target="_blank" class="text-primary"><i class="ri-attachment-line me-1"></i> Baixar</a></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
                 <button type="button" class="btn btn-primary" id="view_edit_btn">
-                    <i class="ri-pencil-line me-1"></i> Edit Notice
+                    <i class="ri-pencil-line me-1"></i> Editar aviso
                 </button>
             </div>
         </div>
     </div>
 </div>
-
 @endsection
 
 @push('scripts')
 <script src="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.js') }}"></script>
 <script>
 function openCreateModal() {
-    $('#noticeModalLabel').text('Add Notice');
+    $('#noticeModalLabel').text('Novo aviso');
     $('#noticeForm')[0].reset();
     $('#noticeId').val('');
     $('#formMethod').val('POST');
     $('#is_active').prop('checked', true);
-    $('#attachment').val(''); // Clear attachment field
-    
-    // Set default date to today
+    $('#attachment').val('');
+
     const today = new Date().toISOString().split('T')[0];
     $('#publish_date').val(today);
-    
+
     clearValidationErrors();
 }
 
 function openEditModal(noticeId) {
-    $('#noticeModalLabel').text('Edit Notice');
+    $('#noticeModalLabel').text('Editar aviso');
     $('#formMethod').val('PUT');
     $('#noticeId').val(noticeId);
-    $('#attachment').val(''); // Clear attachment field for security reasons
+    $('#attachment').val('');
     clearValidationErrors();
 
     $.ajax({
@@ -317,7 +292,7 @@ function openEditModal(noticeId) {
             $('#publish_date').val(notice.publish_date.split('T')[0]);
             $('#expiry_date').val(notice.expiry_date ? notice.expiry_date.split('T')[0] : '');
             $('#is_active').prop('checked', notice.is_active);
-            
+
             const modalEl = document.getElementById('noticeModal');
             let modal = bootstrap.Modal.getInstance(modalEl);
             if (!modal) {
@@ -327,14 +302,14 @@ function openEditModal(noticeId) {
         },
         error: function(xhr) {
             console.error('Error:', xhr);
-            showToast('Error loading notice data', 'danger');
+            showToast('Erro ao carregar dados do aviso', 'danger');
         }
     });
 }
 
 function openViewModal(noticeId) {
-    $('#view_title').text('Loading...');
-    
+    $('#view_title').text('Carregando...');
+
     $.ajax({
         url: `/notice-boards/${noticeId}`,
         type: 'GET',
@@ -345,27 +320,23 @@ function openViewModal(noticeId) {
         success: function(data) {
             if (data.success) {
                 const notice = data.notice;
-                
+
                 $('#view_title').text(notice.title);
                 $('#view_content').text(notice.content);
-                
-                // Priority Badge
+
                 const priorityClass = {
                     'high': 'bg-danger',
                     'medium': 'bg-warning',
                     'low': 'bg-info'
                 }[notice.priority] || 'bg-secondary';
                 $('#view_priority').attr('class', `badge ${priorityClass}`).text(notice.priority.charAt(0).toUpperCase() + notice.priority.slice(1));
-                
-                // Status Badge
+
                 const statusClass = notice.is_active ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger';
-                $('#view_status').attr('class', `badge ${statusClass}`).text(notice.is_active ? 'Active' : 'Inactive');
-                
-                // Dates
-                $('#view_publish_date').text(new Date(notice.publish_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }));
-                $('#view_expiry_date').text(notice.expiry_date ? new Date(notice.expiry_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '-');
-                
-                // Attachment
+                $('#view_status').attr('class', `badge ${statusClass}`).text(notice.is_active ? 'Ativo' : 'Inativo');
+
+                $('#view_publish_date').text(new Date(notice.publish_date).toLocaleDateString('pt-BR'));
+                $('#view_expiry_date').text(notice.expiry_date ? new Date(notice.expiry_date).toLocaleDateString('pt-BR') : '-');
+
                 if (notice.attachment) {
                     $('#view_attachment_row').show();
                     $('#view_attachment_link').attr('href', '/storage/' + notice.attachment);
@@ -383,7 +354,7 @@ function openViewModal(noticeId) {
         },
         error: function(xhr) {
             console.error('Error:', xhr);
-            showToast('Error loading notice details', 'danger');
+            showToast('Erro ao carregar detalhes do aviso', 'danger');
         }
     });
 }
@@ -394,8 +365,7 @@ function switchToEditModal(noticeId) {
     if (viewModal) {
         viewModal.hide();
     }
-    
-    // Small delay to allow modal to close
+
     setTimeout(() => {
         openEditModal(noticeId);
     }, 500);
@@ -403,8 +373,8 @@ function switchToEditModal(noticeId) {
 
 function deleteNotice(noticeId) {
     Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
+        title: 'Confirmar exclusao?',
+        text: 'Esta acao nao podera ser desfeita.',
         icon: 'warning',
         showCancelButton: true,
         customClass: {
@@ -412,7 +382,9 @@ function deleteNotice(noticeId) {
             cancelButton: 'btn btn-danger w-xs mt-2'
         },
         buttonsStyling: false,
-        showCloseButton: true
+        showCloseButton: true,
+        confirmButtonText: 'Sim, excluir',
+        cancelButtonText: 'Cancelar'
     }).then(function (result) {
         if (result.value) {
             $.ajax({
@@ -425,8 +397,8 @@ function deleteNotice(noticeId) {
                 success: function(response) {
                     if (response.success) {
                         Swal.fire({
-                            title: 'Deleted!',
-                            text: 'Notice has been deleted.',
+                            title: 'Excluido!',
+                            text: 'Aviso removido com sucesso.',
                             icon: 'success',
                             customClass: {
                                 confirmButton: 'btn btn-primary w-xs mt-2'
@@ -440,8 +412,8 @@ function deleteNotice(noticeId) {
                 error: function(xhr) {
                     console.error('Error:', xhr);
                     Swal.fire({
-                        title: 'Error!',
-                        text: 'Something went wrong.',
+                        title: 'Erro!',
+                        text: 'Algo deu errado.',
                         icon: 'error',
                         customClass: {
                             confirmButton: 'btn btn-primary w-xs mt-2'
@@ -469,12 +441,10 @@ function displayValidationErrors(errors) {
 }
 
 function showToast(message, type = 'success') {
-    // Simple toast implementation or use a library
-    // For now, we can use SweetAlert for errors
     if (type === 'danger') {
         Swal.fire({
             icon: 'error',
-            title: 'Oops...',
+            title: 'Ops...',
             text: message,
         });
     }
@@ -483,12 +453,11 @@ function showToast(message, type = 'success') {
 $(document).ready(function() {
     $('#noticeForm').on('submit', function(e) {
         e.preventDefault();
-        
-        const form = $(this);
+
         const formData = new FormData(this);
         const noticeId = $('#noticeId').val();
         const method = $('#formMethod').val();
-        
+
         let url = '{{ route("notice-boards.store") }}';
         if (method === 'PUT') {
             url = `/notice-boards/${noticeId}`;
@@ -510,9 +479,9 @@ $(document).ready(function() {
                     const modalEl = document.getElementById('noticeModal');
                     const modal = bootstrap.Modal.getInstance(modalEl);
                     modal.hide();
-                    
+
                     Swal.fire({
-                        title: 'Success!',
+                        title: 'Sucesso!',
                         text: response.message,
                         icon: 'success',
                         customClass: {
@@ -529,7 +498,7 @@ $(document).ready(function() {
                     displayValidationErrors(xhr.responseJSON.errors);
                 } else {
                     console.error('Error:', xhr);
-                    showToast('An error occurred. Please try again.', 'danger');
+                    showToast('Ocorreu um erro. Tente novamente.', 'danger');
                 }
             }
         });

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SuperAdmin\StorePlatformSubscriptionRequest;
 use App\Http\Requests\SuperAdmin\UpdatePlatformSubscriptionRequest;
 use App\Models\PlatformSubscriptionTier;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -26,7 +27,7 @@ class PlatformSubscriptionController extends Controller
 
         return $dataTable->render('super-admin.platform-subscriptions.index');
 
-//        return view('super-admin.platform-subscriptions.index', compact('tiers'));
+        //        return view('super-admin.platform-subscriptions.index', compact('tiers'));
     }
 
     /**
@@ -91,23 +92,23 @@ class PlatformSubscriptionController extends Controller
     /**
      * Remove the specified tier from storage.
      */
-    public function destroy(PlatformSubscriptionTier $platformSubscription): RedirectResponse
+    public function destroy(PlatformSubscriptionTier $platformSubscription): JsonResponse
     {
         abort_unless(auth()->user()->hasRole('super-admin'), 403);
 
         // Prevent deletion if tier has active tenants
         if ($platformSubscription->tenants()->where('status', 'active')->exists()) {
             return response()->json([
-                'status'  => false,
-                'message' => 'Cannot delete tier with active customers. Please reassign them first.'
+                'status' => false,
+                'message' => 'Cannot delete tier with active customers. Please reassign them first.',
             ]);
         }
 
         $platformSubscription->delete();
 
         return response()->json([
-            'status'  => true,
-            'message' => 'Data deleted successfully'
+            'status' => true,
+            'message' => 'Data deleted successfully',
         ]);
     }
 }

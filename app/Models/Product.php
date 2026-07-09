@@ -13,6 +13,7 @@ class Product extends Model
         'category_id',
         'product_id',
         'name',
+        'type',
         'description',
         'sku',
         'price',
@@ -42,15 +43,18 @@ class Product extends Model
 
         static::creating(function ($product) {
             if (empty($product->product_id)) {
-                $product->product_id = self::generateProductId();
+                $product->product_id = self::generateProductId($product->parent_id);
             }
         });
     }
 
-    public static function generateProductId(): string
+    public static function generateProductId($parentId = null): string
     {
-        $parentId = parentId();
-        $lastProduct = self::where('parent_id', $parentId)->orderBy('id', 'desc')->first();
+        $parentId = $parentId ?? parentId();
+        $lastProduct = self::withoutGlobalScopes()
+            ->where('parent_id', $parentId)
+            ->orderBy('id', 'desc')
+            ->first();
 
         if ($lastProduct && preg_match('/#PRD-(\d+)/', $lastProduct->product_id, $matches)) {
             $number = intval($matches[1]) + 1;
@@ -58,7 +62,7 @@ class Product extends Model
             $number = 1;
         }
 
-        return '#PRD-' . str_pad($number, 4, '0', STR_PAD_LEFT);
+        return '#PRD-'.str_pad($number, 4, '0', STR_PAD_LEFT);
     }
 
     public function parent(): BelongsTo

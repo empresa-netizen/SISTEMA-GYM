@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Notification extends Model
 {
+    protected $table = 'notification_templates';
+
     protected $fillable = [
         'parent_id',
         'module',
@@ -20,10 +23,7 @@ class Notification extends Model
         'enabled_web' => 'boolean',
     ];
 
-    /**
-     * Get the parent user (owner/admin)
-     */
-    public function parent()
+    public function parent(): BelongsTo
     {
         return $this->belongsTo(User::class, 'parent_id');
     }

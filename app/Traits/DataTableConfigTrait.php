@@ -65,14 +65,14 @@ trait DataTableConfigTrait
                 'previous' => '<i class="ri-arrow-left-line"></i>',
                 'next' => '<i class="ri-arrow-right-line"></i>',
             ],
-            'info' => 'Showing page _PAGE_ of _PAGES_',
-            'search' => '',
-            'searchPlaceholder' => 'Search...',
-            'lengthMenu' => 'Show _MENU_ entries',
-            'infoEmpty' => 'No entries available',
-            'infoFiltered' => '(filtered from _MAX_ total entries)',
-            'emptyTable' => 'No data available in table',
-            'zeroRecords' => 'No matching records found',
+            'searchPlaceholder' => 'Buscar...',
+            'lengthMenu' => 'Mostrar _MENU_ registros',
+            'info' => 'Página _PAGE_ de _PAGES_',
+            'infoEmpty' => 'Nenhum registro',
+            'infoFiltered' => '(filtrado de _MAX_ no total)',
+            'emptyTable' => 'Nenhum dado disponível',
+            'zeroRecords' => 'Nenhum resultado encontrado',
+            'processing' => 'Carregando...',
         ];
     }
 

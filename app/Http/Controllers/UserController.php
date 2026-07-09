@@ -6,8 +6,8 @@ use App\DataTables\UserDataTable;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 use Spatie\Permission\Models\Role;
@@ -19,9 +19,27 @@ class UserController extends Controller
      */
     public function index(UserDataTable $dataTable)
     {
-        $roles = Role::all();
-        return $dataTable->render('users.index',compact('roles'));
-//        return view('users.index', compact('users', 'roles'));
+        $staffRoles = ['owner', 'manager', 'trainer', 'receptionist'];
+        $roles = Role::whereIn('name', $staffRoles)->orderBy('name')->get();
+        $parentId = parentId();
+
+        $statsQuery = User::with('roles')
+            ->where(function ($query) use ($parentId) {
+                $query->where('parent_id', $parentId)
+                    ->orWhere('id', $parentId);
+            })
+            ->whereHas('roles', function ($query) use ($staffRoles) {
+                $query->whereIn('name', $staffRoles);
+            });
+
+        $collaboratorStats = [
+            'total' => (clone $statsQuery)->count(),
+            'active' => (clone $statsQuery)->whereNotNull('email_verified_at')->count(),
+            'pending' => (clone $statsQuery)->whereNull('email_verified_at')->count(),
+        ];
+
+        return $dataTable->render('users.index', compact('roles', 'collaboratorStats'));
+        //        return view('users.index', compact('users', 'roles'));
     }
 
     /**
@@ -29,7 +47,7 @@ class UserController extends Controller
      */
     public function create(): View
     {
-        $roles = Role::all();
+        $roles = Role::whereIn('name', ['owner', 'manager', 'trainer', 'receptionist'])->orderBy('name')->get();
 
         return view('users.create', compact('roles'));
     }
@@ -37,7 +55,7 @@ class UserController extends Controller
     public function store(UserStoreRequest $request): RedirectResponse
     {
         $password = $request->password; // Store before hashing for email
-        
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -88,7 +106,7 @@ class UserController extends Controller
             abort(403, 'Unauthorized access');
         }
 
-        $roles = Role::all();
+        $roles = Role::whereIn('name', ['owner', 'manager', 'trainer', 'receptionist'])->orderBy('name')->get();
 
         return view('users.edit', compact('user', 'roles'));
     }
@@ -127,7 +145,7 @@ class UserController extends Controller
     /**
      * Remove the specified user from storage.
      */
-    public function destroy(User $user): RedirectResponse
+    public function destroy(User $user): JsonResponse
     {
         // Check multi-tenant isolation
         if ($user->parent_id != parentId() && $user->id != parentId()) {
@@ -137,8 +155,8 @@ class UserController extends Controller
         // Prevent deleting yourself
         if ($user->id == auth()->id()) {
             return response()->json([
-                'status'  => false,
-                'message' => 'You cannot delete your own account'
+                'status' => false,
+                'message' => 'You cannot delete your own account',
             ]);
 
         }
@@ -146,8 +164,8 @@ class UserController extends Controller
         $user->delete();
 
         return response()->json([
-            'status'  => true,
-            'message' => 'Data deleted successfully'
+            'status' => true,
+            'message' => 'Data deleted successfully',
         ]);
     }
 }

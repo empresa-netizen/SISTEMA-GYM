@@ -25,7 +25,7 @@ test('super admin can view platform subscription tiers page', function () {
 
     $response->assertStatus(200);
     $response->assertSee('Platform Subscription Tiers');
-    $response->assertSee($tier->name);
+    // This page is DataTables-driven; row data is loaded via AJAX.
 });
 
 test('owner cannot access platform subscription tiers page', function () {
@@ -69,7 +69,7 @@ test('super admin can create new platform subscription tier', function () {
     $response->assertSessionHas('success');
 
     expect(PlatformSubscriptionTier::count())->toBe(1);
-    
+
     $tier = PlatformSubscriptionTier::first();
     expect($tier->name)->toBe('Premium Plan');
     expect($tier->price)->toBe('99.99');
@@ -125,11 +125,9 @@ test('super admin can delete tier without customers', function () {
 
     $tier = PlatformSubscriptionTier::factory()->create();
 
-    $response = $this->actingAs($superAdmin)->delete(route('super-admin.platform-subscriptions.destroy', $tier));
+    $response = $this->actingAs($superAdmin)->post(route('super-admin.platform-subscriptions.destroy', $tier));
+    $response->assertOk()->assertJson(['status' => true]);
 
-    $response->assertRedirect(route('super-admin.platform-subscriptions.index'));
-    $response->assertSessionHas('success');
-    
     expect(PlatformSubscriptionTier::count())->toBe(0);
 });
 
@@ -138,11 +136,11 @@ test('super admin cannot delete tier with active customers', function () {
     $superAdmin->assignRole('super-admin');
 
     $tier = PlatformSubscriptionTier::factory()->create();
-    
+
     // Create tenant/customer with this tier
     $owner = User::factory()->create(['parent_id' => null]);
     $owner->assignRole('owner');
-    
+
     Tenant::create([
         'user_id' => $owner->id,
         'business_name' => 'Test Gym',
@@ -151,11 +149,9 @@ test('super admin cannot delete tier with active customers', function () {
         'platform_subscription_tier_id' => $tier->id,
     ]);
 
-    $response = $this->actingAs($superAdmin)->delete(route('super-admin.platform-subscriptions.destroy', $tier));
+    $response = $this->actingAs($superAdmin)->post(route('super-admin.platform-subscriptions.destroy', $tier));
+    $response->assertOk()->assertJson(['status' => false]);
 
-    $response->assertRedirect();
-    $response->assertSessionHas('error');
-    
     expect(PlatformSubscriptionTier::count())->toBe(1);
 });
 
@@ -205,13 +201,13 @@ test('auto-generates slug from tier name', function () {
 
 test('counts tenants correctly', function () {
     $tier = PlatformSubscriptionTier::factory()->create();
-    
+
     // Create 2 tenants with this tier
     $owner1 = User::factory()->create(['parent_id' => null]);
     $owner1->assignRole('owner');
     $owner2 = User::factory()->create(['parent_id' => null]);
     $owner2->assignRole('owner');
-    
+
     Tenant::create([
         'user_id' => $owner1->id,
         'business_name' => 'Gym 1',
@@ -219,7 +215,7 @@ test('counts tenants correctly', function () {
         'status' => 'active',
         'platform_subscription_tier_id' => $tier->id,
     ]);
-    
+
     Tenant::create([
         'user_id' => $owner2->id,
         'business_name' => 'Gym 2',

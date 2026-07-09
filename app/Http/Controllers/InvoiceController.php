@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\DataTables\InvoiceDataTable;
 use App\Models\Invoice;
+use App\Models\InvoicePayment;
 use App\Models\Member;
+use App\Models\MembershipPlan;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +17,7 @@ class InvoiceController extends Controller
     /**
      * Display a listing of invoices
      */
-    public function index(InvoiceDataTable $dataTable,Request $request)
+    public function index(InvoiceDataTable $dataTable, Request $request)
     {
         $parentId = parentId();
 
@@ -47,19 +49,19 @@ class InvoiceController extends Controller
             $query->whereDate('invoice_date', '<=', $request->end_date);
         }
 
-        $invoices = $query->latest('invoice_date')->paginate(20);
+        $invoiceIds = (clone $query)->pluck('id');
+        $totalAmount = (clone $query)->sum('total_amount');
+        $totalPaid = InvoicePayment::whereIn('invoice_id', $invoiceIds)->sum('amount');
+        $totalDue = max(0, $totalAmount - $totalPaid);
 
-        // Calculate totals
-        $totalAmount = $query->sum('total_amount');
-        $totalPaid = $query->sum('paid_amount');
-        $totalDue = $totalAmount - $totalPaid;
+        $invoices = $query->latest('invoice_date')->paginate(20);
 
         // Pass filters to view for form persistence
         $filters = [
             'search' => $request->search,
             'status' => $request->status,
             'start_date' => $request->start_date,
-            'end_date' => $request->end_date
+            'end_date' => $request->end_date,
         ];
 
         return $dataTable->render('invoices.index', compact('invoices', 'totalAmount', 'totalPaid', 'totalDue', 'filters'));
@@ -72,8 +74,9 @@ class InvoiceController extends Controller
     {
         $parentId = parentId();
         $members = Member::where('parent_id', $parentId)->active()->get();
+        $plans = MembershipPlan::where('parent_id', $parentId)->active()->get();
 
-        return view('invoices.create', compact('members'));
+        return view('invoices.create', compact('members', 'plans'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -129,12 +132,12 @@ class InvoiceController extends Controller
             DB::commit();
 
             return redirect()->route('invoices.index')
-                ->with('success', 'Invoice created successfully with Number: '.$invoice->invoice_number);
+                ->with('success', 'Venda criada com sucesso. Fatura: '.$invoice->invoice_number);
 
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return back()->with('error', 'Error creating invoice: '.$e->getMessage())->withInput();
+            return back()->with('error', 'Erro ao criar venda: '.$e->getMessage())->withInput();
         }
     }
 
@@ -254,18 +257,18 @@ class InvoiceController extends Controller
         // Prevent deleting paid invoices
         if ($invoice->paid_amount > 0) {
             return response()->json([
-                'status'  => false,
-                'message' => 'Cannot delete an invoice that has payments'
+                'status' => false,
+                'message' => 'Cannot delete an invoice that has payments',
             ]);
-//            return back()->with('error', 'Cannot delete an invoice that has payments');
+            //            return back()->with('error', 'Cannot delete an invoice that has payments');
         }
 
         $invoice->items()->delete();
         $invoice->delete();
 
         return response()->json([
-            'status'  => true,
-            'message' => 'Data deleted successfully'
+            'status' => true,
+            'message' => 'Data deleted successfully',
         ]);
     }
 
@@ -309,12 +312,12 @@ class InvoiceController extends Controller
 
             DB::commit();
 
-            return back()->with('success', 'Payment added successfully');
+            return back()->with('success', 'Pagamento registrado com sucesso');
 
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return back()->with('error', 'Error adding payment: '.$e->getMessage());
+            return back()->with('error', 'Erro ao registrar pagamento: '.$e->getMessage());
         }
     }
 }

@@ -1,220 +1,131 @@
 @extends('layouts.master')
 
-@section('title')
-    Create Member
-@endsection
+@section('title', 'Novo cliente')
 
 @section('content')
-@component('components.breadcrumb')
-@slot('li_1')
-    <a href="{{ route('members.index') }}">Members</a>
-@endslot
-@slot('title')
-    Create New Member
-@endslot
-@endcomponent
-
-<div class="row">
-    <div class="col-lg-12">
-        <form action="{{ route('members.store') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title mb-0">Personal Information</h4>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="name" class="form-label">Full Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control @error('name') is-invalid @enderror" 
-                                       id="name" name="name" value="{{ old('name') }}" required>
-                                @error('name')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-                                <input type="email" class="form-control @error('email') is-invalid @enderror" 
-                                       id="email" name="email" value="{{ old('email') }}" required>
-                                @error('email')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="phone" class="form-label">Phone Number</label>
-                                <input type="text" class="form-control @error('phone') is-invalid @enderror" 
-                                       id="phone" name="phone" value="{{ old('phone') }}">
-                                @error('phone')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="date_of_birth" class="form-label">Date of Birth</label>
-                                <input type="date" class="form-control @error('date_of_birth') is-invalid @enderror" 
-                                       id="date_of_birth" name="date_of_birth" value="{{ old('date_of_birth') }}">
-                                @error('date_of_birth')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="gender" class="form-label">Gender</label>
-                                <select class="form-select @error('gender') is-invalid @enderror" id="gender" name="gender">
-                                    <option value="">Select Gender</option>
-                                    <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Male</option>
-                                    <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Female</option>
-                                    <option value="other" {{ old('gender') == 'other' ? 'selected' : '' }}>Other</option>
-                                </select>
-                                @error('gender')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="photo" class="form-label">Photo</label>
-                                <input type="file" class="form-control @error('photo') is-invalid @enderror" 
-                                       id="photo" name="photo" accept="image/*">
-                                @error('photo')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                <label for="address" class="form-label">Address</label>
-                                <textarea class="form-control @error('address') is-invalid @enderror" 
-                                          id="address" name="address" rows="2">{{ old('address') }}</textarea>
-                                @error('address')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title mb-0">Emergency Contact</h4>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="emergency_contact_name" class="form-label">Contact Name</label>
-                                <input type="text" class="form-control" 
-                                       id="emergency_contact_name" name="emergency_contact_name" 
-                                       value="{{ old('emergency_contact_name') }}">
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="emergency_contact_phone" class="form-label">Contact Phone</label>
-                                <input type="text" class="form-control" 
-                                       id="emergency_contact_phone" name="emergency_contact_phone" 
-                                       value="{{ old('emergency_contact_phone') }}">
-                            </div>
-                        </div>
-
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                <label for="medical_conditions" class="form-label">Medical Conditions</label>
-                                <textarea class="form-control" id="medical_conditions" 
-                                          name="medical_conditions" rows="2">{{ old('medical_conditions') }}</textarea>
-                                <small class="text-muted">Any allergies, injuries, or medical conditions we should be aware of</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title mb-0">Membership Details</h4>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="membership_plan_id" class="form-label">Membership Plan <span class="text-danger">*</span></label>
-                                <select class="form-select @error('membership_plan_id') is-invalid @enderror" 
-                                        id="membership_plan_id" name="membership_plan_id" required>
-                                    <option value="">Select Plan</option>
-                                    @foreach($plans as $plan)
-                                        <option value="{{ $plan->id }}" {{ old('membership_plan_id') == $plan->id ? 'selected' : '' }}>
-                                            {{ $plan->name }} - ${{ $plan->price }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('membership_plan_id')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="membership_start_date" class="form-label">Start Date <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control @error('membership_start_date') is-invalid @enderror" 
-                                       id="membership_start_date" name="membership_start_date" 
-                                       value="{{ old('membership_start_date', date('Y-m-d')) }}" required>
-                                @error('membership_start_date')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
-                                <select class="form-select @error('status') is-invalid @enderror" 
-                                        id="status" name="status" required>
-                                    <option value="active" {{ old('status', 'active') == 'active' ? 'selected' : '' }}>Active</option>
-                                    <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
-                                    <option value="suspended" {{ old('status') == 'suspended' ? 'selected' : '' }}>Suspended</option>
-                                </select>
-                                @error('status')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                <label for="notes" class="form-label">Notes</label>
-                                <textarea class="form-control" id="notes" name="notes" rows="2">{{ old('notes') }}</textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="text-end mb-3">
-                <a href="{{ route('members.index') }}" class="btn btn-secondary">
-                    <i class="ri-close-line me-1"></i> Cancel
-                </a>
-                <button type="submit" class="btn btn-success">
-                    <i class="ri-save-line me-1"></i> Create Member
-                </button>
-            </div>
-        </form>
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+    <div>
+        <h1 class="prime-page-title">Novo cliente</h1>
+        <p class="prime-page-sub">Cadastre um aluno e vincule ao plano de consultoria.</p>
     </div>
+    <a href="{{ route('members.index') }}" class="btn btn-outline-secondary">
+        <i class="ri-arrow-left-line me-1"></i> Voltar
+    </a>
 </div>
+
+<form action="{{ route('members.store') }}" method="POST" enctype="multipart/form-data">
+    @csrf
+
+    <div class="prime-panel mb-3">
+        <div class="prime-panel-label mb-3">DADOS PESSOAIS</div>
+        <div>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="name" class="form-label">Nome completo <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" required>
+                    @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                </div>
+                <div class="col-md-6">
+                    <label for="email" class="form-label">E-mail <span class="text-danger">*</span></label>
+                    <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" required>
+                    @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                </div>
+                <div class="col-md-6">
+                    <label for="phone" class="form-label">Telefone</label>
+                    <input type="text" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone" value="{{ old('phone') }}" placeholder="(11) 99999-0000">
+                    @error('phone')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                </div>
+                <div class="col-md-6">
+                    <label for="date_of_birth" class="form-label">Data de nascimento</label>
+                    <input type="date" class="form-control @error('date_of_birth') is-invalid @enderror" id="date_of_birth" name="date_of_birth" value="{{ old('date_of_birth') }}">
+                    @error('date_of_birth')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                </div>
+                <div class="col-md-6">
+                    <label for="gender" class="form-label">Gênero</label>
+                    <select class="form-select @error('gender') is-invalid @enderror" id="gender" name="gender">
+                        <option value="">Selecione</option>
+                        <option value="male" @selected(old('gender') === 'male')>Masculino</option>
+                        <option value="female" @selected(old('gender') === 'female')>Feminino</option>
+                        <option value="other" @selected(old('gender') === 'other')>Outro</option>
+                    </select>
+                    @error('gender')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                </div>
+                <div class="col-md-6">
+                    <label for="photo" class="form-label">Foto</label>
+                    <input type="file" class="form-control @error('photo') is-invalid @enderror" id="photo" name="photo" accept="image/*">
+                    @error('photo')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                </div>
+                <div class="col-12">
+                    <label for="address" class="form-label">Endereço</label>
+                    <textarea class="form-control @error('address') is-invalid @enderror" id="address" name="address" rows="2">{{ old('address') }}</textarea>
+                    @error('address')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="prime-panel mb-3">
+        <div class="prime-panel-label mb-3">CONTATO DE EMERGÊNCIA</div>
+        <div>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="emergency_contact_name" class="form-label">Nome</label>
+                    <input type="text" class="form-control" id="emergency_contact_name" name="emergency_contact_name" value="{{ old('emergency_contact_name') }}">
+                </div>
+                <div class="col-md-6">
+                    <label for="emergency_contact_phone" class="form-label">Telefone</label>
+                    <input type="text" class="form-control" id="emergency_contact_phone" name="emergency_contact_phone" value="{{ old('emergency_contact_phone') }}">
+                </div>
+                <div class="col-12">
+                    <label for="medical_conditions" class="form-label">Condições médicas</label>
+                    <textarea class="form-control" id="medical_conditions" name="medical_conditions" rows="2">{{ old('medical_conditions') }}</textarea>
+                    <small class="text-muted">Alergias, lesões ou restrições importantes</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="prime-panel mb-3">
+        <div class="prime-panel-label mb-3">PLANO E ASSINATURA</div>
+        <div>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="membership_plan_id" class="form-label">Plano <span class="text-danger">*</span></label>
+                    <select class="form-select @error('membership_plan_id') is-invalid @enderror" id="membership_plan_id" name="membership_plan_id" required>
+                        <option value="">Selecione o plano</option>
+                        @foreach($plans as $plan)
+                            <option value="{{ $plan->id }}" @selected(old('membership_plan_id') == $plan->id)>
+                                {{ $plan->name }} — R$ {{ number_format($plan->price, 2, ',', '.') }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('membership_plan_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                </div>
+                <div class="col-md-6">
+                    <label for="membership_start_date" class="form-label">Início <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control @error('membership_start_date') is-invalid @enderror" id="membership_start_date" name="membership_start_date" value="{{ old('membership_start_date', date('Y-m-d')) }}" required>
+                    @error('membership_start_date')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                </div>
+                <div class="col-md-6">
+                    <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
+                    <select class="form-select @error('status') is-invalid @enderror" id="status" name="status" required>
+                        <option value="active" @selected(old('status', 'active') === 'active')>Ativo</option>
+                        <option value="inactive" @selected(old('status') === 'inactive')>Inativo</option>
+                        <option value="suspended" @selected(old('status') === 'suspended')>Suspenso</option>
+                    </select>
+                    @error('status')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                </div>
+                <div class="col-12">
+                    <label for="notes" class="form-label">Observações</label>
+                    <textarea class="form-control" id="notes" name="notes" rows="2">{{ old('notes') }}</textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-end">
+        <a href="{{ route('members.index') }}" class="btn btn-light">Cancelar</a>
+        <button type="submit" class="btn btn-primary">Salvar cliente</button>
+    </div>
+</form>
 @endsection

@@ -1,65 +1,67 @@
 @extends('layouts.master')
 
-@section('title')
-    Payment Successful
-@endsection
+@section('title', 'Pagamento Confirmado')
 
 @section('content')
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2 prime-page-header">
+    <div>
+        <h1 class="prime-page-title">Pagamento Confirmado</h1>
+        <p class="prime-page-sub">Assinatura ativada com sucesso na MGTEAM FITNESS &amp; HEALTH.</p>
+    </div>
+</div>
+
 <div class="row justify-content-center">
-    <div class="col-lg-6">
-        <div class="text-center mt-5">
-            <div class="mb-4">
-                <i class="ri-checkbox-circle-line display-1 text-success"></i>
-            </div>
-            
-            <h3 class="mb-3">Payment Successful!</h3>
-            <p class="text-muted mb-4">
-                Your subscription has been activated successfully. Thank you for your purchase!
-            </p>
-
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title mb-3">Subscription Details</h5>
-                    <div class="table-responsive">
-                        <table class="table table-borderless mb-0">
-                            <tbody>
-                                <tr>
-                                    <td class="text-muted">Plan:</td>
-                                    <td><strong>{{ $subscription->plan->name }}</strong></td>
-                                </tr>
-                                <tr>
-                                    <td class="text-muted">Status:</td>
-                                    <td>
-                                        <span class="badge badge-soft-success">{{ ucfirst($subscription->status) }}</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-muted">Start Date:</td>
-                                    <td>{{ $subscription->start_date->format('M d, Y') }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-muted">End Date:</td>
-                                    <td>{{ $subscription->end_date->format('M d, Y') }}</td>
-                                </tr>
-                                @if($subscription->trial_end_date)
-                                <tr>
-                                    <td class="text-muted">Trial Ends:</td>
-                                    <td class="text-success">{{ $subscription->trial_end_date->format('M d, Y') }}</td>
-                                </tr>
-                                @endif
-                            </tbody>
-                        </table>
-                    </div>
+    <div class="col-lg-7">
+        <div class="prime-panel">
+            <div class="prime-panel-body text-center">
+                <div class="mb-4">
+                    <i class="ri-checkbox-circle-line display-1 text-success"></i>
                 </div>
-            </div>
 
-            <div class="mt-4">
-                <a href="{{ route('dashboard') }}" class="btn btn-primary me-2">
-                    <i class="ri-home-line me-1"></i> Go to Dashboard
-                </a>
-                <a href="{{ route('subscriptions.mine') }}" class="btn btn-soft-primary">
-                    <i class="ri-file-list-line me-1"></i> View My Subscription
-                </a>
+                <h3 class="mb-3">Pagamento realizado com sucesso!</h3>
+                <p class="text-muted mb-4">
+                    Sua assinatura foi ativada e ja esta pronta para uso.
+                </p>
+
+                <div class="table-responsive mb-4">
+                    <table class="table table-borderless mb-0">
+                        <tbody>
+                            <tr>
+                                <td class="text-muted text-start">Plano:</td>
+                                <td class="text-end"><strong>{{ $subscription->plan->name }}</strong></td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted text-start">Status:</td>
+                                <td class="text-end">
+                                    <span class="badge badge-soft-success">{{ ucfirst($subscription->status) }}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted text-start">Inicio:</td>
+                                <td class="text-end">{{ $subscription->start_date->format('d/m/Y') }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted text-start">Fim:</td>
+                                <td class="text-end">{{ $subscription->end_date->format('d/m/Y') }}</td>
+                            </tr>
+                            @if($subscription->trial_end_date)
+                            <tr>
+                                <td class="text-muted text-start">Fim do teste:</td>
+                                <td class="text-end text-success">{{ $subscription->trial_end_date->format('d/m/Y') }}</td>
+                            </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="d-flex flex-wrap justify-content-center gap-2">
+                    <a href="{{ route('dashboard') }}" class="btn btn-primary">
+                        <i class="ri-home-line me-1"></i> Ir para o painel
+                    </a>
+                    <a href="{{ route('subscriptions.mine') }}" class="btn btn-soft-primary">
+                        <i class="ri-file-list-line me-1"></i> Ver minha assinatura
+                    </a>
+                </div>
             </div>
         </div>
     </div>

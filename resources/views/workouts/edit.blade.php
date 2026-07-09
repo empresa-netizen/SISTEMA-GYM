@@ -1,18 +1,17 @@
 @extends('layouts.master')
 
-@section('title')
-    Edit Workout
-@endsection
+@section('title', 'Editar treino — '.$workout->name)
 
 @section('content')
-@component('components.breadcrumb')
-@slot('li_1')
-    <a href="{{ route('workouts.index') }}">Workouts</a>
-@endslot
-@slot('title')
-    Edit Workout: {{ $workout->name }}
-@endslot
-@endcomponent
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+    <div>
+        <h1 class="prime-page-title">Editar treino</h1>
+        <p class="prime-page-sub">{{ $workout->name }} · {{ $workout->workout_id }}</p>
+    </div>
+    <a href="{{ route('workouts.show', $workout) }}" class="btn btn-outline-secondary btn-sm">
+        <i class="ri-arrow-left-line me-1"></i> Voltar
+    </a>
+</div>
 
 <form action="{{ route('workouts.update', $workout->id) }}" method="POST">
     @csrf

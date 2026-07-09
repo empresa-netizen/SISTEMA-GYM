@@ -319,11 +319,23 @@ class MemberSeeder extends Seeder
         foreach ($members as $index => $memberData) {
             // Assign a random membership plan
             $plan = $plans->random();
+            $noteBody = $memberData['notes'] ?? null;
+            unset($memberData['notes']);
 
-            Member::create(array_merge($memberData, [
+            $member = Member::create(array_merge($memberData, [
                 'parent_id' => $parentId,
                 'membership_plan_id' => $plan->id,
             ]));
+
+            if (filled($noteBody)) {
+                \App\Models\MemberNote::create([
+                    'parent_id' => $parentId,
+                    'member_id' => $member->id,
+                    'author_id' => null,
+                    'body' => $noteBody,
+                    'noted_at' => now(),
+                ]);
+            }
         }
 
         $this->command->info('✅ '.count($members).' members created successfully!');

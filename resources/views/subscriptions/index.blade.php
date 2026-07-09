@@ -1,46 +1,45 @@
 @extends('layouts.master')
 
-@section('title')
-    Subscription Plans
-@endsection
+@section('title', 'Planos de Assinatura')
 
 @section('content')
-@component('components.breadcrumb')
-@slot('li_1')
-    Subscription
-@endslot
-@slot('title')
-    Choose Your Plan
-@endslot
-@endcomponent
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2 prime-page-header">
+    <div>
+        <h1 class="prime-page-title">Planos de Assinatura</h1>
+        <p class="prime-page-sub">Escolha o plano ideal para sua jornada na MGTEAM FITNESS &amp; HEALTH.</p>
+    </div>
+</div>
 
-<div class="row justify-content-center">
-    <div class="col-lg-10">
+<div class="prime-panel">
+    <div class="prime-panel-body">
         <div class="text-center mb-5">
-            <h3 class="mb-3">Choose the plan that's right for you</h3>
-            <p class="text-muted">Select a subscription plan and get started with your fitness journey</p>
+            <h3 class="mb-3">Encontre o plano ideal para voce</h3>
+            <p class="text-muted">Selecione uma assinatura e comece agora com a MGTEAM FITNESS &amp; HEALTH.</p>
         </div>
 
         <div class="row g-4">
             @foreach($plans as $plan)
             <div class="col-lg-4">
-                <div class="card pricing-box {{ $plan->is_featured ? 'border-primary' : '' }}">
+                <div class="card h-100 pricing-box {{ $plan->is_featured ? 'border-primary' : '' }}">
                     @if($plan->is_featured)
-                    <div class="ribbon-two ribbon-two-primary"><span>Popular</span></div>
+                        <div class="ribbon-two ribbon-two-primary"><span>Mais escolhido</span></div>
                     @endif
-                    
-                    <div class="card-body p-4">
+
+                    <div class="card-body p-4 d-flex flex-column">
                         <div class="text-center">
                             <h5 class="mb-1">{{ $plan->name }}</h5>
                             <p class="text-muted">{{ $plan->description }}</p>
                         </div>
 
                         <div class="py-4 text-center">
-                            <h1 class="month"><sup><small>$</small></sup><span class="ff-secondary fw-bold">{{ number_format($plan->price, 0) }}</span> <span class="fs-13 text-muted">/{{ $plan->duration_days }} days</span></h1>
+                            <h1 class="month">
+                                <span class="ff-secondary fw-bold">R$ {{ number_format($plan->price, 2, ',', '.') }}</span>
+                                <span class="fs-13 text-muted">/ {{ $plan->duration_days }} dias</span>
+                            </h1>
                         </div>
 
-                        <div class="mb-4">
-                            <h6 class="fs-15 fw-semibold text-uppercase mb-3">Features:</h6>
+                        <div class="mb-4 flex-grow-1">
+                            <h6 class="fs-15 fw-semibold text-uppercase mb-3">Recursos inclusos:</h6>
                             <ul class="list-unstyled vstack gap-3">
                                 @if($plan->features)
                                     @foreach($plan->features as $feature)
@@ -56,7 +55,7 @@
                                     </li>
                                     @endforeach
                                 @endif
-                                
+
                                 @if($plan->max_members)
                                 <li>
                                     <div class="d-flex">
@@ -64,7 +63,7 @@
                                             <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
                                         </div>
                                         <div class="flex-grow-1">
-                                            Up to {{ $plan->max_members }} members
+                                            Ate {{ $plan->max_members }} membros
                                         </div>
                                     </div>
                                 </li>
@@ -77,7 +76,7 @@
                                             <i class="ri-gift-line fs-15 align-middle"></i>
                                         </div>
                                         <div class="flex-grow-1">
-                                            <strong>{{ $plan->trial_days }} days FREE trial</strong>
+                                            <strong>{{ $plan->trial_days }} dias gratis</strong>
                                         </div>
                                     </div>
                                 </li>
@@ -87,7 +86,7 @@
 
                         <div class="mt-4">
                             <a href="{{ route('subscriptions.checkout', $plan->id) }}" class="btn {{ $plan->is_featured ? 'btn-primary' : 'btn-soft-primary' }} w-100">
-                                Get Started
+                                Assinar agora
                             </a>
                         </div>
                     </div>
@@ -96,10 +95,10 @@
             @endforeach
         </div>
 
-        <div class="mt-5 text-center">
-            <p class="text-muted mb-2">
+        <div class="mt-4 text-center">
+            <p class="text-muted mb-0">
                 <i class="ri-secure-payment-line align-middle me-1"></i>
-                Secure payment processing with Stripe and PayPal
+                Pagamentos seguros processados via Stripe e PayPal.
             </p>
         </div>
     </div>

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\WorkoutDataTable;
 use App\Models\Member;
 use App\Models\Trainer;
 use App\Models\Workout;
@@ -15,14 +14,34 @@ class WorkoutController extends Controller
     /**
      * Display a listing of workouts
      */
-    public function index(WorkoutDataTable $dataTable)
+    public function index(Request $request): View
     {
         $parentId = parentId();
 
+        $query = Workout::query()
+            ->where('parent_id', $parentId)
+            ->with(['member', 'trainer', 'activities'])
+            ->latest();
 
-        $members = Member::where('parent_id', $parentId)->get();
+        if ($search = trim((string) $request->get('search_value', ''))) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('workout_id', 'like', "%{$search}%");
+            });
+        }
 
-        return $dataTable->render('workouts.index', compact( 'members'));
+        if ($request->filled('member')) {
+            $query->where('member_id', $request->member);
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $workouts = $query->paginate(20)->withQueryString();
+        $members = Member::where('parent_id', $parentId)->orderBy('name')->get();
+
+        return view('workouts.index', compact('workouts', 'members'));
     }
 
     /**
@@ -160,8 +179,8 @@ class WorkoutController extends Controller
         $workout->delete();
 
         return response()->json([
-            'status'  => true,
-            'message' => 'Data deleted successfully'
+            'status' => true,
+            'message' => 'Data deleted successfully',
         ]);
     }
 

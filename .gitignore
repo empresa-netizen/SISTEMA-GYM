@@ -21,3 +21,5 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 /.idea
+/_referencias_visuais
+/BLACKBOARD.json

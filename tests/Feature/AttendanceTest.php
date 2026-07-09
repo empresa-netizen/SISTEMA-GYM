@@ -100,7 +100,7 @@ test('owner can view attendance report', function () {
             'end_date' => now()->format('Y-m-d'),
         ]))
         ->assertOk()
-        ->assertSee('Total Visits')
+        ->assertSee('Total de visitas')
         ->assertSee('60'); // Duration
 });
 
@@ -123,9 +123,9 @@ test('owner cannot access attendance from other tenant', function () {
         ->put(route('attendances.update', $otherAttendance), [
             'check_out_time' => '10:00',
         ])
-        ->assertForbidden();
+        ->assertNotFound();
 
     $this->actingAs($this->owner)
         ->delete(route('attendances.destroy', $otherAttendance))
-        ->assertForbidden();
+        ->assertNotFound();
 });

@@ -1,26 +1,17 @@
 @extends('layouts.master')
 
-@section('title')
-    Edit Invoice
-@endsection
+@section('title', 'Editar fatura')
 
 @section('content')
-@component('components.breadcrumb')
-@slot('li_1')
-    Invoices
-@endslot
-@slot('title')
-    Edit Invoice
-@endslot
-@endcomponent
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+    <div>
+        <h1 class="prime-page-title">Editar fatura</h1>
+        <p class="prime-page-sub">{{ $invoice->invoice_number }}</p>
+    </div>
+    <a href="{{ route('invoices.show', $invoice) }}" class="btn btn-outline-secondary btn-sm"><i class="ri-arrow-left-line me-1"></i> Voltar</a>
+</div>
 
-<div class="row">
-    <div class="col-lg-12">
-        <div class="card">
-            <div class="card-header">
-                <h4 class="card-title mb-0">Edit Invoice {{ $invoice->invoice_number }}</h4>
-            </div>
-            <div class="card-body">
+<div class="prime-panel">
                 @if ($errors->any())
                     <div class="alert alert-danger">
                         <ul class="mb-0">
@@ -36,9 +27,9 @@
                     @method('PUT')
                     <div class="row g-3">
                         <div class="col-lg-4">
-                            <label for="member_id" class="form-label">Member</label>
+                            <label for="member_id" class="form-label">Cliente</label>
                             <select class="form-select" id="member_id" name="member_id" required>
-                                <option value="">Select Member</option>
+                                <option value="">Selecione o cliente</option>
                                 @foreach($members as $member)
                                     <option value="{{ $member->id }}" {{ old('member_id', $invoice->member_id) == $member->id ? 'selected' : '' }}>
                                         {{ $member->name }} ({{ $member->member_id }})
@@ -47,11 +38,11 @@
                             </select>
                         </div>
                         <div class="col-lg-4">
-                            <label for="invoice_date" class="form-label">Invoice Date</label>
+                            <label for="invoice_date" class="form-label">Data da fatura</label>
                             <input type="date" class="form-control" id="invoice_date" name="invoice_date" value="{{ old('invoice_date', $invoice->invoice_date->format('Y-m-d')) }}" required>
                         </div>
                         <div class="col-lg-4">
-                            <label for="due_date" class="form-label">Due Date</label>
+                            <label for="due_date" class="form-label">Vencimento</label>
                             <input type="date" class="form-control" id="due_date" name="due_date" value="{{ old('due_date', $invoice->due_date->format('Y-m-d')) }}" required>
                         </div>
 
@@ -60,9 +51,9 @@
                                 <table class="table table-bordered" id="itemsTable">
                                     <thead class="table-light">
                                         <tr>
-                                            <th>Description</th>
-                                            <th width="150">Quantity</th>
-                                            <th width="150">Unit Price</th>
+                                            <th>Descrição</th>
+                                            <th width="150">Qtd</th>
+                                            <th width="150">Preço unit.</th>
                                             <th width="150">Total</th>
                                             <th width="50"></th>
                                         </tr>
@@ -94,7 +85,7 @@
                                         <tr>
                                             <td colspan="5">
                                                 <button type="button" class="btn btn-soft-secondary btn-sm" id="addItem">
-                                                    <i class="ri-add-line align-middle me-1"></i> Add Item
+                                                    <i class="ri-add-line align-middle me-1"></i> Adicionar item
                                                 </button>
                                             </td>
                                         </tr>
@@ -104,7 +95,7 @@
                         </div>
 
                         <div class="col-lg-6">
-                            <label for="notes" class="form-label">Notes</label>
+                            <label for="notes" class="form-label">Observações</label>
                             <textarea class="form-control" id="notes" name="notes" rows="3">{{ old('notes', $invoice->notes) }}</textarea>
                         </div>
 
@@ -113,23 +104,23 @@
                                 <table class="table table-borderless">
                                     <tr>
                                         <th>Subtotal:</th>
-                                        <td class="text-end">$<span id="subtotal">{{ number_format($invoice->subtotal, 2) }}</span></td>
+                                        <td class="text-end">R$ <span id="subtotal">{{ number_format($invoice->subtotal, 2, ',', '.') }}</span></td>
                                     </tr>
                                     <tr>
-                                        <th>Tax Amount:</th>
+                                        <th>Impostos:</th>
                                         <td>
                                             <input type="number" name="tax_amount" id="tax_amount" class="form-control form-control-sm text-end" value="{{ old('tax_amount', $invoice->tax_amount) }}" step="0.01" min="0">
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th>Discount:</th>
+                                        <th>Desconto:</th>
                                         <td>
                                             <input type="number" name="discount_amount" id="discount_amount" class="form-control form-control-sm text-end" value="{{ old('discount_amount', $invoice->discount_amount) }}" step="0.01" min="0">
                                         </td>
                                     </tr>
                                     <tr class="border-top border-top-dashed">
-                                        <th>Total Amount:</th>
-                                        <td class="text-end fw-bold fs-16">$<span id="totalAmount">{{ number_format($invoice->total_amount, 2) }}</span></td>
+                                        <th>Total:</th>
+                                        <td class="text-end fw-bold fs-16">R$ <span id="totalAmount">{{ number_format($invoice->total_amount, 2, ',', '.') }}</span></td>
                                     </tr>
                                 </table>
                             </div>
@@ -137,15 +128,12 @@
 
                         <div class="col-lg-12">
                             <div class="hstack gap-2 justify-content-end">
-                                <a href="{{ route('invoices.index') }}" class="btn btn-light">Cancel</a>
-                                <button type="submit" class="btn btn-primary">Update Invoice</button>
+                                <a href="{{ route('invoices.index') }}" class="btn btn-light">Cancelar</a>
+                                <button type="submit" class="btn btn-primary">Salvar fatura</button>
                             </div>
                         </div>
                     </div>
                 </form>
-            </div>
-        </div>
-    </div>
 </div>
 @endsection
 

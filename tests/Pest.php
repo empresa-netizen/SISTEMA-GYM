@@ -1,19 +1,18 @@
 <?php
 
+use App\Models\Invoice;
+use App\Models\Member;
+use App\Models\User;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 /*
 |--------------------------------------------------------------------------
 | Test Case
 |--------------------------------------------------------------------------
-|
-| The closure you provide to your test functions is always bound to a specific PHPUnit test
-| case class. By default, that class is "PHPUnit\Framework\TestCase". Of course, you may
-| need to change it using the "uses()" function to bind a different classes or traits.
-|
 */
 
 pest()->extend(TestCase::class)
@@ -28,11 +27,6 @@ pest()->extend(TestCase::class)
 |--------------------------------------------------------------------------
 | Expectations
 |--------------------------------------------------------------------------
-|
-| When you're writing tests, you often need to check that values meet certain conditions. The
-| "expect()" function gives you access to a set of "expectations" methods that you can use
-| to assert different things. Of course, you may extend the Expectation API at any time.
-|
 */
 
 expect()->extend('toBeOne', function () {
@@ -41,16 +35,53 @@ expect()->extend('toBeOne', function () {
 
 /*
 |--------------------------------------------------------------------------
-| Functions
+| Helpers — API V1 / multi-tenant
 |--------------------------------------------------------------------------
-|
-| While Pest is very powerful out-of-the-box, you may have some testing code that is specific
-| to your project. You may add your own functions to this file. Here's an example of how
-| to do that.
-|
 */
 
-function asUser($user = null)
+function createOwner(array $attributes = []): User
 {
-    return test()->actingAs($user ?? \App\Models\User::factory()->create());
+    $user = User::factory()->create(array_merge([
+        'password' => Hash::make('password'),
+    ], $attributes));
+
+    $user->assignRole('owner');
+
+    return $user->fresh();
+}
+
+function createMemberFor(User $owner, array $attributes = []): Member
+{
+    return Member::query()->create(array_merge([
+        'parent_id' => $owner->id,
+        'name' => 'Aluno Teste',
+        'email' => 'aluno.'.uniqid().'@example.com',
+        'phone' => '11999990000',
+        'status' => 'active',
+        'gender' => 'female',
+    ], $attributes));
+}
+
+function createInvoiceFor(User $owner, Member $member, array $attributes = []): Invoice
+{
+    return Invoice::query()->create(array_merge([
+        'parent_id' => $owner->id,
+        'member_id' => $member->id,
+        'invoice_date' => now()->toDateString(),
+        'due_date' => now()->addDays(7)->toDateString(),
+        'subtotal' => 100,
+        'tax_amount' => 0,
+        'discount_amount' => 0,
+        'total_amount' => 100,
+        'paid_amount' => 0,
+        'status' => 'unpaid',
+        'notes' => null,
+    ], $attributes));
+}
+
+function asOwner(?User $owner = null)
+{
+    $owner ??= createOwner();
+
+    return test()->actingAs($owner);
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\Member;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -33,9 +34,14 @@ class EventController extends Controller
     /**
      * Show the form for creating a new event
      */
-    public function create(): View
+    public function create(Request $request): View
     {
-        return view('events.create');
+        $members = Member::where('parent_id', parentId())->orderBy('name')->get(['id', 'name']);
+
+        return view('events.create', [
+            'members' => $members,
+            'selectedMemberId' => $request->integer('member') ?: null,
+        ]);
     }
 
     /**
@@ -51,11 +57,15 @@ class EventController extends Controller
             'location' => 'nullable|string|max:255',
             'max_participants' => 'nullable|integer|min:1',
             'status' => 'required|in:scheduled,ongoing,completed,cancelled',
+            'member_id' => 'nullable|exists:members,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $validated['parent_id'] = parentId();
         $validated['registered_count'] = 0;
+        if (empty($validated['member_id'])) {
+            $validated['member_id'] = null;
+        }
 
         // Handle image upload
         if ($request->hasFile('image')) {
@@ -65,7 +75,7 @@ class EventController extends Controller
         Event::create($validated);
 
         return redirect()->route('events.index')
-            ->with('success', 'Event created successfully');
+            ->with('success', 'Evento criado com sucesso');
     }
 
     /**
@@ -91,7 +101,10 @@ class EventController extends Controller
             abort(403, 'Unauthorized access');
         }
 
-        return view('events.edit', compact('event'));
+        return view('events.edit', [
+            'event' => $event,
+            'members' => Member::where('parent_id', parentId())->orderBy('name')->get(['id', 'name']),
+        ]);
     }
 
     /**
@@ -112,8 +125,13 @@ class EventController extends Controller
             'location' => 'nullable|string|max:255',
             'max_participants' => 'nullable|integer|min:1',
             'status' => 'required|in:scheduled,ongoing,completed,cancelled',
+            'member_id' => 'nullable|exists:members,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
+
+        if (empty($validated['member_id'])) {
+            $validated['member_id'] = null;
+        }
 
         // Handle image upload
         if ($request->hasFile('image')) {
@@ -127,7 +145,7 @@ class EventController extends Controller
         $event->update($validated);
 
         return redirect()->route('events.index')
-            ->with('success', 'Event updated successfully');
+            ->with('success', 'Evento atualizado com sucesso');
     }
 
     /**
@@ -148,6 +166,30 @@ class EventController extends Controller
         $event->delete();
 
         return redirect()->route('events.index')
-            ->with('success', 'Event deleted successfully');
+            ->with('success', 'Evento excluído com sucesso');
+    }
+
+    public function schedule(): View
+    {
+        return view('events.schedule');
+    }
+
+    public function feed()
+    {
+        $events = Event::where('parent_id', parentId())->get()->map(fn (Event $event) => [
+            'id' => $event->id,
+            'title' => $event->title,
+            'start' => $event->start_time->toIso8601String(),
+            'end' => $event->end_time->toIso8601String(),
+            'url' => route('events.show', $event),
+            'backgroundColor' => match ($event->status) {
+                'completed' => '#64748b',
+                'cancelled' => '#ef4444',
+                'ongoing' => '#22c55e',
+                default => '#3b82f6',
+            },
+        ]);
+
+        return response()->json($events);
     }
 }

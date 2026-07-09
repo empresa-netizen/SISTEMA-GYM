@@ -1,0 +1,42 @@
+---
+description: Regras do clone Prime Coaching Laravel — domínio, tenancy, UI e ecossistema
+alwaysApply: true
+---
+
+# Prime Coaching Clone (SISTEMA-GYM)
+
+## Escopo
+
+Clone funcional de app.primecoaching.com.br em Laravel 12. Roadmap D1–D7 em `PRIME_COACHING.md`.
+
+## UI
+
+- Usuários **coach/owner**: shell Prime (`layouts/prime-*`, `body.prime-app`, `public/css/prime-app.css`)
+- **super-admin**: Velzon legado — não migrar sem pedido
+- Páginas novas: `prime-page-title`, `prime-page-sub`, `prime-panel`, `prime-stat-card`
+- Evitar `components.breadcrumb` Velzon em módulos Prime
+
+## Dados
+
+- Seeders: `PrimeCoach*` — manter base limpa (1 coach, 2 clientes demo)
+- Métricas financeiras: somar `InvoicePayment` via `whereHas('invoice', parent_id)`
+- Locale PT-BR, moeda R$, datas `d/m/Y`
+
+## Ecossistema anterior
+
+Projeto irmão em `/Users/trabalho/CLAUDE` (mobile+API) e `/Users/trabalho/codex/coach-pro` (Next.js web).
+Ver `docs/ECOSYSTEM_BRIDGE.md` antes de espelhar domínios (chat, prescrições, CRM).
+Não portar código React/Expo — portar **contratos, tokens e padrões de tela**.
+
+## Agentes
+
+Playbooks em `docs/agents/`. Orquestração em `docs/ORQUESTRACAO.md`.
+
+## Docker
+
+```bash
+docker compose exec -T app php artisan migrate --force
+docker compose exec -T app php artisan db:seed --class=PrimeCoachPaymentSeeder --force
+```
+
+Login: `coach@primecoaching.com.br` / `password` @ localhost:8000

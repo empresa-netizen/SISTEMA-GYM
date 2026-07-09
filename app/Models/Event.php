@@ -12,6 +12,7 @@ class Event extends Model
      */
     protected $fillable = [
         'parent_id',
+        'member_id',
         'title',
         'description',
         'start_time',
@@ -22,6 +23,7 @@ class Event extends Model
         'status',
         'image',
     ];
+
     /**
      * Boot the model
      */
@@ -32,7 +34,6 @@ class Event extends Model
         // Apply tenant scoping for data isolation
         static::addGlobalScope(new \App\Models\Scopes\TenantScope);
     }
-
 
     /**
      * The attributes that should be cast.
@@ -53,6 +54,11 @@ class Event extends Model
     public function parent(): BelongsTo
     {
         return $this->belongsTo(User::class, 'parent_id');
+    }
+
+    public function member(): BelongsTo
+    {
+        return $this->belongsTo(Member::class);
     }
 
     /**

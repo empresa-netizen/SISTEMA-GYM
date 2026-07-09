@@ -14,7 +14,9 @@ test('owner can list users', function () {
     $this->actingAs($this->owner)
         ->get(route('users.index'))
         ->assertOk()
-        ->assertSee($user->name);
+        // Users index is rendered via DataTables (AJAX), so the initial HTML
+        // may not contain row data.
+        ->assertSee('Usuários');
 });
 
 test('owner can create user', function () {
@@ -57,8 +59,9 @@ test('owner can delete user', function () {
     $user = User::factory()->create(['parent_id' => $this->owner->id]);
 
     $this->actingAs($this->owner)
-        ->delete(route('users.destroy', $user))
-        ->assertRedirect(route('users.index'));
+        ->post(route('users.destroy', $user))
+        ->assertOk()
+        ->assertJson(['status' => true]);
 
     $this->assertModelMissing($user);
 });
@@ -96,6 +99,6 @@ test('owner cannot access users from other tenant', function () {
         ->assertForbidden();
 
     $this->actingAs($this->owner)
-        ->delete(route('users.destroy', $otherUser))
+        ->post(route('users.destroy', $otherUser))
         ->assertForbidden();
 });

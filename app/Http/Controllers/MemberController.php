@@ -17,15 +17,56 @@ class MemberController extends Controller
     /**
      * Display a listing of members
      */
-    public function index(MemberDataTable $dataTable)
+    public function index(Request $request, MemberDataTable $dataTable)
     {
         $parentId = parentId();
-
-
         $plans = MembershipPlan::where('parent_id', $parentId)->get();
 
-        return $dataTable->render('members.index',compact('plans'));
+        $query = Member::query()
+            ->with([
+                'membershipPlan',
+                'anamnesis',
+                'photos',
+                'feedbacks',
+                'workouts',
+                'dietPrescriptions',
+                'healthRecords',
+            ])
+            ->where('parent_id', $parentId);
 
+        $status = $request->get('status', 'active');
+        if ($status !== '' && $status !== null) {
+            $query->where('status', $status);
+        } else {
+            $query->where('status', 'active');
+        }
+
+        if ($search = $request->get('search_value', $request->get('search'))) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('phone', 'like', "%{$search}%")
+                    ->orWhere('member_id', 'like', "%{$search}%");
+            });
+        }
+
+        if ($plan = $request->get('plan')) {
+            $query->where('membership_plan_id', $plan);
+        }
+
+        $members = $query->orderBy('name')->get();
+
+        $pendingCount = $members->filter(function (Member $member) {
+            $hasActiveWorkout = $member->workouts->contains(fn ($w) => $w->status === 'active');
+            $hasPendingFeedback = $member->feedbacks->contains(fn ($f) => $f->status === 'pending');
+            $hasPendingDiet = $member->dietPrescriptions->contains(fn ($d) => ($d->delivery_status ?? null) === 'PENDING');
+
+            return ! $hasActiveWorkout || $hasPendingFeedback || $hasPendingDiet;
+        })->count();
+
+        $deliveredCount = max(0, $members->count() - $pendingCount);
+
+        return $dataTable->render('members.index', compact('plans', 'members', 'pendingCount', 'deliveredCount'));
     }
 
     /**
@@ -58,7 +99,20 @@ class MemberController extends Controller
             $data['membership_end_date'] = $plan->calculateExpiryDate($data['membership_start_date']);
         }
 
+        $initialNote = $data['notes'] ?? null;
+        unset($data['notes']);
+
         $member = Member::create($data);
+
+        if (filled($initialNote)) {
+            \App\Models\MemberNote::create([
+                'parent_id' => parentId(),
+                'member_id' => $member->id,
+                'author_id' => auth()->id(),
+                'body' => $initialNote,
+                'noted_at' => now(),
+            ]);
+        }
 
         // Send welcome email to member
         sendNotificationEmail('member_create', $member->email, [
@@ -70,22 +124,62 @@ class MemberController extends Controller
         ]);
 
         return redirect()->route('members.index')
-            ->with('success', 'Member created successfully with ID: '.$member->member_id);
+            ->with('success', 'Cliente criado com sucesso. ID: '.$member->member_id);
     }
 
     /**
      * Display the specified member
      */
-    public function show(Member $member): View
+    public function show(Member $member, Request $request): View
     {
-        // Check multi-tenant isolation
         if ($member->parent_id != parentId()) {
             abort(403, 'Unauthorized access');
         }
 
-        $member->load('membershipPlan', 'user');
+        $tab = $request->get('tab', 'progress');
+        $tabAliases = [
+            'overview' => 'progress',
+            'prescriptions' => 'workout',
+            'logbook' => 'workout',
+        ];
+        $tab = $tabAliases[$tab] ?? $tab;
 
-        return view('members.show', compact('member'));
+        $allowedTabs = [
+            'progress',
+            'appointments',
+            'anamnesis',
+            'reviews',
+            'diet',
+            'workout',
+            'cardio',
+            'exams',
+            'feedbacks',
+            'photos',
+            'notes',
+        ];
+        if (! in_array($tab, $allowedTabs, true)) {
+            $tab = 'progress';
+        }
+
+        $member->load([
+            'membershipPlan',
+            'workouts',
+            'anamnesis',
+            'photos',
+            'logbooks',
+            'dietPrescriptions.dietMenu',
+            'cardioPlans',
+            'memberNotes.author',
+            'coach',
+            'feedbacks',
+            'healthRecords',
+            'appointments',
+            'conversation',
+        ]);
+
+        $dietMenus = \App\Models\DietMenu::where('status', 'published')->orWhere('parent_id', parentId())->get();
+
+        return view('members.show', compact('member', 'tab', 'dietMenus'));
     }
 
     /**
@@ -115,6 +209,8 @@ class MemberController extends Controller
         }
 
         $data = $request->validated();
+        $newNote = $data['notes'] ?? null;
+        unset($data['notes']);
 
         // Handle photo upload
         if ($request->hasFile('photo')) {
@@ -133,8 +229,18 @@ class MemberController extends Controller
 
         $member->update($data);
 
+        if (filled($newNote)) {
+            \App\Models\MemberNote::create([
+                'parent_id' => parentId(),
+                'member_id' => $member->id,
+                'author_id' => auth()->id(),
+                'body' => $newNote,
+                'noted_at' => now(),
+            ]);
+        }
+
         return redirect()->route('members.index')
-            ->with('success', 'Member updated successfully');
+            ->with('success', 'Cliente atualizado com sucesso.');
     }
 
     /**
@@ -155,8 +261,8 @@ class MemberController extends Controller
         $member->delete();
 
         return response()->json([
-            'status'  => true,
-            'message' => 'Data deleted successfully'
+            'status' => true,
+            'message' => 'Data deleted successfully',
         ]);
     }
 }

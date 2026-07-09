@@ -1,92 +1,87 @@
 @extends('layouts.master')
 
-@section('title')
-    View Membership Plan
-@endsection
+@section('title', $membershipPlan->name)
 
 @section('content')
-    @component('components.breadcrumb')
-        @slot('li_1')
-            Membership Plans
-        @endslot
-        @slot('title')
-            View Plan
-        @endslot
-    @endcomponent
+@php
+    $durationTypes = [
+        'daily' => 'Diário',
+        'weekly' => 'Semanal',
+        'monthly' => 'Mensal',
+        'quarterly' => 'Trimestral',
+        'half_yearly' => 'Semestral',
+        'yearly' => 'Anual',
+        'lifetime' => 'Vitalício',
+    ];
+    $durationLabel = $durationTypes[$membershipPlan->duration_type] ?? ucfirst($membershipPlan->duration_type);
+@endphp
 
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-0 flex-grow-1">Plan Details</h4>
-                    <div class="flex-shrink-0">
-                        <a href="{{ route('membership-plans.edit', $membershipPlan->id) }}" class="btn btn-primary">
-                            <i class="ri-pencil-line align-bottom me-1"></i> Edit
-                        </a>
-                        <a href="{{ route('membership-plans.index') }}" class="btn btn-light">
-                            Back to List
-                        </a>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-borderless mb-0">
-                            <tbody>
-                                <tr>
-                                    <th class="ps-0" scope="row">Name :</th>
-                                    <td class="text-muted">{{ $membershipPlan->name }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="ps-0" scope="row">Price :</th>
-                                    <td class="text-muted">{{ $membershipPlan->price }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="ps-0" scope="row">Duration :</th>
-                                    <td class="text-muted">{{ $membershipPlan->duration_value }} {{ ucfirst($membershipPlan->duration_type) }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="ps-0" scope="row">Status :</th>
-                                    <td class="text-muted">
-                                        @if ($membershipPlan->is_active)
-                                            <span class="badge bg-success">Active</span>
-                                        @else
-                                            <span class="badge bg-danger">Inactive</span>
-                                        @endif
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="ps-0" scope="row">Personal Training :</th>
-                                    <td class="text-muted">
-                                        @if ($membershipPlan->personal_training)
-                                            <span class="badge bg-info">Yes</span>
-                                        @else
-                                            <span class="badge bg-secondary">No</span>
-                                        @endif
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="ps-0" scope="row">Description :</th>
-                                    <td class="text-muted">{{ $membershipPlan->description }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="ps-0" scope="row">Features :</th>
-                                    <td class="text-muted">
-                                        @if($membershipPlan->features)
-                                            <ul>
-                                                @foreach($membershipPlan->features as $feature)
-                                                    <li>{{ $feature }}</li>
-                                                @endforeach
-                                            </ul>
-                                        @else
-                                            N/A
-                                        @endif
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+<div class="prime-clients-page">
+    <div class="prime-clients-toolbar">
+        <div class="prime-clients-toolbar__left">
+            <h1 class="prime-page-title mb-0">{{ $membershipPlan->name }}</h1>
+            <div class="prime-clients-counters">
+                <span class="prime-clients-counter">
+                    <i class="ri-price-tag-3-line"></i>
+                    Plano de consultoria
+                </span>
             </div>
         </div>
+        <div class="prime-clients-toolbar__right">
+            <a href="{{ route('membership-plans.edit', $membershipPlan->id) }}" class="prime-btn-primary">
+                <i class="ri-pencil-line"></i> Editar
+            </a>
+            <a href="{{ route('membership-plans.index') }}" class="prime-btn-ghost">
+                <i class="ri-arrow-left-line"></i> Voltar
+            </a>
+        </div>
     </div>
+
+    <div class="prime-product-show">
+        <div class="prime-panel prime-panel--compact prime-product-show__price">
+            <div class="prime-panel-value prime-panel-value--sm mb-2">R$ {{ number_format($membershipPlan->price, 2, ',', '.') }}</div>
+            <p class="text-muted mb-3">{{ $membershipPlan->duration_value }} {{ strtolower($durationLabel) }}</p>
+            @if($membershipPlan->is_active)
+                <span class="prime-chip prime-chip--success">Ativo</span>
+            @else
+                <span class="prime-chip prime-chip--danger">Inativo</span>
+            @endif
+            @if($membershipPlan->personal_training)
+                <p class="small text-muted mt-3 mb-0"><i class="ri-user-star-line me-1"></i> Inclui treino personalizado</p>
+            @endif
+        </div>
+
+        <div class="prime-panel prime-panel--compact">
+            <div class="prime-panel-label mb-3">Detalhes</div>
+            <dl class="prime-detail-grid mb-0">
+                <dt>Nome</dt><dd>{{ $membershipPlan->name }}</dd>
+                <dt>Preço</dt><dd>R$ {{ number_format($membershipPlan->price, 2, ',', '.') }}</dd>
+                <dt>Duração</dt><dd>{{ $membershipPlan->duration_value }} {{ strtolower($durationLabel) }}</dd>
+                <dt>Status</dt>
+                <dd>
+                    @if($membershipPlan->is_active)
+                        <span class="prime-chip prime-chip--success">Ativo</span>
+                    @else
+                        <span class="prime-chip prime-chip--danger">Inativo</span>
+                    @endif
+                </dd>
+                <dt>Treino personalizado</dt>
+                <dd>{{ $membershipPlan->personal_training ? 'Sim' : 'Não' }}</dd>
+                <dt>Descrição</dt><dd>{{ $membershipPlan->description ?? '—' }}</dd>
+                <dt>Benefícios</dt>
+                <dd>
+                    @if($membershipPlan->features)
+                        <ul class="mb-0 ps-3">
+                            @foreach($membershipPlan->features as $feature)
+                                <li>{{ $feature }}</li>
+                            @endforeach
+                        </ul>
+                    @else
+                        —
+                    @endif
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>
 @endsection

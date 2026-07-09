@@ -1,134 +1,90 @@
 @extends('layouts.master')
 
-@section('title')
-    Class Details
-@endsection
+@section('title', $gymClass->name)
 
 @section('content')
-@component('components.breadcrumb')
-@slot('li_1')
-    Gym Classes
-@endslot
-@slot('title')
-    Class Details
-@endslot
-@endcomponent
+@php
+    $initials = collect(explode(' ', $gymClass->name))->map(fn ($w) => mb_substr($w, 0, 1))->take(2)->implode('');
+    $difficultyMap = [
+        'beginner' => ['Iniciante', 'bg-success-subtle text-success'],
+        'intermediate' => ['Intermediário', 'bg-warning-subtle text-warning'],
+        'advanced' => ['Avançado', 'bg-danger-subtle text-danger'],
+    ];
+    $difficulty = $difficultyMap[$gymClass->difficulty_level] ?? [ucfirst($gymClass->difficulty_level), 'bg-secondary'];
+    $statusMap = [
+        'active' => ['Ativa', 'bg-success-subtle text-success'],
+        'inactive' => ['Inativa', 'bg-secondary-subtle text-secondary'],
+        'cancelled' => ['Cancelada', 'bg-danger-subtle text-danger'],
+    ];
+    $status = $statusMap[$gymClass->status] ?? [ucfirst($gymClass->status), 'bg-secondary'];
+    $dayLabels = [
+        'monday' => 'Segunda-feira',
+        'tuesday' => 'Terça-feira',
+        'wednesday' => 'Quarta-feira',
+        'thursday' => 'Quinta-feira',
+        'friday' => 'Sexta-feira',
+        'saturday' => 'Sábado',
+        'sunday' => 'Domingo',
+    ];
+@endphp
 
-<div class="row">
-    <div class="col-lg-12">
-        <div class="card">
-            <div class="card-header align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1">Class Information</h4>
-                <div class="flex-shrink-0">
-                    <a href="{{ route('gym-classes.edit', $gymClass->id) }}" class="btn btn-primary btn-sm">
-                        <i class="ri-pencil-line align-middle me-1"></i> Edit Class
-                    </a>
-                    <a href="{{ route('gym-classes.index') }}" class="btn btn-secondary btn-sm ms-1">
-                        <i class="ri-arrow-left-line align-middle me-1"></i> Back to List
-                    </a>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4 text-center mb-4">
-                        <div class="profile-user position-relative d-inline-block mx-auto  mb-4">
-                            @if($gymClass->image)
-                                <img src="{{ URL::asset('storage/' . $gymClass->image) }}" class="rounded avatar-xl img-thumbnail user-profile-image" alt="class-image">
-                            @else
-                                <div class="avatar-xl">
-                                    <div class="avatar-title rounded bg-light text-primary text-uppercase fs-1">
-                                        {{ substr($gymClass->name, 0, 2) }}
-                                    </div>
-                                </div>
-                            @endif
-                        </div>
-                        <h5 class="fs-16 mb-1">{{ $gymClass->name }}</h5>
-                        <p class="text-muted mb-0">{{ $gymClass->category->name ?? 'Uncategorized' }}</p>
-                    </div>
-                    <div class="col-md-8">
-                        <div class="table-responsive">
-                            <table class="table table-borderless mb-0">
-                                <tbody>
-                                    <tr>
-                                        <th class="ps-0" scope="row">Class ID :</th>
-                                        <td class="text-muted">{{ $gymClass->class_id }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="ps-0" scope="row">Name :</th>
-                                        <td class="text-muted">{{ $gymClass->name }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="ps-0" scope="row">Duration :</th>
-                                        <td class="text-muted">{{ $gymClass->duration_minutes }} Minutes</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="ps-0" scope="row">Capacity :</th>
-                                        <td class="text-muted">{{ $gymClass->enrolled_count }} / {{ $gymClass->max_capacity }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="ps-0" scope="row">Difficulty :</th>
-                                        <td class="text-muted">
-                                            <span class="badge 
-                                                @if($gymClass->difficulty_level == 'beginner') bg-success
-                                                @elseif($gymClass->difficulty_level == 'intermediate') bg-warning text-dark
-                                                @else bg-danger
-                                                @endif
-                                            ">{{ ucfirst($gymClass->difficulty_level) }}</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th class="ps-0" scope="row">Status :</th>
-                                        <td class="text-muted">
-                                            <span class="badge 
-                                                @if($gymClass->status == 'active') bg-success
-                                                @elseif($gymClass->status == 'inactive') bg-secondary
-                                                @else bg-danger
-                                                @endif
-                                            ">{{ ucfirst($gymClass->status) }}</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th class="ps-0" scope="row">Description :</th>
-                                        <td class="text-muted">{{ $gymClass->description ?? 'N/A' }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+    <div>
+        <h1 class="prime-page-title">{{ $gymClass->name }}</h1>
+        <p class="prime-page-sub">{{ $gymClass->class_id }} · {{ $gymClass->category->name ?? 'Sem categoria' }}</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{{ route('gym-classes.edit', $gymClass->id) }}" class="btn btn-primary btn-sm"><i class="ri-pencil-line me-1"></i> Editar</a>
+        <a href="{{ route('gym-classes.index') }}" class="btn btn-outline-secondary btn-sm"><i class="ri-arrow-left-line"></i></a>
+    </div>
+</div>
 
-                <div class="row mt-4">
-                    <div class="col-lg-12">
-                        <h5 class="mb-3">Class Schedules</h5>
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Day</th>
-                                        <th>Time</th>
-                                        <th>Trainer</th>
-                                        <th>Location</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($gymClass->schedules as $schedule)
-                                        <tr>
-                                            <td>{{ ucfirst($schedule->day_of_week) }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($schedule->start_time)->format('h:i A') }} - {{ \Carbon\Carbon::parse($schedule->end_time)->format('h:i A') }}</td>
-                                            <td>{{ $schedule->trainer->name ?? 'N/A' }}</td>
-                                            <td>{{ $schedule->room_location ?? 'Main Hall' }}</td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="4" class="text-center">No schedules found</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
+<div class="row g-3">
+    <div class="col-lg-4">
+        <div class="prime-panel text-center">
+            @if($gymClass->image)
+                <img src="{{ asset('storage/'.$gymClass->image) }}" class="rounded mb-3 img-fluid" alt="">
+            @else
+                <div class="prime-list-avatar mx-auto mb-3" style="width:4rem;height:4rem;font-size:1.1rem">{{ strtoupper($initials) }}</div>
+            @endif
+            <span class="badge {{ $status[1] }}">{{ $status[0] }}</span>
+            <span class="badge {{ $difficulty[1] }} ms-1">{{ $difficulty[0] }}</span>
+            <p class="small text-muted mt-3 mb-0">{{ $gymClass->enrolled_count }} / {{ $gymClass->max_capacity }} matriculados</p>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="prime-panel mb-3" style="height:auto">
+            <div class="prime-panel-label mb-3">DETALHES</div>
+            <dl class="prime-detail-grid mb-0">
+                <dt>Código</dt><dd>{{ $gymClass->class_id }}</dd>
+                <dt>Nome</dt><dd>{{ $gymClass->name }}</dd>
+                <dt>Categoria</dt><dd>{{ $gymClass->category->name ?? '—' }}</dd>
+                <dt>Duração</dt><dd>{{ $gymClass->duration_minutes }} minutos</dd>
+                <dt>Capacidade</dt><dd>{{ $gymClass->enrolled_count }} / {{ $gymClass->max_capacity }}</dd>
+                <dt>Dificuldade</dt><dd>{{ $difficulty[0] }}</dd>
+                <dt>Status</dt><dd>{{ $status[0] }}</dd>
+                <dt>Descrição</dt><dd>{{ $gymClass->description ?? '—' }}</dd>
+            </dl>
+        </div>
+
+        <div class="prime-panel" style="height:auto">
+            <div class="prime-panel-label mb-3">HORÁRIOS</div>
+            @forelse($gymClass->schedules as $schedule)
+                <div class="prime-list-row">
+                    <div class="prime-list-body">
+                        <div class="prime-list-title">{{ $dayLabels[$schedule->day_of_week] ?? ucfirst($schedule->day_of_week) }}</div>
+                        <div class="prime-list-sub">
+                            {{ \Carbon\Carbon::parse($schedule->start_time)->format('H:i') }} – {{ \Carbon\Carbon::parse($schedule->end_time)->format('H:i') }}
+                            · {{ $schedule->trainer->name ?? 'Sem treinador' }}
+                            · {{ $schedule->room_location ?? 'Salão principal' }}
                         </div>
                     </div>
                 </div>
-            </div>
+            @empty
+                <div class="text-center text-muted py-4">
+                    <p class="small mb-0">Nenhum horário cadastrado.</p>
+                </div>
+            @endforelse
         </div>
     </div>
 </div>

@@ -34,6 +34,7 @@ class MembershipPlanTest extends TestCase
         $this->actingAs($owner)
             ->get(route('membership-plans.index'))
             ->assertOk()
+            ->assertSee('Meus produtos')
             ->assertSee('Test Plan');
     }
 
@@ -107,9 +108,9 @@ class MembershipPlanTest extends TestCase
         ]);
 
         $this->actingAs($owner)
-            ->delete(route('membership-plans.destroy', $plan))
-            ->assertRedirect(route('membership-plans.index'))
-            ->assertSessionHas('success');
+            ->post(route('membership-plans.destroy', $plan))
+            ->assertOk()
+            ->assertJson(['status' => true]);
 
         $this->assertDatabaseMissing('membership_plans', [
             'id' => $plan->id,
@@ -134,7 +135,7 @@ class MembershipPlanTest extends TestCase
 
         $this->actingAs($owner1)
             ->get(route('membership-plans.edit', $plan))
-            ->assertForbidden();
+            ->assertNotFound();
 
         $this->actingAs($owner1)
             ->put(route('membership-plans.update', $plan), [
@@ -143,11 +144,11 @@ class MembershipPlanTest extends TestCase
                 'duration_type' => 'monthly',
                 'duration_value' => 1,
             ])
-            ->assertForbidden();
+            ->assertNotFound();
 
         $this->actingAs($owner1)
-            ->delete(route('membership-plans.destroy', $plan))
-            ->assertForbidden();
+            ->post(route('membership-plans.destroy', $plan))
+            ->assertNotFound();
     }
 
     public function test_owner_can_create_inactive_membership_plan()

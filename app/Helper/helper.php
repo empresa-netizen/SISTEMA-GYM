@@ -171,7 +171,8 @@ if (! function_exists('commonEmailSend')) {
     function commonEmailSend($to, $subject, $message)
     {
         try {
-            Mail::to($to)->send(new \App\Mail\Common($subject, $message));
+            // Enfileira o mailable (QUEUE_CONNECTION=database) para nao bloquear a request
+            Mail::to($to)->queue(new \App\Mail\Common($subject, $message));
 
             return true;
         } catch (\Exception $e) {

@@ -1,46 +1,50 @@
 @extends('layouts.master')
 
-@section('title')
-    Payment Cancelled
-@endsection
+@section('title', 'Pagamento Cancelado')
 
 @section('content')
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2 prime-page-header">
+    <div>
+        <h1 class="prime-page-title">Pagamento Cancelado</h1>
+        <p class="prime-page-sub">A compra nao foi concluida na MGTEAM FITNESS &amp; HEALTH.</p>
+    </div>
+</div>
+
 <div class="row justify-content-center">
-    <div class="col-lg-6">
-        <div class="text-center mt-5">
-            <div class="mb-4">
-                <i class="ri-close-circle-line display-1 text-warning"></i>
-            </div>
-            
-            <h3 class="mb-3">Payment Cancelled</h3>
-            <p class="text-muted mb-4">
-                Your payment was cancelled. No charges were made to your account.
-            </p>
+    <div class="col-lg-7">
+        <div class="prime-panel">
+            <div class="prime-panel-body text-center">
+                <div class="mb-4">
+                    <i class="ri-close-circle-line display-1 text-warning"></i>
+                </div>
 
-            @if(session('error'))
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <i class="ri-error-warning-line align-middle me-2"></i> {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-            @endif
+                <h3 class="mb-3">Pagamento cancelado</h3>
+                <p class="text-muted mb-4">
+                    O processo foi interrompido antes da confirmacao e nenhuma cobranca foi realizada.
+                </p>
 
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title mb-3">What happened?</h5>
+                @if(session('error'))
+                <div class="alert alert-warning alert-dismissible fade show text-start" role="alert">
+                    <i class="ri-error-warning-line align-middle me-2"></i> {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                @endif
+
+                <div class="alert alert-light border text-start mb-4">
+                    <h5 class="mb-2">O que aconteceu?</h5>
                     <p class="text-muted mb-0">
-                        You cancelled the payment process before it could be completed. 
-                        If this was a mistake, you can try again by selecting a subscription plan.
+                        O pagamento foi cancelado antes da finalizacao. Se desejar, voce pode escolher o plano novamente e tentar outra vez.
                     </p>
                 </div>
-            </div>
 
-            <div class="mt-4">
-                <a href="{{ route('subscriptions.index') }}" class="btn btn-primary me-2">
-                    <i class="ri-restart-line me-1"></i> Try Again
-                </a>
-                <a href="{{ route('dashboard') }}" class="btn btn-soft-secondary">
-                    <i class="ri-home-line me-1"></i> Go to Dashboard
-                </a>
+                <div class="d-flex flex-wrap justify-content-center gap-2">
+                    <a href="{{ route('subscriptions.index') }}" class="btn btn-primary">
+                        <i class="ri-restart-line me-1"></i> Tentar novamente
+                    </a>
+                    <a href="{{ route('dashboard') }}" class="btn btn-soft-secondary">
+                        <i class="ri-home-line me-1"></i> Ir para o painel
+                    </a>
+                </div>
             </div>
         </div>
     </div>
