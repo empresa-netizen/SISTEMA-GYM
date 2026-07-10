@@ -2,10 +2,17 @@
 
 ## 1. Subdomínio (Hostinger)
 
-1. hPanel → Domains → `mgteamoficial.site` → Subdomains → Create `plataforma`
-2. Ou via MCP: `hosting_createWebsiteSubdomainV1` com `subdomain=plataforma`, `domain=mgteamoficial.site`
-3. DNS: registro **A** `plataforma` → IP do servidor (ou CNAME se o painel indicar)
-4. SSL: Let's Encrypt no painel / `certbot --nginx -d plataforma.mgteamoficial.site`
+A API MCP da Hostinger está retornando `ECONNRESET` neste momento. Crie o subdomínio pelo hPanel:
+
+1. [hPanel](https://hpanel.hostinger.com/) → **Domains** → `mgteamoficial.site`
+2. **Subdomains** → Create → prefixo `plataforma`
+3. Document root sugerido (Laravel): `plataforma.mgteamoficial.site/public`  
+   (ou pasta do addon apontando o vhost Nginx `root` para `/public`)
+4. DNS: registro **A** `plataforma` → IP do hosting/VPS (TTL 300)
+5. SSL: SSL/TLS no painel (Let's Encrypt) para `plataforma.mgteamoficial.site`
+
+Quando a API Hostinger voltar, dá para criar via:
+`hosting_createWebsiteSubdomainV1(username, domain=mgteamoficial.site, subdomain=plataforma)`.
 
 ## 2. Servidor
 
