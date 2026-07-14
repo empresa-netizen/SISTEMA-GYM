@@ -1,0 +1,45 @@
+<?php
+
+namespace App\Http\Requests\Api\Mobile;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class StoreStudentFeedbackRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
+            'message' => ['required', 'string', 'min:3', 'max:2000'],
+            'rating' => ['nullable', 'integer', 'min:1', 'max:5'],
+            'context_type' => ['nullable', 'string', 'in:workout,diet,meal,exercise,general'],
+            'context_id' => ['nullable', 'integer', 'min:1'],
+        ];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'message.required' => 'Descreva o feedback para o coach.',
+            'message.min' => 'Escreva pelo menos 3 caracteres.',
+            'rating.min' => 'A nota deve ser entre 1 e 5.',
+            'rating.max' => 'A nota deve ser entre 1 e 5.',
+            'context_type.in' => 'Contexto do feedback invalido.',
+        ];
+    }
+}

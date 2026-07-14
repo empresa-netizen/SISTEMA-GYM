@@ -12,8 +12,8 @@
             <span class="prime-chip {{ $anamnesisStatus === 'completed' ? 'prime-chip--success' : 'prime-chip--warn' }}">
                 {{ $anamnesisStatus === 'completed' ? 'Completa' : 'Pendente' }}
             </span>
-            <button type="button" class="prime-btn-ghost" disabled title="Envio de formulário ainda não disponível">
-                <i class="ri-send-plane-line"></i> Enviar anamnese
+            <button type="button" class="prime-btn-ghost" data-bs-toggle="modal" data-bs-target="#notifyClientModal">
+                <i class="ri-send-plane-line"></i> Notificar cliente
             </button>
         </div>
     </div>

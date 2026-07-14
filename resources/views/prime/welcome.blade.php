@@ -5,10 +5,14 @@
 @section('content')
 <div class="prime-shell">
     <div class="prime-center">
-        @include('prime.partials.logo')
+        @include('prime.partials.logo', ['size' => 'lg', 'variant' => 'dark'])
 
         <div id="prime-home">
+            <p class="prime-eyebrow">{{ config('brand.tagline', 'SAÚDE · ESTÉTICA · PERFORMANCE') }}</p>
             <h1 class="prime-title">Bem-vindo à {{ config('brand.short', 'MGTEAM') }}</h1>
+            <p class="prime-subtitle prime-subtitle--serif">
+                Acompanhamento que trata você <em>por inteiro.</em>
+            </p>
             <p class="prime-subtitle">Selecione como deseja acessar a plataforma</p>
 
             <button type="button" class="prime-choice" data-target="professional">
@@ -59,7 +63,7 @@
                         <p>Acompanhe métricas e vendas, converse com clientes e interaja no feed.</p>
                     </div>
                 </div>
-                <a href="http://localhost:8089" target="_blank" rel="noopener" class="prime-btn">Abrir app</a>
+                <a href="{{ config('brand.apps.pro_url') }}" target="_blank" rel="noopener" class="prime-btn">Abrir app</a>
             </div>
         </div>
 
@@ -76,7 +80,7 @@
                         <p>Treinos, dieta, chat com o coach, diário e evolução no celular.</p>
                     </div>
                 </div>
-                <a href="http://localhost:8086" target="_blank" rel="noopener" class="prime-btn">Abrir app</a>
+                <a href="{{ config('brand.apps.student_url') }}" target="_blank" rel="noopener" class="prime-btn">Abrir app</a>
             </div>
 
             <div class="prime-panel-card">

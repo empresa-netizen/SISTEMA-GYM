@@ -37,11 +37,13 @@ class MemberController extends Controller
         return MemberResource::collection($members);
     }
 
-    public function show(Member $member): MemberResource
+    public function show(int $member): MemberResource
     {
-        $this->ensureTenantResource($member->parent_id);
+        // Resolve sem TenantScope para distinguir 403 (outro tenant) de 404 (inexistente).
+        $model = Member::withoutGlobalScopes()->findOrFail($member);
+        $this->ensureTenantResource($model->parent_id);
 
-        $member->load([
+        $model->load([
             'membershipPlan',
             'conversation',
             'anamnesis',
@@ -51,7 +53,7 @@ class MemberController extends Controller
             'dietPrescriptions.dietMenu',
         ]);
 
-        return new MemberResource($member);
+        return new MemberResource($model);
     }
 
     public function update(Request $request, Member $member): JsonResponse

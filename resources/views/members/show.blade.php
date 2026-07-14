@@ -72,7 +72,10 @@
             <button type="button" class="prime-icon-btn" title="Copiar link" onclick="navigator.clipboard?.writeText(window.location.href)"><i class="ri-link"></i></button>
             <a href="mailto:{{ $member->email }}" class="prime-icon-btn" title="E-mail"><i class="ri-mail-line"></i></a>
             <a href="{{ route('members.show', [$member, 'tab' => 'appointments']) }}" class="prime-icon-btn" title="Agenda"><i class="ri-calendar-line"></i></a>
-            <a href="{{ route('messages.start', $member) }}" class="prime-icon-btn" title="Chat"><i class="ri-message-3-line"></i></a>
+            <form method="POST" action="{{ route('messages.start', $member) }}" class="d-inline">
+                @csrf
+                <button type="submit" class="prime-icon-btn" title="Chat"><i class="ri-message-3-line"></i></button>
+            </form>
             @if($waPhone)
                 <a href="https://wa.me/{{ $waPhone }}" target="_blank" rel="noopener" class="prime-icon-btn prime-icon-btn--whatsapp" title="WhatsApp"><i class="ri-whatsapp-line"></i></a>
             @endif
@@ -103,6 +106,17 @@
 
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show mb-3">{{ session('success') }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+    @endif
+    @if($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show mb-3">
+            <strong>Revise os dados enviados.</strong>
+            <ul class="mb-0 mt-2">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
     @endif
 
     <nav class="prime-client-tabs" aria-label="Abas do cliente">

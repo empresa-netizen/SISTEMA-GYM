@@ -131,7 +131,12 @@ class Invoice extends Model
      */
     public function isOverdue(): bool
     {
-        return $this->status !== 'paid' && $this->due_date->isPast();
+        if ($this->status === 'paid' || $this->status === 'cancelled') {
+            return false;
+        }
+
+        return $this->status === 'overdue'
+            || ($this->due_date && $this->due_date->isPast());
     }
 
     /**
@@ -143,6 +148,8 @@ class Invoice extends Model
             $this->status = 'paid';
         } elseif ($this->paid_amount > 0) {
             $this->status = 'partially_paid';
+        } elseif ($this->due_date && $this->due_date->isPast()) {
+            $this->status = 'overdue';
         } else {
             $this->status = 'unpaid';
         }
@@ -164,8 +171,13 @@ class Invoice extends Model
      */
     public function scopeOverdue($query)
     {
-        return $query->where('status', '!=', 'paid')
-            ->where('due_date', '<', now());
+        return $query->where(function ($builder) {
+            $builder->where('status', 'overdue')
+                ->orWhere(function ($open) {
+                    $open->whereIn('status', ['unpaid', 'partially_paid'])
+                        ->where('due_date', '<', now());
+                });
+        });
     }
 
     /**
@@ -198,29 +210,28 @@ class Invoice extends Model
 
         // Delete button - check permission
         if (auth()->user()->can('delete payments')) {
-            $buttons .= $this->deleteModel(route("invoices.destroy", $this), csrf_token(), "invoice-table");
+            $buttons .= $this->deleteModel(route('invoices.destroy', $this), csrf_token(), 'invoice-table');
         }
 
-
         return '<div class="d-inline-block">'
-            . '<a href="javascript:;" class="btn btn-sm btn-text-secondary rounded-pill btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-2-fill fs-17"></i></a>'
-            . '<ul class="dropdown-menu dropdown-menu-end m-0">'
-            . $buttons
-            . '</ul></div>';
+            .'<a href="javascript:;" class="btn btn-sm btn-text-secondary rounded-pill btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-2-fill fs-17"></i></a>'
+            .'<ul class="dropdown-menu dropdown-menu-end m-0">'
+            .$buttons
+            .'</ul></div>';
     }
 
     public function edit($customer)
     {
-        return '<li><a href="' . route('invoices.edit', $customer) . '" class="dropdown-item">Edit</a></li>';
+        return '<li><a href="'.route('invoices.edit', $customer).'" class="dropdown-item">Edit</a></li>';
     }
 
     public function view($customer)
     {
-        return '<li><a href="' . route('invoices.show', $customer) . '" class="dropdown-item">View</a></li>';
+        return '<li><a href="'.route('invoices.show', $customer).'" class="dropdown-item">View</a></li>';
     }
 
     public function deleteModel($route, $token, $dataTableId)
     {
-        return '<li><a href="#" onclick="deleteRow(`' . $route . '`,`' . $token . '`' . ',`' . $dataTableId . '`' . ')" title="Delete" class="dropdown-item text-danger">Delete</a></li>';
+        return '<li><a href="#" onclick="deleteRow(`'.$route.'`,`'.$token.'`'.',`'.$dataTableId.'`'.')" title="Delete" class="dropdown-item text-danger">Delete</a></li>';
     }
 }

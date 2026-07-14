@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class WorkoutActivity extends Model
 {
@@ -46,6 +47,13 @@ class WorkoutActivity extends Model
     public function workout(): BelongsTo
     {
         return $this->belongsTo(Workout::class);
+    }
+
+    public function logs(): HasMany
+    {
+        return $this->hasMany(WorkoutActivityLog::class)
+            ->orderByDesc('logged_at')
+            ->orderByDesc('id');
     }
 
     /**

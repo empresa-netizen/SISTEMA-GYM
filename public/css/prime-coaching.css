@@ -1,34 +1,55 @@
 :root,
 [data-prime-theme="dark"] {
-    --prime-bg: #05070a;
-    --prime-bg-elevated: #0c1018;
-    --prime-card: #111827;
-    --prime-card-border: rgba(148, 163, 184, 0.12);
-    --prime-blue: #3b82f6;
-    --prime-blue-hover: #2563eb;
-    --prime-text: #f8fafc;
-    --prime-muted: #94a3b8;
-    --prime-input: #0f172a;
-    --prime-auth-gradient: radial-gradient(ellipse at top, #0f172a 0%, var(--prime-bg) 55%);
-    --prime-choice-bg: rgba(17, 24, 39, 0.92);
-    --prime-icon-btn-bg: rgba(15, 23, 42, 0.8);
-    --prime-link: #93c5fd;
+    --prime-sage: #A8CDB7;
+    --prime-dark: #24332D;
+    --prime-cream: #F6F5F0;
+    --prime-neutral: #CFC9BE;
+    --prime-mid: #6B746D;
+    --prime-mark: #727E67;
+    --prime-bg: #1a2420;
+    --prime-bg-elevated: #24332D;
+    --prime-card: #2a3832;
+    --prime-card-border: rgba(168, 205, 183, 0.16);
+    --prime-blue: #A8CDB7;
+    --prime-blue-hover: #8fbaa1;
+    --prime-text: #F6F5F0;
+    --prime-muted: #A8B0A9;
+    --prime-input: #1a2420;
+    --prime-auth-gradient:
+        linear-gradient(135deg, rgba(36, 51, 45, 0.92) 0%, rgba(26, 36, 32, 0.96) 48%, rgba(36, 51, 45, 0.9) 100%),
+        repeating-linear-gradient(
+            -32deg,
+            transparent 0 28px,
+            rgba(168, 205, 183, 0.035) 28px 56px
+        ),
+        #1a2420;
+    --prime-choice-bg: rgba(42, 56, 50, 0.92);
+    --prime-icon-btn-bg: rgba(36, 51, 45, 0.88);
+    --prime-link: #A8CDB7;
+    --prime-btn-text: #24332D;
 }
 
 [data-prime-theme="light"] {
-    --prime-bg: #f1f5f9;
+    --prime-sage: #A8CDB7;
+    --prime-dark: #24332D;
+    --prime-cream: #F6F5F0;
+    --prime-neutral: #CFC9BE;
+    --prime-mid: #6B746D;
+    --prime-mark: #727E67;
+    --prime-bg: #F6F5F0;
     --prime-bg-elevated: #ffffff;
     --prime-card: #ffffff;
-    --prime-card-border: rgba(15, 23, 42, 0.1);
-    --prime-blue: #2563eb;
-    --prime-blue-hover: #1d4ed8;
-    --prime-text: #0f172a;
-    --prime-muted: #64748b;
+    --prime-card-border: rgba(36, 51, 45, 0.1);
+    --prime-blue: #727E67;
+    --prime-blue-hover: #5f6a55;
+    --prime-text: #24332D;
+    --prime-muted: #6B746D;
     --prime-input: #ffffff;
-    --prime-auth-gradient: radial-gradient(ellipse at top, #e0e7ff 0%, var(--prime-bg) 55%);
+    --prime-auth-gradient: radial-gradient(ellipse at top, #E8F0EA 0%, var(--prime-bg) 55%);
     --prime-choice-bg: #ffffff;
-    --prime-icon-btn-bg: rgba(255, 255, 255, 0.9);
-    --prime-link: #2563eb;
+    --prime-icon-btn-bg: rgba(255, 255, 255, 0.92);
+    --prime-link: #5d8a6f;
+    --prime-btn-text: #F6F5F0;
 }
 
 * { box-sizing: border-box; }
@@ -36,9 +57,10 @@
 body.prime-auth {
     margin: 0;
     min-height: 100vh;
-    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-family: "Work Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     background: var(--prime-auth-gradient);
     color: var(--prime-text);
+    -webkit-font-smoothing: antialiased;
 }
 
 .prime-topbar {
@@ -95,17 +117,25 @@ body.prime-auth {
 .prime-logo {
     display: inline-flex;
     align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 2rem;
+    justify-content: center;
+    margin-bottom: 1.75rem;
     text-decoration: none;
     color: inherit;
+}
+
+.prime-logo-img {
+    display: block;
+    max-width: min(100%, 18rem);
+    height: auto;
+    object-fit: contain;
 }
 
 .prime-logo-mark {
     width: 3rem;
     height: 3rem;
     border-radius: 999px;
-    background: linear-gradient(135deg, #60a5fa, #2563eb);
+    background: linear-gradient(135deg, var(--prime-sage), var(--prime-mark));
+    color: var(--prime-dark);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -127,18 +157,50 @@ body.prime-auth {
     letter-spacing: 0.12em;
     color: var(--prime-muted);
     line-height: 1.2;
-    max-width: 9rem;
+    max-width: 12rem;
+}
+
+.prime-eyebrow {
+    margin: 0 0 0.85rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--prime-sage);
 }
 
 .prime-title {
-    font-size: clamp(1.75rem, 4vw, 2.35rem);
-    font-weight: 700;
-    margin: 0 0 0.5rem;
+    font-family: "Instrument Serif", Georgia, serif;
+    font-size: clamp(2rem, 5vw, 2.85rem);
+    font-weight: 400;
+    line-height: 1.08;
+    margin: 0 0 0.65rem;
 }
 
 .prime-subtitle {
-    margin: 0 0 2rem;
+    margin: 0 0 1.5rem;
     color: var(--prime-muted);
+}
+
+.prime-subtitle--serif {
+    font-family: "Instrument Serif", Georgia, serif;
+    font-size: clamp(1.15rem, 2.5vw, 1.45rem);
+    color: var(--prime-cream);
+    margin-bottom: 0.85rem;
+}
+
+.prime-subtitle--serif em,
+.prime-auth-slogan em {
+    font-style: italic;
+    color: var(--prime-sage);
+    text-decoration-color: var(--prime-sage);
+    text-decoration-line: underline;
+    text-decoration-thickness: 0.14em;
+    text-underline-offset: 0.2em;
+}
+
+[data-prime-theme="light"] .prime-subtitle--serif {
+    color: var(--prime-dark);
 }
 
 .prime-choice,
@@ -161,7 +223,7 @@ body.prime-auth {
 
 .prime-choice:hover,
 .prime-panel-card:hover {
-    border-color: rgba(59, 130, 246, 0.45);
+    border-color: rgba(168, 205, 183, 0.55);
     transform: translateY(-1px);
 }
 
@@ -176,8 +238,8 @@ body.prime-auth {
     width: 2.75rem;
     height: 2.75rem;
     border-radius: 0.85rem;
-    background: rgba(59, 130, 246, 0.15);
-    color: var(--prime-link);
+    background: rgba(168, 205, 183, 0.16);
+    color: var(--prime-sage);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -235,24 +297,35 @@ button.prime-btn {
     justify-content: center;
     width: 100%;
     margin-top: 1rem;
-    padding: 0.85rem 1rem;
-    border-radius: 0.85rem;
+    padding: 0.9rem 1.1rem;
+    border-radius: 0.35rem;
     border: 0;
-    background: var(--prime-blue);
-    color: #fff;
-    font-weight: 600;
+    background: var(--prime-sage);
+    color: var(--prime-btn-text);
+    font-weight: 700;
+    font-size: 0.92rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
     text-decoration: none;
     cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
 }
 
 .prime-btn:hover {
     background: var(--prime-blue-hover);
-    color: #fff;
+    color: var(--prime-btn-text);
+    box-shadow: 0 12px 28px -10px rgba(168, 205, 183, 0.55);
 }
 
 .prime-btn-outline {
     background: transparent;
-    border: 1px solid var(--prime-card-border);
+    border: 1px solid rgba(168, 205, 183, 0.35);
+    color: var(--prime-text);
+    box-shadow: none;
+}
+
+.prime-btn-outline:hover {
+    background: rgba(168, 205, 183, 0.1);
     color: var(--prime-text);
 }
 
@@ -273,13 +346,61 @@ button.prime-btn {
     align-items: center;
     justify-content: center;
     padding: 3rem;
-    background: radial-gradient(circle at center, rgba(37, 99, 235, 0.12), transparent 60%), var(--prime-bg-elevated);
+    position: relative;
+    overflow: hidden;
+    background:
+        linear-gradient(160deg, rgba(26, 36, 32, 0.55) 0%, rgba(36, 51, 45, 0.82) 100%),
+        url("../brand/capa-facebook.png") center / cover no-repeat,
+        var(--prime-bg-elevated);
+}
+
+.prime-auth-brand::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        -32deg,
+        transparent 0 36px,
+        rgba(168, 205, 183, 0.04) 36px 72px
+    );
+    pointer-events: none;
 }
 
 @media (min-width: 992px) {
     .prime-auth-brand {
         display: flex;
     }
+}
+
+.prime-auth-brand-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 26rem;
+    text-align: center;
+}
+
+.prime-auth-brand-logo {
+    width: min(100%, 17rem);
+    height: auto;
+    margin: 0 auto 1.75rem;
+    display: block;
+}
+
+.prime-auth-slogan {
+    margin: 0 0 1.5rem;
+    font-family: "Instrument Serif", Georgia, serif;
+    font-size: clamp(1.55rem, 2.4vw, 2.1rem);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--prime-cream);
+}
+
+.prime-auth-handle {
+    margin: 0;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    color: var(--prime-sage);
+    font-weight: 600;
 }
 
 .prime-auth-brand .prime-logo-mark {
@@ -300,12 +421,24 @@ button.prime-btn {
     max-width: 26rem;
 }
 
+.prime-form-brand-mobile {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+}
+
+@media (min-width: 992px) {
+    .prime-form-brand-mobile {
+        display: none;
+    }
+}
+
 .prime-form-icon {
     width: 3rem;
     height: 3rem;
     border-radius: 999px;
-    background: rgba(59, 130, 246, 0.15);
-    color: var(--prime-link);
+    background: rgba(168, 205, 183, 0.16);
+    color: var(--prime-sage);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -314,7 +447,9 @@ button.prime-btn {
 
 .prime-form-card h1 {
     margin: 0 0 0.35rem;
-    font-size: 1.65rem;
+    font-family: "Instrument Serif", Georgia, serif;
+    font-size: 1.85rem;
+    font-weight: 400;
 }
 
 .prime-form-card .prime-subtitle {
@@ -345,8 +480,8 @@ button.prime-btn {
 
 .prime-field input:focus {
     outline: none;
-    border-color: rgba(59, 130, 246, 0.65);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    border-color: rgba(168, 205, 183, 0.7);
+    box-shadow: 0 0 0 3px rgba(168, 205, 183, 0.18);
 }
 
 .prime-field .invalid-feedback,
@@ -358,6 +493,12 @@ button.prime-btn {
     border: 1px solid rgba(239, 68, 68, 0.25);
     color: #fecaca;
     font-size: 0.875rem;
+}
+
+.prime-alert--success {
+    background: rgba(168, 205, 183, 0.14);
+    border-color: rgba(168, 205, 183, 0.35);
+    color: #d7ecdf;
 }
 
 .prime-link-row {

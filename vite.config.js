@@ -60,6 +60,7 @@ export default defineConfig({
                 'resources/scss/icons.scss',
                 'resources/scss/app.scss',
                 'resources/scss/custom.scss',
+                'resources/js/chat-realtime.js',
             ],
             refresh: [
                 ...refreshPaths,

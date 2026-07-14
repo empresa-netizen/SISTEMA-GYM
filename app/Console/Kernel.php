@@ -14,7 +14,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        // Transição unpaid/partially_paid → overdue + notificação in-app
+        $schedule->command('finance:check-overdue')->dailyAt('06:00');
+
+        // Lembretes por e-mail de faturas ainda em aberto (inclui overdue)
+        $schedule->command('payments:send-reminders')->dailyAt('08:00');
     }
 
     /**

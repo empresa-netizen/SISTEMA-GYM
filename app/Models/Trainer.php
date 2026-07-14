@@ -68,8 +68,8 @@ class Trainer extends Model
      */
     public static function generateTrainerId($parentId = null): string
     {
-        $parentId = $parentId ?? parentId();
-        $lastTrainer = self::where('parent_id', $parentId)
+        $lastTrainer = self::withoutGlobalScopes()
+            ->whereNotNull('trainer_id')
             ->orderBy('id', 'desc')
             ->first();
 
@@ -138,29 +138,28 @@ class Trainer extends Model
 
         // Delete button - check permission
         if (auth()->user()->can('delete trainers')) {
-            $buttons .= $this->deleteModel(route("trainers.destroy", $this), csrf_token(), "trainer-table");
+            $buttons .= $this->deleteModel(route('trainers.destroy', $this), csrf_token(), 'trainer-table');
         }
 
-
         return '<div class="d-inline-block">'
-            . '<a href="javascript:;" class="btn btn-sm btn-text-secondary rounded-pill btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-2-fill fs-17"></i></a>'
-            . '<ul class="dropdown-menu dropdown-menu-end m-0">'
-            . $buttons
-            . '</ul></div>';
+            .'<a href="javascript:;" class="btn btn-sm btn-text-secondary rounded-pill btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-2-fill fs-17"></i></a>'
+            .'<ul class="dropdown-menu dropdown-menu-end m-0">'
+            .$buttons
+            .'</ul></div>';
     }
 
     public function edit($customer)
     {
-        return '<li><a href="' . route('trainers.edit', $customer) . '" class="dropdown-item">Edit</a></li>';
+        return '<li><a href="'.route('trainers.edit', $customer).'" class="dropdown-item">Edit</a></li>';
     }
 
     public function view($customer)
     {
-        return '<li><a href="' . route('trainers.show', $customer) . '" class="dropdown-item">View</a></li>';
+        return '<li><a href="'.route('trainers.show', $customer).'" class="dropdown-item">View</a></li>';
     }
 
     public function deleteModel($route, $token, $dataTableId)
     {
-        return '<li><a href="#" onclick="deleteRow(`' . $route . '`,`' . $token . '`' . ',`' . $dataTableId . '`' . ')" title="Delete" class="dropdown-item text-danger">Delete</a></li>';
+        return '<li><a href="#" onclick="deleteRow(`'.$route.'`,`'.$token.'`'.',`'.$dataTableId.'`'.')" title="Delete" class="dropdown-item text-danger">Delete</a></li>';
     }
 }

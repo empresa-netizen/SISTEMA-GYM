@@ -13,8 +13,16 @@ class ClientFeedback extends Model
     protected $table = 'client_feedbacks';
 
     protected $fillable = [
-        'parent_id', 'member_id', 'status', 'message', 'photo_path', 'rating',
+        'parent_id', 'member_id', 'status', 'message', 'photo_path', 'rating', 'context_type', 'context_id',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'rating' => 'integer',
+            'context_id' => 'integer',
+        ];
+    }
 
     public function member(): BelongsTo
     {

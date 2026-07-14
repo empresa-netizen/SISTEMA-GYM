@@ -1729,6 +1729,11 @@ klona@^2.0.4:
   resolved "https://registry.npmjs.org/klona/-/klona-2.0.6.tgz"
   integrity sha512-dhG34DXATL5hSxJbIexCft8FChFXtmskoZYnoPWjXQuebWYCNkVeV3KkGegCK9CP1oswI/vQibS2GY7Em/sJJA==
 
+laravel-echo@^2.3.7:
+  version "2.3.7"
+  resolved "https://registry.npmjs.org/laravel-echo/-/laravel-echo-2.3.7.tgz"
+  integrity sha512-6NoPtOk16PuaykVgcV1MV5665VPtrbyvacBD6AJ8NJdRjTwrOwKrgOYHgq4bz5E1zUbbVi2UJfMN7P7D/yceyQ==
+
 laravel-vite-plugin@^1.0.1:
   version "1.0.2"
   resolved "https://registry.npmjs.org/laravel-vite-plugin/-/laravel-vite-plugin-1.0.2.tgz"
@@ -2088,6 +2093,13 @@ punycode@^2.1.0:
   version "2.3.1"
   resolved "https://registry.npmjs.org/punycode/-/punycode-2.3.1.tgz"
   integrity sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==
+
+pusher-js@*, pusher-js@^8.5.0:
+  version "8.5.0"
+  resolved "https://registry.npmjs.org/pusher-js/-/pusher-js-8.5.0.tgz"
+  integrity sha512-V7uzGi9bqOOOyM/6IkJdpFyjGZj7llz1v0oWnYkZKcYLvbz6VcHVLmzKqkvegjuMumpfIEKGLmWHwFb39XFCpw==
+  dependencies:
+    tweetnacl "^1.0.3"
 
 qj@^2.0.0, qj@~2.0.0:
   version "2.0.0"
@@ -2530,6 +2542,11 @@ tslib@^2.1.0, tslib@2.3.0:
   version "2.3.0"
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.3.0.tgz"
   integrity sha512-N82ooyxVNm6h1riLCoyS9e3fuJ3AMG2zIZs2Gd1ATcSFjSA23Q0fzjjZeh0jbJvWVDZ0cJT8yaNNaaXHzueNjg==
+
+tweetnacl@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.npmjs.org/tweetnacl/-/tweetnacl-1.0.3.tgz"
+  integrity sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==
 
 type-func@^1.0.1:
   version "1.0.3"

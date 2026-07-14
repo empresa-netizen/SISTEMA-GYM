@@ -502,10 +502,12 @@ class MemberHubController extends Controller
     public function logbook(Request $request): View
     {
         $type = $request->get('type', 'TRAINING');
-        $allowedTypes = ['TRAINING', 'DIET', 'CARDIO'];
+        $allowedTypes = ['TRAINING', 'DIET', 'CARDIO', 'WEIGHT'];
         $activeType = in_array($type, $allowedTypes, true) ? $type : 'TRAINING';
+        $parentId = parentId();
 
         $entriesQuery = MemberLogbook::with(['member.feedbacks'])
+            ->where('parent_id', $parentId)
             ->where('type', $activeType)
             ->when($request->filled('q'), function ($query) use ($request) {
                 $search = $request->string('q')->trim();
@@ -527,9 +529,10 @@ class MemberHubController extends Controller
         $entries = $entriesQuery->paginate(25)->withQueryString();
 
         $counts = [
-            'TRAINING' => MemberLogbook::where('type', 'TRAINING')->count(),
-            'DIET' => MemberLogbook::where('type', 'DIET')->count(),
-            'CARDIO' => MemberLogbook::where('type', 'CARDIO')->count(),
+            'TRAINING' => MemberLogbook::where('parent_id', $parentId)->where('type', 'TRAINING')->count(),
+            'DIET' => MemberLogbook::where('parent_id', $parentId)->where('type', 'DIET')->count(),
+            'CARDIO' => MemberLogbook::where('parent_id', $parentId)->where('type', 'CARDIO')->count(),
+            'WEIGHT' => MemberLogbook::where('parent_id', $parentId)->where('type', 'WEIGHT')->count(),
         ];
 
         return view('prime.members.logbook', compact('entries', 'counts', 'activeType'));

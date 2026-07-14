@@ -4,7 +4,7 @@
 <aside class="prime-rail" id="primeRail">
     <div class="prime-rail-brand-wrap">
         <div class="prime-rail-brand" aria-label="{{ config('brand.name', 'MGTEAM FITNESS & HEALTH') }}">
-            @include('prime.partials.logo')
+            @include('prime.partials.logo', ['size' => 'sm', 'variant' => 'dark'])
         </div>
     </div>
 

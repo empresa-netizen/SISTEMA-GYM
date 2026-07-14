@@ -27,6 +27,246 @@
     $maxTrend = max(1, collect($dailyTrend)->max('cumulative'));
 @endphp
 
+@push('styles')
+<style>
+    .prime-greeting {
+        margin: 0 0 2.18rem;
+        padding-top: 0.15rem;
+    }
+
+    .prime-greeting h1 {
+        margin-bottom: 0.45rem;
+        color: #FFFFFF;
+        font-size: clamp(2rem, 2.4vw, 2.62rem);
+        font-weight: 950;
+        letter-spacing: -0.055em;
+    }
+
+    .prime-greeting p,
+    .prime-live-badge {
+        color: #A2AEC4;
+        font-size: 1rem;
+        font-weight: 650;
+    }
+
+    .prime-live-badge::before {
+        background: #14C97A;
+        box-shadow: 0 0 0 4px rgba(20, 201, 122, 0.08);
+    }
+
+    .prime-section-head {
+        gap: 0.55rem;
+        margin-bottom: 1.05rem !important;
+    }
+
+    .prime-section-pill {
+        height: 1.72rem;
+        padding: 0 0.78rem;
+        border: 1px solid rgba(59, 149, 255, 0.34) !important;
+        border-radius: 999px;
+        background: rgba(59, 149, 255, 0.12) !important;
+        color: #BBD7FF !important;
+        font-size: 0.72rem;
+        font-weight: 950;
+        letter-spacing: 0.1em;
+    }
+
+    .prime-section-title {
+        color: #FFFFFF;
+        font-size: 1.24rem;
+        font-weight: 920;
+        letter-spacing: -0.03em;
+    }
+
+    .prime-billing-card {
+        margin-bottom: 2.45rem !important;
+        padding: 1.42rem;
+        border: 1px solid rgba(40, 94, 168, 0.58) !important;
+        border-radius: 1.45rem;
+        background: linear-gradient(180deg, rgba(10, 25, 52, 0.92), rgba(7, 17, 35, 0.98)) !important;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+    }
+
+    .prime-billing-grid {
+        display: grid;
+        grid-template-columns: minmax(24rem, 1fr) minmax(34rem, 0.95fr);
+        gap: 2.2rem;
+    }
+
+    .prime-billing-hero {
+        min-height: 13.4rem;
+        padding: 1.25rem 1.45rem;
+        border: 0 !important;
+        border-radius: 1rem;
+        background: transparent !important;
+    }
+
+    .prime-billing-hero .prime-panel-label,
+    .prime-billing-mini .prime-panel-label {
+        color: #8F9DB3 !important;
+        font-size: 0.76rem;
+        font-weight: 950;
+        letter-spacing: 0.09em;
+    }
+
+    .prime-billing-hero .prime-panel-value {
+        color: #FFFFFF;
+        font-size: clamp(3rem, 4vw, 4.3rem);
+        line-height: 0.95;
+        font-weight: 950;
+        letter-spacing: -0.07em;
+    }
+
+    .prime-billing-compare {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+    }
+
+    .prime-billing-mini {
+        min-height: 11.2rem;
+        padding: 1.1rem 1.15rem;
+        border: 1px solid rgba(87, 111, 148, 0.34) !important;
+        border-radius: 0.98rem;
+        background: #172235 !important;
+    }
+
+    .prime-billing-mini .prime-panel-value--sm {
+        margin-top: 1.1rem;
+        color: #FFFFFF;
+        font-size: 1.82rem;
+        font-weight: 950;
+        letter-spacing: -0.045em;
+    }
+
+    .prime-delta {
+        display: inline-flex;
+        align-items: center;
+        min-height: 1.52rem;
+        margin-top: 0.4rem;
+        padding: 0 0.62rem;
+        border-radius: 999px;
+        font-size: 0.78rem;
+        font-weight: 950;
+    }
+
+    .prime-delta--up {
+        background: rgba(20, 201, 122, 0.16);
+        color: #73E7AE;
+    }
+
+    .prime-delta--down {
+        background: rgba(244, 111, 104, 0.18);
+        color: #FF8C85;
+    }
+
+    .prime-billing-footer {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(87, 111, 148, 0.28);
+    }
+
+    .prime-metric-card {
+        min-height: 10.8rem;
+        padding: 1.18rem 1.28rem;
+        border-radius: 1.25rem;
+        background: #111A2B !important;
+    }
+
+    .prime-metric-top span {
+        color: #D6DEEC;
+        font-size: 1.02rem;
+        font-weight: 850;
+        line-height: 1.25;
+    }
+
+    .prime-metric-icon {
+        width: 2.72rem;
+        height: 2.72rem;
+        border-radius: 0.78rem;
+        background: #0C356B !important;
+        color: #9ECFFF !important;
+        font-size: 1.18rem;
+    }
+
+    .prime-metric-icon--orange {
+        background: rgba(246, 178, 61, 0.16) !important;
+        color: #F6C86F !important;
+    }
+
+    .prime-metric-icon--red {
+        background: rgba(244, 111, 104, 0.18) !important;
+        color: #FF9A95 !important;
+    }
+
+    .prime-metric-value {
+        color: #FFFFFF;
+        font-size: 2.45rem;
+        font-weight: 950;
+    }
+
+    .prime-metric-link {
+        color: #BBD7FF;
+        font-size: 0.88rem;
+        font-weight: 820;
+    }
+
+    .prime-panel {
+        border-radius: 1.25rem;
+        background: #111A2B !important;
+    }
+
+    .prime-day-pills {
+        gap: 0.45rem;
+        overflow-x: auto;
+        padding: 0.25rem 0 0.45rem;
+    }
+
+    .prime-day-pill {
+        min-width: 4.25rem;
+        min-height: 4.05rem;
+        border: 1px solid rgba(87, 111, 148, 0.34);
+        border-radius: 0.82rem;
+        background: #081422 !important;
+        color: #CBD5E6 !important;
+    }
+
+    .prime-day-pill.is-active {
+        background: #3B95FF !important;
+        border-color: #3B95FF !important;
+        color: #FFFFFF !important;
+        box-shadow: none !important;
+    }
+
+    .prime-day-pill-count {
+        background: #61AAFF !important;
+        color: #FFFFFF !important;
+    }
+
+    .prime-active-clients-value {
+        color: #FFFFFF;
+        font-size: 3.65rem;
+        font-weight: 950;
+        letter-spacing: -0.07em;
+    }
+
+    .prime-gender-bar-fill--male {
+        background: #3B95FF !important;
+    }
+
+    .prime-gender-bar-fill--female {
+        background: #9B6CF6 !important;
+    }
+
+    @media (max-width: 1200px) {
+        .prime-billing-grid,
+        .prime-billing-compare {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+@endpush
+
 <div class="prime-greeting">
     <div>
         <h1>{{ $greeting }}, {{ $firstName }}! 👋</h1>

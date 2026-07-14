@@ -10,6 +10,10 @@ class DietPrescriptionResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
+        if ($this->relationLoaded('dietMenu') && $this->dietMenu) {
+            $this->dietMenu->loadMissing('meals.mealFoods.dietFood');
+        }
+
         return [
             'id' => $this->id,
             'member_id' => $this->member_id,

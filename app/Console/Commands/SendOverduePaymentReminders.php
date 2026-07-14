@@ -15,7 +15,7 @@ class SendOverduePaymentReminders extends Command
     public function handle(): int
     {
         $invoices = Invoice::query()
-            ->whereIn('status', ['unpaid', 'partially_paid'])
+            ->whereIn('status', ['unpaid', 'partially_paid', 'overdue'])
             ->whereDate('due_date', '<', now()->toDateString())
             ->with('member:id,name,email')
             ->get();

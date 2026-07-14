@@ -36,6 +36,25 @@ class PrimeCoachMemberSeeder extends Seeder
         ];
 
         foreach ($clients as $client) {
+            $memberUser = User::updateOrCreate(
+                ['email' => $client['email']],
+                [
+                    'name' => $client['name'],
+                    'password' => bcrypt('password'),
+                    'email_verified_at' => now(),
+                    'parent_id' => $owner->id,
+                    'avatar' => 'avatar-1.jpg',
+                ]
+            );
+
+            if (method_exists($memberUser, 'assignRole')) {
+                try {
+                    $memberUser->assignRole('member');
+                } catch (\Throwable $e) {
+                    // role may already exist
+                }
+            }
+
             Member::updateOrCreate(
                 [
                     'parent_id' => $owner->id,
@@ -43,10 +62,13 @@ class PrimeCoachMemberSeeder extends Seeder
                 ],
                 array_merge($client, [
                     'membership_plan_id' => $plan->id,
+                    'user_id' => $memberUser->id,
+                    'coach_user_id' => $owner->id,
                 ])
             );
         }
 
         $this->command->info('✅ 2 clientes: anabeatriz@gmail.com + carlos.lima@gmail.com (iguais ao app)');
+        $this->command->info('   📱 Login aluno: anabeatriz@gmail.com / password');
     }
 }

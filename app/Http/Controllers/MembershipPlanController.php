@@ -168,7 +168,7 @@ class MembershipPlanController extends Controller
 
         $membershipPlan->delete();
 
-        if (request()->expectsJson()) {
+        if (request()->expectsJson() || request('_response') !== 'redirect') {
             return response()->json([
                 'status' => true,
                 'message' => 'Plano excluído com sucesso',

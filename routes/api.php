@@ -68,6 +68,7 @@ Route::prefix('v1')->group(function () {
             Route::get('/', [PrescriptionController::class, 'index']);
             Route::get('/member/{member}', [PrescriptionController::class, 'member']);
             Route::post('/diet', [PrescriptionController::class, 'storeDiet']);
+            Route::post('/workout', [PrescriptionController::class, 'storeWorkout']);
         });
 
         Route::prefix('finance')->group(function () {
@@ -125,17 +126,30 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::get('/prescriptions', [StudentController::class, 'prescriptions']);
+    Route::post('/workouts/{workout}/activities/{activity}/log', [StudentController::class, 'logWorkoutActivity']);
+    Route::delete('/workouts/{workout}/activities/{activity}/log', [StudentController::class, 'uncompleteWorkoutActivity']);
+    Route::post('/workouts/{workout}/complete', [StudentController::class, 'completeWorkout']);
+    Route::get('/diets/{prescription}/print', [StudentController::class, 'dietPrint']);
+    Route::get('/diets/{prescription}/print-link', [StudentController::class, 'dietPrintLink']);
+    Route::post('/diets/{prescription}/meals/{meal}/complete', [StudentController::class, 'completeDietMeal']);
+    Route::delete('/diets/{prescription}/meals/{meal}/complete', [StudentController::class, 'uncompleteDietMeal']);
     Route::prefix('catalog')->group(function () {
         Route::get('/exercises', [StudentController::class, 'catalogExercises']);
         Route::get('/foods', [StudentController::class, 'catalogFoods']);
     });
     Route::get('/feed', [StudentController::class, 'feed']);
     Route::get('/feedbacks', [StudentController::class, 'feedbacks']);
+    Route::post('/feedbacks', [StudentController::class, 'storeFeedback']);
     Route::get('/messages/conversation', [StudentController::class, 'messagesConversation']);
+    Route::post('/messages/conversation', [StudentController::class, 'sendMessage']);
+    Route::post('/messages/conversation/read', [StudentController::class, 'markMessagesRead']);
     Route::get('/logbooks', [StudentController::class, 'logbooks']);
+    Route::post('/logbooks', [StudentController::class, 'storeLogbook']);
     Route::get('/photos', [StudentController::class, 'photos']);
+    Route::post('/photos', [StudentController::class, 'storePhoto']);
     Route::get('/engagement', [StudentController::class, 'engagement']);
     Route::get('/groups', [StudentController::class, 'groups']);
+    Route::post('/groups/{group}/posts', [StudentController::class, 'storeGroupPost']);
 });
 
 Route::get('/health', function () {

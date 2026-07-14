@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MemberDietPrescriptionRequest;
 use App\Jobs\ProcessExamUpload;
 use App\Jobs\SendClientNotificationEmail;
 use App\Jobs\SendPaymentReminderEmail;
@@ -13,9 +14,12 @@ use App\Models\MemberAnamnesis;
 use App\Models\MemberLogbook;
 use App\Models\MemberNote;
 use App\Models\MemberPhoto;
+use App\Services\DietMacroAuditor;
+use App\Services\DietMenuBuilder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class MemberCrmController extends Controller
 {
@@ -69,29 +73,39 @@ class MemberCrmController extends Controller
         return back()->with('success', $message);
     }
 
-    public function storeDietPrescription(Request $request, Member $member): RedirectResponse
+    public function storeDietPrescription(MemberDietPrescriptionRequest $request, Member $member, DietMenuBuilder $builder): RedirectResponse
     {
         abort_unless($member->parent_id === parentId(), 403);
 
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'diet_menu_id' => 'nullable|exists:diet_menus,id',
-            'notes' => 'nullable|string',
-            'scheduled_at' => 'nullable|date',
-        ]);
+        $validated = $request->validated();
+        $meals = $validated['meals'] ?? [];
+        $dietMenuId = $validated['diet_menu_id'] ?? null;
+
+        if (! empty($meals)) {
+            $menu = $builder->createForTenant(parentId(), [
+                'name' => ($validated['menu_name'] ?? null) ?: $validated['title'],
+                'description' => $validated['menu_description'] ?? $validated['notes'] ?? null,
+                'status' => 'published',
+                'meals' => $meals,
+            ]);
+
+            $dietMenuId = $menu->id;
+        }
 
         DietPrescription::create([
             'parent_id' => parentId(),
             'member_id' => $member->id,
             'title' => $validated['title'],
-            'diet_menu_id' => $validated['diet_menu_id'] ?? null,
+            'diet_menu_id' => $dietMenuId,
             'notes' => $validated['notes'] ?? null,
             'scheduled_at' => $validated['scheduled_at'] ?? now(),
             'status' => 'scheduled',
             'delivery_status' => 'PENDING',
         ]);
 
-        return back()->with('success', 'Dieta prescrita.');
+        return redirect()
+            ->route('members.show', ['member' => $member, 'tab' => 'diet'])
+            ->with('success', 'Dieta prescrita.');
     }
 
     public function sendDietPrescription(DietPrescription $prescription): RedirectResponse
@@ -105,6 +119,36 @@ class MemberCrmController extends Controller
         ]);
 
         return back()->with('success', 'Dieta enviada ao aluno.');
+    }
+
+    public function updateDietPrescription(MemberDietPrescriptionRequest $request, DietPrescription $prescription): RedirectResponse
+    {
+        abort_unless($prescription->parent_id === parentId(), 403);
+
+        $validated = $request->validated();
+
+        $prescription->update([
+            'title' => $validated['title'],
+            'diet_menu_id' => $validated['diet_menu_id'] ?? null,
+            'notes' => $validated['notes'] ?? null,
+            'scheduled_at' => $validated['scheduled_at'] ?? $prescription->scheduled_at,
+        ]);
+
+        return back()->with('success', 'Dieta atualizada.');
+    }
+
+    public function printDietPrescription(DietPrescription $prescription, DietMacroAuditor $auditor): View
+    {
+        abort_unless($prescription->parent_id === parentId(), 403);
+
+        $prescription->load(['dietMenu', 'member']);
+        $summary = $auditor->summarize($prescription);
+
+        return view('prime.diets.print', [
+            'prescription' => $prescription,
+            'summary' => $summary,
+            'member' => $prescription->member,
+        ]);
     }
 
     public function storeLogbook(Request $request, Member $member): RedirectResponse

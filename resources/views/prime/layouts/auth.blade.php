@@ -7,11 +7,11 @@
     <title>@yield('title') | {{ config('brand.name', 'MGTEAM FITNESS & HEALTH') }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="{{ asset('css/prime-coaching.css') }}" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
 </head>
-<body class="prime-auth">
+<body class="prime-auth" data-prime-theme="dark">
     <div class="prime-topbar">
         <button type="button" class="prime-icon-btn" data-prime-theme-toggle aria-label="Alternar tema">
             <i class="ri-sun-line"></i>

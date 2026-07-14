@@ -5,9 +5,9 @@
 @section('content')
 <div class="prime-shell">
     <div class="prime-form-card" style="max-width:28rem;margin:0 auto;">
-        @include('prime.partials.logo')
+        @include('prime.partials.logo', ['size' => 'md', 'variant' => 'dark'])
 
-        <h1 class="prime-title" style="font-size:1.65rem;">Aproveite a avaliação gratuita</h1>
+        <h1 class="prime-title" style="font-size:1.85rem;">Aproveite a avaliação gratuita</h1>
         <p class="prime-subtitle">Crie sua conta profissional e comece a gerenciar clientes, treinos e vendas.</p>
 
         @if ($errors->any())

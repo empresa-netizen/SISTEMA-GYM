@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\Sanctum;
 
@@ -64,6 +63,53 @@ describe('API V1 Auth', function () {
             ->assertJsonPath('user.email', 'coach@test.app');
 
         expect($response->json('access_token'))->not->toBeEmpty();
+    });
+
+    it('logs in a student member through the V1 login endpoint', function () {
+        $owner = createOwner([
+            'email' => 'coach-student-login@test.app',
+            'name' => 'Coach Student Login',
+            'password' => Hash::make('password'),
+        ]);
+        $member = createMemberFor($owner, [
+            'name' => 'Aluno V1',
+            'email' => 'aluno.v1@test.app',
+            'phone' => '11988887777',
+        ]);
+
+        $response = $this->postJson('/api/v1/login', [
+            'email' => 'aluno.v1@test.app',
+            'password' => 'password',
+            'device_name' => 'student-app',
+        ]);
+
+        $response->assertOk()
+            ->assertJsonPath('token_type', 'Bearer')
+            ->assertJsonPath('session_type', 'student')
+            ->assertJsonPath('user.id', (string) $member->id)
+            ->assertJsonPath('user.email', 'aluno.v1@test.app')
+            ->assertJsonPath('user.role', 'STUDENT')
+            ->assertJsonPath('user.coachName', 'Coach Student Login')
+            ->assertJsonStructure([
+                'message',
+                'token_type',
+                'access_token',
+                'session_type',
+                'user' => [
+                    'id',
+                    'name',
+                    'email',
+                    'image',
+                    'phone',
+                    'status',
+                    'role',
+                    'coachName',
+                ],
+                'client',
+            ]);
+
+        expect($response->json('access_token'))->not->toBeEmpty()
+            ->and($owner->fresh()->tokens()->where('name', 'client-'.$member->id)->exists())->toBeTrue();
     });
 
     it('returns the authenticated user via /auth/me', function () {

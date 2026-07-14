@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\EventResource;
 use App\Models\Event;
+use App\Models\Member;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -50,9 +51,11 @@ class EventController extends Controller
             'status' => ['nullable', Rule::in(['scheduled', 'ongoing', 'completed', 'cancelled'])],
         ]);
 
+        $memberId = $this->resolveTenantMemberId($validated['member_id'] ?? null);
+
         $event = Event::query()->create([
             'parent_id' => $this->tenantId(),
-            'member_id' => $validated['member_id'] ?? null,
+            'member_id' => $memberId,
             'title' => $validated['title'],
             'description' => $validated['description'] ?? null,
             'start_time' => $validated['start_time'],
@@ -94,6 +97,10 @@ class EventController extends Controller
             ], 422);
         }
 
+        if (array_key_exists('member_id', $validated)) {
+            $validated['member_id'] = $this->resolveTenantMemberId($validated['member_id']);
+        }
+
         $event->update($validated);
 
         return response()->json([
@@ -110,5 +117,17 @@ class EventController extends Controller
     private function ensureTenantResource(?int $resourceParentId): void
     {
         abort_if((int) $resourceParentId !== $this->tenantId(), 403, 'Acesso nao autorizado.');
+    }
+
+    private function resolveTenantMemberId(null|int|string $memberId): ?int
+    {
+        if (! $memberId) {
+            return null;
+        }
+
+        return Member::query()
+            ->whereKey($memberId)
+            ->firstOrFail()
+            ->id;
     }
 }

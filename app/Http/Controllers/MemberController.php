@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\DataTables\MemberDataTable;
 use App\Http\Requests\MemberStoreRequest;
 use App\Http\Requests\MemberUpdateRequest;
+use App\Models\DietFood;
+use App\Models\DietMenu;
+use App\Models\LibraryWorkout;
 use App\Models\Member;
 use App\Models\MembershipPlan;
 use Illuminate\Http\RedirectResponse;
@@ -30,6 +33,7 @@ class MemberController extends Controller
                 'feedbacks',
                 'workouts',
                 'dietPrescriptions',
+                'cardioPlans',
                 'healthRecords',
             ])
             ->where('parent_id', $parentId);
@@ -163,11 +167,11 @@ class MemberController extends Controller
 
         $member->load([
             'membershipPlan',
-            'workouts',
+            'workouts.activities',
             'anamnesis',
             'photos',
             'logbooks',
-            'dietPrescriptions.dietMenu',
+            'dietPrescriptions.dietMenu.meals.mealFoods.dietFood',
             'cardioPlans',
             'memberNotes.author',
             'coach',
@@ -177,9 +181,37 @@ class MemberController extends Controller
             'conversation',
         ]);
 
-        $dietMenus = \App\Models\DietMenu::where('status', 'published')->orWhere('parent_id', parentId())->get();
+        $dietMenus = DietMenu::query()
+            ->where('parent_id', parentId())
+            ->with('meals.mealFoods.dietFood')
+            ->orderBy('name')
+            ->get();
+        $dietFoods = DietFood::query()
+            ->where('parent_id', parentId())
+            ->orderBy('name')
+            ->get(['id', 'name', 'food_group', 'calories', 'protein', 'carbs', 'fat']);
+        $workoutTemplates = LibraryWorkout::query()
+            ->where('parent_id', parentId())
+            ->where('status', 'published')
+            ->with('activities')
+            ->orderBy('title')
+            ->get();
 
-        return view('members.show', compact('member', 'tab', 'dietMenus'));
+        return view('members.show', compact('dietFoods', 'dietMenus', 'member', 'tab', 'workoutTemplates'));
+    }
+
+    public function workouts(Member $member, Request $request): View
+    {
+        $request->merge(['tab' => 'workout']);
+
+        return $this->show($member, $request);
+    }
+
+    public function diet(Member $member, Request $request): View
+    {
+        $request->merge(['tab' => 'diet']);
+
+        return $this->show($member, $request);
     }
 
     /**

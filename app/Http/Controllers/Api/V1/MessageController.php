@@ -7,6 +7,7 @@ use App\Http\Resources\V1\ConversationResource;
 use App\Http\Resources\V1\MessageResource;
 use App\Models\Conversation;
 use App\Models\Member;
+use App\Services\ChatMessenger;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -63,7 +64,7 @@ class MessageController extends Controller
         return new ConversationResource($conversation);
     }
 
-    public function send(Request $request, Conversation $conversation): JsonResponse
+    public function send(Request $request, Conversation $conversation, ChatMessenger $messenger): JsonResponse
     {
         $this->ensureTenantResource($conversation->parent_id);
 
@@ -71,16 +72,7 @@ class MessageController extends Controller
             'content' => ['required', 'string', 'max:5000'],
         ]);
 
-        $message = $conversation->messages()->create([
-            'sender_type' => 'coach',
-            'content' => $validated['content'],
-        ]);
-
-        $conversation->update([
-            'last_message' => $validated['content'],
-            'last_message_at' => now(),
-            'unread_by_coach' => false,
-        ]);
+        $message = $messenger->sendFromCoach($conversation, $validated['content']);
 
         return response()->json([
             'message' => 'Mensagem enviada com sucesso.',
@@ -88,16 +80,11 @@ class MessageController extends Controller
         ], 201);
     }
 
-    public function markAsRead(Conversation $conversation): JsonResponse
+    public function markAsRead(Conversation $conversation, ChatMessenger $messenger): JsonResponse
     {
         $this->ensureTenantResource($conversation->parent_id);
 
-        $conversation->messages()
-            ->where('sender_type', 'member')
-            ->whereNull('read_at')
-            ->update(['read_at' => now()]);
-
-        $conversation->update(['unread_by_coach' => false]);
+        $messenger->markMemberMessagesRead($conversation);
 
         return response()->json([
             'message' => 'Mensagens marcadas como lidas.',

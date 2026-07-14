@@ -26,6 +26,10 @@ Route::get('login', [LoginController::class, 'create'])->name('login');
 Route::post('login', [LoginController::class, 'store']);
 Route::post('logout', [LoginController::class, 'destroy'])->name('logout');
 
+Route::get('/mobile/student/diets/{prescription}/print', [App\Http\Controllers\Api\Mobile\StudentController::class, 'signedDietPrint'])
+    ->middleware('signed')
+    ->name('mobile.student.diets.print');
+
 // 2FA Routes
 Route::middleware(['auth'])->group(function () {
     Route::get('2fa', [OTPController::class, 'show'])->name('login.2fa');
@@ -51,14 +55,14 @@ Route::middleware(['auth', 'verify2fa'])->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
     Route::get('/notifications/inbox', [App\Http\Controllers\InAppNotificationController::class, 'index'])->name('notifications.inbox');
     Route::post('/notifications/inbox/read-all', [App\Http\Controllers\InAppNotificationController::class, 'markAllRead'])->name('notifications.read-all');
-    Route::post('/notifications/inbox/{id}/read', [App\Http\Controllers\InAppNotificationController::class, 'markRead'])->name('notifications.read');
+    Route::match(['get', 'post'], '/notifications/inbox/{id}/read', [App\Http\Controllers\InAppNotificationController::class, 'markRead'])->name('notifications.read');
     Route::get('/search', [App\Http\Controllers\SearchController::class, 'index'])->name('search');
     Route::get('/finance', [App\Http\Controllers\FinanceController::class, 'index'])->name('finance.index');
 
     // Coaching modules (coach-pro mirror)
     Route::get('/messages', [App\Http\Controllers\MessageController::class, 'index'])->name('messages.index');
     Route::post('/messages/{conversation}', [App\Http\Controllers\MessageController::class, 'store'])->name('messages.store');
-    Route::post('/messages/start/{member}', [App\Http\Controllers\MessageController::class, 'start'])->name('messages.start');
+    Route::match(['get', 'post'], '/messages/start/{member}', [App\Http\Controllers\MessageController::class, 'start'])->name('messages.start');
     Route::get('/feed', [App\Http\Controllers\FeedController::class, 'index'])->name('feed.index');
     Route::post('/feed', [App\Http\Controllers\FeedController::class, 'store'])->name('feed.store');
     Route::post('/feed/{item}/like', [App\Http\Controllers\FeedController::class, 'like'])->name('feed.like');
@@ -124,6 +128,8 @@ Route::middleware(['auth', 'verify2fa'])->group(function () {
     Route::post('/members/{member}/notify', [App\Http\Controllers\MemberCrmController::class, 'notifyClient'])->name('members.notify');
     Route::post('/members/{member}/photos/compare', [App\Http\Controllers\MemberCrmController::class, 'comparePhotos'])->name('members.photos.compare');
     Route::post('/diet-prescriptions/{prescription}/send', [App\Http\Controllers\MemberCrmController::class, 'sendDietPrescription'])->name('diet-prescriptions.send');
+    Route::put('/diet-prescriptions/{prescription}', [App\Http\Controllers\MemberCrmController::class, 'updateDietPrescription'])->name('diet-prescriptions.update');
+    Route::get('/diet-prescriptions/{prescription}/print', [App\Http\Controllers\MemberCrmController::class, 'printDietPrescription'])->name('diet-prescriptions.print');
     Route::get('/prescriptions', [App\Http\Controllers\PrescriptionController::class, 'index'])->name('prescriptions.index');
     Route::get('/apps', [App\Http\Controllers\MobileAppsController::class, 'index'])->name('apps.index');
     Route::get('/apps/status', [App\Http\Controllers\MobileAppsController::class, 'status'])->name('apps.status');
@@ -162,6 +168,8 @@ Route::middleware(['auth', 'verify2fa'])->group(function () {
 
         Route::group(['prefix' => '{member}'], function () {
             Route::get('edit', [App\Http\Controllers\MemberController::class, 'edit'])->name('edit');
+            Route::get('workouts', [App\Http\Controllers\MemberController::class, 'workouts'])->name('workouts');
+            Route::get('diet', [App\Http\Controllers\MemberController::class, 'diet'])->name('diet');
             Route::get('show', [App\Http\Controllers\MemberController::class, 'show'])->name('show');
             Route::put('update', [App\Http\Controllers\MemberController::class, 'update'])->name('update');
             Route::post('delete', [App\Http\Controllers\MemberController::class, 'destroy'])->name('destroy');

@@ -12,6 +12,8 @@ class MemberPhoto extends Model
 
     protected $fillable = ['parent_id', 'member_id', 'path', 'type', 'caption'];
 
+    protected $appends = ['url'];
+
     public function member(): BelongsTo
     {
         return $this->belongsTo(Member::class);

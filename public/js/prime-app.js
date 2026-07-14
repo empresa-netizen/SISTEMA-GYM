@@ -1,4 +1,35 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // Move Bootstrap modals to <body> so nested overflow/transform parents
+    // (client tabs, prescription cards) cannot trap or break the dialog.
+    document.querySelectorAll('.modal').forEach(function (modal) {
+        if (modal.parentElement !== document.body) {
+            document.body.appendChild(modal);
+        }
+    });
+
+    function clearOrphanBackdrops() {
+        if (document.querySelector('.modal.show')) {
+            return;
+        }
+        document.querySelectorAll('.modal-backdrop').forEach(function (el) {
+            el.remove();
+        });
+        document.body.classList.remove('modal-open');
+        document.body.style.removeProperty('overflow');
+        document.body.style.removeProperty('padding-right');
+    }
+
+    document.addEventListener('hidden.bs.modal', clearOrphanBackdrops);
+    document.addEventListener('shown.bs.modal', function () {
+        // If a previous click left a stale backdrop, keep only one.
+        const backdrops = document.querySelectorAll('.modal-backdrop');
+        backdrops.forEach(function (el, index) {
+            if (index > 0) {
+                el.remove();
+            }
+        });
+    });
+
     const rail = document.getElementById('primeRail');
     const toggle = document.getElementById('primeRailToggle');
 

@@ -16,6 +16,7 @@
 <form action="{{ route('workouts.update', $workout->id) }}" method="POST">
     @csrf
     @method('PUT')
+    <input type="hidden" name="sync_activities" value="1">
     
     <div class="row">
         <div class="col-lg-8">
@@ -108,54 +109,70 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title mb-0">Workout Activities ({{ $workout->activities->count() }})</h4>
+                    <div class="d-flex justify-content-between align-items-center gap-2">
+                        <h4 class="card-title mb-0">Exercícios do treino</h4>
+                        <button type="button" class="btn btn-sm btn-primary" onclick="addActivity()">
+                            <i class="ri-add-line"></i> Adicionar exercício
+                        </button>
+                    </div>
                 </div>
                 <div class="card-body">
-                    @if($workout->activities->count() > 0)
-                        <div class="table-responsive">
-                            <table class="table table-sm">
-                                <thead>
-                                    <tr>
-                                        <th>Exercise</th>
-                                        <th>Sets × Reps</th>
-                                        <th>Duration</th>
-                                        <th>Weight</th>
-                                        <th>Rest</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($workout->activities as $activity)
-                                        <tr>
-                                            <td>
-                                                <strong>{{ $activity->exercise_name }}</strong>
-                                                @if($activity->description)
-                                                    <br><small class="text-muted">{{ $activity->description }}</small>
-                                                @endif
-                                            </td>
-                                            <td>{{ $activity->sets && $activity->reps ? "{$activity->sets} × {$activity->reps}" : '-' }}</td>
-                                            <td>{{ $activity->duration_minutes ? "{$activity->duration_minutes} min" : '-' }}</td>
-                                            <td>{{ $activity->weight_kg ? "{$activity->weight_kg} kg" : '-' }}</td>
-                                            <td>{{ $activity->rest_seconds }}s</td>
-                                            <td>
-                                                @if($activity->is_completed)
-                                                    <span class="badge badge-soft-success">Completed</span>
-                                                @else
-                                                    <span class="badge badge-soft-secondary">Pending</span>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        <p class="text-muted small mt-2">
-                            Completion: {{ $workout->completion_percentage }}% 
-                            ({{ $workout->activities->where('is_completed', true)->count() }}/{{ $workout->activities->count() }})
-                        </p>
-                    @else
-                        <p class="text-muted">No activities in this workout.</p>
-                    @endif
+                    @php
+                        $editableActivities = collect(old('activities', $workout->activities->map(fn ($activity) => [
+                            'exercise_name' => $activity->exercise_name,
+                            'description' => $activity->description,
+                            'sets' => $activity->sets,
+                            'reps' => $activity->reps,
+                            'duration_minutes' => $activity->duration_minutes,
+                            'rest_seconds' => $activity->rest_seconds,
+                            'weight_kg' => $activity->weight_kg,
+                        ])->all()))->values();
+                    @endphp
+                    <div id="activities-container">
+                        @foreach($editableActivities as $index => $activity)
+                            <div class="activity-item border rounded p-3 mb-3" data-activity-item>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h6 class="mb-0">Exercício {{ $index + 1 }}</h6>
+                                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeActivity(this)">
+                                        <i class="ri-delete-bin-line"></i>
+                                    </button>
+                                </div>
+                                <div class="row g-2">
+                                    <div class="col-12">
+                                        <label class="form-label">Nome <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="activities[{{ $index }}][exercise_name]" value="{{ $activity['exercise_name'] ?? '' }}" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">Instruções</label>
+                                        <textarea class="form-control" name="activities[{{ $index }}][description]" rows="1">{{ $activity['description'] ?? '' }}</textarea>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Séries</label>
+                                        <input type="number" class="form-control" name="activities[{{ $index }}][sets]" value="{{ $activity['sets'] ?? '' }}" min="1">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Reps</label>
+                                        <input type="number" class="form-control" name="activities[{{ $index }}][reps]" value="{{ $activity['reps'] ?? '' }}" min="1">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Duração (min)</label>
+                                        <input type="number" class="form-control" name="activities[{{ $index }}][duration_minutes]" value="{{ $activity['duration_minutes'] ?? '' }}" min="1">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Carga (kg)</label>
+                                        <input type="number" class="form-control" name="activities[{{ $index }}][weight_kg]" value="{{ $activity['weight_kg'] ?? '' }}" step="0.5" min="0">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Descanso (seg)</label>
+                                        <input type="number" class="form-control" name="activities[{{ $index }}][rest_seconds]" value="{{ $activity['rest_seconds'] ?? 60 }}" min="0">
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    <p class="text-muted small mb-0 {{ $editableActivities->isNotEmpty() ? 'd-none' : '' }}" id="no-activities-msg">
+                        Nenhum exercício cadastrado. Use "Adicionar exercício" para montar a ficha.
+                    </p>
                 </div>
             </div>
 
@@ -170,4 +187,71 @@
         </div>
     </div>
 </form>
+@endsection
+
+@section('script')
+<script>
+let activityIndex = document.querySelectorAll('[data-activity-item]').length;
+
+function activityTemplate(index) {
+    return `
+        <div class="activity-item border rounded p-3 mb-3" data-activity-item>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="mb-0">Exercício ${index + 1}</h6>
+                <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeActivity(this)">
+                    <i class="ri-delete-bin-line"></i>
+                </button>
+            </div>
+            <div class="row g-2">
+                <div class="col-12">
+                    <label class="form-label">Nome <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" name="activities[${index}][exercise_name]" required>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Instruções</label>
+                    <textarea class="form-control" name="activities[${index}][description]" rows="1"></textarea>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Séries</label>
+                    <input type="number" class="form-control" name="activities[${index}][sets]" min="1">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Reps</label>
+                    <input type="number" class="form-control" name="activities[${index}][reps]" min="1">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Duração (min)</label>
+                    <input type="number" class="form-control" name="activities[${index}][duration_minutes]" min="1">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Carga (kg)</label>
+                    <input type="number" class="form-control" name="activities[${index}][weight_kg]" step="0.5" min="0">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Descanso (seg)</label>
+                    <input type="number" class="form-control" name="activities[${index}][rest_seconds]" value="60" min="0">
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function updateActivitiesEmptyState() {
+    const emptyState = document.getElementById('no-activities-msg');
+    if (!emptyState) return;
+
+    emptyState.classList.toggle('d-none', document.querySelectorAll('[data-activity-item]').length > 0);
+}
+
+function addActivity() {
+    document.getElementById('activities-container').insertAdjacentHTML('beforeend', activityTemplate(activityIndex));
+    activityIndex++;
+    updateActivitiesEmptyState();
+}
+
+function removeActivity(button) {
+    button.closest('[data-activity-item]')?.remove();
+    updateActivitiesEmptyState();
+}
+</script>
 @endsection

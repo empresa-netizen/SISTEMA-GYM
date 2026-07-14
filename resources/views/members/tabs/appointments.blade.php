@@ -48,9 +48,9 @@
             <a href="{{ route('events.create', ['member' => $member->id]) }}" class="prime-btn-ghost">
                 <i class="ri-calendar-event-line"></i> Agendar para o período
             </a>
-            <button type="button" class="prime-btn-ghost prime-btn-danger-ghost" disabled title="Ação em lote ainda não disponível">
-                <i class="ri-delete-bin-line"></i> Excluir agendamentos futuros
-            </button>
+            <a href="{{ route('members.show', [$member, 'tab' => 'appointments', 'period' => 'future']) }}" class="prime-btn-ghost">
+                <i class="ri-calendar-check-line"></i> Ver futuros
+            </a>
         </div>
     </div>
 

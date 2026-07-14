@@ -56,15 +56,7 @@ class MessageController extends Controller
 
         $validated = $request->validate(['content' => 'required|string|max:5000']);
 
-        $conversation->messages()->create([
-            'sender_type' => 'coach',
-            'content' => $validated['content'],
-        ]);
-
-        $conversation->update([
-            'last_message' => $validated['content'],
-            'last_message_at' => now(),
-        ]);
+        app(\App\Services\ChatMessenger::class)->sendFromCoach($conversation, $validated['content']);
 
         return redirect()->route('messages.index', ['conversation' => $conversation->id]);
     }

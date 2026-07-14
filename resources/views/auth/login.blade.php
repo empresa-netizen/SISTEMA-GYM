@@ -5,19 +5,26 @@
 @section('content')
 <div class="prime-auth-split">
     <div class="prime-auth-brand">
-        <div class="text-center">
-            <span class="prime-logo-mark">{{ config('brand.logo_mark', 'M') }}</span>
-            <p class="mt-3 mb-0 text-uppercase small fw-semibold" style="letter-spacing:.12em;color:var(--prime-muted);">
-                {{ config('brand.short', 'MGTEAM') }}
+        <div class="prime-auth-brand-inner">
+            <img
+                src="{{ asset('brand/mgteam-branco.svg') }}"
+                alt="{{ config('brand.name') }}"
+                class="prime-auth-brand-logo"
+            >
+            <p class="prime-auth-slogan">
+                Acompanhamento que trata você
+                <em>por inteiro.</em>
             </p>
-            <p class="mb-0 small" style="color:var(--prime-muted);opacity:.8;">
-                {{ config('brand.tagline', 'FITNESS & HEALTH') }}
-            </p>
+            <p class="prime-auth-handle">{{ config('brand.handle', '@mgteamoficial') }}</p>
         </div>
     </div>
 
     <div class="prime-auth-form-wrap">
         <div class="prime-form-card">
+            <div class="prime-form-brand-mobile">
+                @include('prime.partials.logo', ['size' => 'sm', 'variant' => 'dark'])
+            </div>
+
             <div class="prime-form-icon"><i class="ri-key-2-line"></i></div>
             <h1>Acesse a {{ config('brand.short', 'MGTEAM') }}</h1>
             <p class="prime-subtitle">Entre com suas credenciais de profissional</p>
@@ -31,7 +38,7 @@
             @endif
 
             @if (session('status'))
-                <div class="prime-alert" style="background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.25);color:#bbf7d0;">
+                <div class="prime-alert prime-alert--success">
                     {{ session('status') }}
                 </div>
             @endif

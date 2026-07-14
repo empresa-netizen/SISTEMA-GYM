@@ -3,14 +3,17 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\V1\StoreWorkoutPrescriptionRequest;
 use App\Http\Resources\V1\DietPrescriptionResource;
 use App\Http\Resources\V1\MemberResource;
 use App\Http\Resources\V1\WorkoutResource;
+use App\Models\DietMenu;
 use App\Models\DietPrescription;
 use App\Models\Member;
 use App\Models\Workout;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class PrescriptionController extends Controller
@@ -104,11 +107,19 @@ class PrescriptionController extends Controller
 
         $member = Member::query()->findOrFail($validated['member_id']);
         $this->ensureTenantResource($member->parent_id);
+        $dietMenuId = null;
+
+        if (! empty($validated['diet_menu_id'])) {
+            $dietMenuId = DietMenu::query()
+                ->whereKey($validated['diet_menu_id'])
+                ->firstOrFail()
+                ->id;
+        }
 
         $diet = DietPrescription::query()->create([
             'parent_id' => $this->tenantId(),
             'member_id' => $member->id,
-            'diet_menu_id' => $validated['diet_menu_id'] ?? null,
+            'diet_menu_id' => $dietMenuId,
             'title' => $validated['title'],
             'notes' => $validated['notes'] ?? null,
             'status' => $validated['status'] ?? 'draft',
@@ -119,6 +130,46 @@ class PrescriptionController extends Controller
         return response()->json([
             'message' => 'Prescricao alimentar criada com sucesso.',
             'data' => new DietPrescriptionResource($diet->load(['member:id,name', 'dietMenu:id,name,status'])),
+        ], 201);
+    }
+
+    public function storeWorkout(StoreWorkoutPrescriptionRequest $request): JsonResponse
+    {
+        $validated = $request->validated();
+        $member = Member::query()->findOrFail($validated['member_id']);
+        $this->ensureTenantResource($member->parent_id);
+
+        $workout = DB::transaction(function () use ($validated, $member) {
+            $workout = Workout::query()->create([
+                'parent_id' => $this->tenantId(),
+                'member_id' => $member->id,
+                'name' => $validated['name'],
+                'description' => $validated['description'] ?? null,
+                'workout_date' => $validated['workout_date'] ?? null,
+                'status' => $validated['status'] ?? 'active',
+                'notes' => $validated['notes'] ?? null,
+            ]);
+
+            foreach ($validated['activities'] as $index => $activity) {
+                $workout->activities()->create([
+                    'exercise_name' => $activity['exercise_name'],
+                    'description' => $activity['description'] ?? null,
+                    'sets' => $activity['sets'] ?? null,
+                    'reps' => $activity['reps'] ?? null,
+                    'duration_minutes' => $activity['duration_minutes'] ?? null,
+                    'rest_seconds' => $activity['rest_seconds'] ?? 60,
+                    'weight_kg' => $activity['weight_kg'] ?? null,
+                    'order' => $activity['order'] ?? $index + 1,
+                    'notes' => $activity['notes'] ?? null,
+                ]);
+            }
+
+            return $workout->load(['member:id,name', 'activities.logs']);
+        });
+
+        return response()->json([
+            'message' => 'Prescricao de treino criada com sucesso.',
+            'data' => new WorkoutResource($workout),
         ], 201);
     }
 

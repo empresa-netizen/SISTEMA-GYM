@@ -1,12 +1,17 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(cat:*)",
+      "Bash(npm list *)",
+      "Bash(npm view *)",
+      "Bash(npm install *)",
+      "Bash(sudo npm install -g @openai/codex@latest)",
+      "Bash(codex --version)"
+    ]
+  },
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "laravel-boost",
     "herd"
-  ],
-  "permissions": {
-    "allow": [
-      "Bash(cat:*)"
-    ]
-  }
+  ]
 }

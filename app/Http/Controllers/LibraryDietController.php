@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreDietMenuRequest;
 use App\Models\DietFood;
 use App\Models\DietMenu;
 use App\Models\LibraryCourse;
 use App\Models\Member;
+use App\Services\DietMenuBuilder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -112,11 +114,15 @@ class LibraryDietController extends Controller
 
     public function menus(Request $request): View
     {
-        $menus = DietMenu::when($request->status, fn ($q) => $q->where('status', $request->status))
+        $menus = DietMenu::with('meals.mealFoods.dietFood')
+            ->when($request->status, fn ($q) => $q->where('status', $request->status))
             ->latest()
             ->paginate(20);
+        $foods = DietFood::query()
+            ->orderBy('name')
+            ->get(['id', 'name', 'food_group', 'calories', 'protein', 'carbs', 'fat']);
 
-        return view('prime.library.diet.menus', compact('menus'));
+        return view('prime.library.diet.menus', compact('foods', 'menus'));
     }
 
     public function formulas(): View
@@ -153,17 +159,9 @@ class LibraryDietController extends Controller
         return back()->with('success', 'Alimento cadastrado.');
     }
 
-    public function storeMenu(Request $request): RedirectResponse
+    public function storeMenu(StoreDietMenuRequest $request, DietMenuBuilder $builder): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'meals_count' => 'nullable|integer|min:0',
-            'total_calories' => 'nullable|numeric|min:0',
-            'status' => 'required|in:draft,published',
-        ]);
-
-        DietMenu::create(array_merge($validated, ['parent_id' => parentId()]));
+        $builder->createForTenant(parentId(), $request->validated());
 
         return back()->with('success', 'Cardápio criado.');
     }

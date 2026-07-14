@@ -191,6 +191,7 @@
             <span class="prime-status-badge {{ $statusClass }}">
                 <i class="ri-shield-check-line"></i>
                 {{ $statusLabels[$accountStatus] ?? ucfirst($accountStatus) }}
+                <span class="visually-hidden">{{ ucfirst($accountStatus) }}</span>
             </span>
         </div>
     </section>

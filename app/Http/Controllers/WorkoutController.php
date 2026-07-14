@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\WorkoutPrescriptionRequest;
 use App\Models\Member;
 use App\Models\Trainer;
 use App\Models\Workout;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class WorkoutController extends Controller
@@ -56,41 +58,25 @@ class WorkoutController extends Controller
         return view('workouts.create', compact('members', 'trainers'));
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(WorkoutPrescriptionRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'member_id' => 'nullable|exists:members,id',
-            'trainer_id' => 'nullable|exists:trainers,id',
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'workout_date' => 'nullable|date',
-            'status' => 'required|in:active,completed,cancelled',
-            'notes' => 'nullable|string',
-            // Activities
-            'activities' => 'nullable|array',
-            'activities.*.exercise_name' => 'required|string|max:255',
-            'activities.*.description' => 'nullable|string',
-            'activities.*.sets' => 'nullable|integer|min:1',
-            'activities.*.reps' => 'nullable|integer|min:1',
-            'activities.*.duration_minutes' => 'nullable|integer|min:1',
-            'activities.*.rest_seconds' => 'nullable|integer|min:0',
-            'activities.*.weight_kg' => 'nullable|numeric|min:0',
-        ]);
+        $validated = $request->validated();
+        $activities = $validated['activities'] ?? [];
+        unset($validated['activities']);
 
         $validated['parent_id'] = parentId();
 
-        // Create workout
-        $workout = Workout::create($validated);
+        $workout = DB::transaction(function () use ($activities, $validated) {
+            $workout = Workout::create($validated);
 
-        // Create activities
-        $activitiesCount = 0;
-        if ($request->has('activities')) {
-            foreach ($request->activities as $index => $activity) {
-                $activity['order'] = $index;
-                $workout->activities()->create($activity);
-                $activitiesCount++;
+            foreach (array_values($activities) as $index => $activity) {
+                $workout->activities()->create(array_merge($activity, [
+                    'order' => $index,
+                ]));
             }
-        }
+
+            return $workout;
+        });
 
         // Send email if workout assigned to member
         if ($workout->member_id) {
@@ -103,8 +89,7 @@ class WorkoutController extends Controller
             ]);
         }
 
-        return redirect()->route('workouts.index')
-            ->with('success', 'Workout created successfully with ID: '.$workout->workout_id);
+        return $this->redirectAfterPersist($workout, 'Treino salvo com sucesso: '.$workout->workout_id);
     }
 
     /**
@@ -143,27 +128,44 @@ class WorkoutController extends Controller
     /**
      * Update the specified workout
      */
-    public function update(Request $request, Workout $workout): RedirectResponse
+    public function update(WorkoutPrescriptionRequest $request, Workout $workout): RedirectResponse
     {
         // Check multi-tenant isolation
         if ($workout->parent_id != parentId()) {
             abort(403, 'Unauthorized access');
         }
 
-        $validated = $request->validate([
-            'member_id' => 'nullable|exists:members,id',
-            'trainer_id' => 'nullable|exists:trainers,id',
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'workout_date' => 'nullable|date',
-            'status' => 'required|in:active,completed,cancelled',
-            'notes' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
+        $activities = $validated['activities'] ?? [];
+        unset($validated['activities']);
 
-        $workout->update($validated);
+        DB::transaction(function () use ($activities, $request, $validated, $workout) {
+            $workout->update($validated);
+
+            if ($request->boolean('sync_activities')) {
+                $workout->activities()->delete();
+
+                foreach (array_values($activities) as $index => $activity) {
+                    $workout->activities()->create(array_merge($activity, [
+                        'order' => $index,
+                    ]));
+                }
+            }
+        });
+
+        return $this->redirectAfterPersist($workout, 'Treino atualizado com sucesso.');
+    }
+
+    private function redirectAfterPersist(Workout $workout, string $message): RedirectResponse
+    {
+        if ($workout->member_id) {
+            return redirect()
+                ->route('members.show', ['member' => $workout->member_id, 'tab' => 'workout'])
+                ->with('success', $message);
+        }
 
         return redirect()->route('workouts.index')
-            ->with('success', 'Workout updated successfully');
+            ->with('success', $message);
     }
 
     /**

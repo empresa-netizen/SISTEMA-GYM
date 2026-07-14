@@ -17,6 +17,8 @@ class ClientFeedbackResource extends JsonResource
             'message' => $this->message,
             'photo_path' => $this->photo_path,
             'rating' => $this->rating,
+            'context_type' => $this->context_type,
+            'context_id' => $this->context_id,
             'member' => new MemberResource($this->whenLoaded('member')),
             'created_at' => optional($this->created_at)?->toIso8601String(),
         ];

@@ -35,9 +35,179 @@
             'active' => false,
         ],
     ];
+    $invoiceStatusMeta = function ($invoice): array {
+        if ($invoice->isOverdue()) {
+            return ['label' => 'Atrasado', 'class' => 'prime-invoice-badge--overdue'];
+        }
+
+        return match ($invoice->status) {
+            'paid' => ['label' => 'Pago', 'class' => 'prime-invoice-badge--paid'],
+            'partially_paid' => ['label' => 'Pendente', 'class' => 'prime-invoice-badge--pending'],
+            'unpaid' => ['label' => 'Pendente', 'class' => 'prime-invoice-badge--pending'],
+            'cancelled' => ['label' => 'Cancelado', 'class' => 'prime-invoice-badge--muted'],
+            default => ['label' => ucfirst((string) $invoice->status), 'class' => 'prime-invoice-badge--muted'],
+        };
+    };
 @endphp
 
-<div class="prime-clients-page">
+@push('styles')
+    <style>
+        .prime-finance-page {
+            display: grid;
+            gap: 0.85rem;
+        }
+
+        .prime-invoice-board {
+            overflow: hidden;
+            border: 1px solid #D8E0EA;
+            border-radius: 0.86rem;
+            background: #FFFFFF;
+            box-shadow: 0 8px 22px rgba(23, 37, 56, 0.04);
+        }
+
+        .prime-invoice-row {
+            display: grid;
+            grid-template-columns: minmax(9rem, 0.8fr) minmax(12rem, 1.2fr) 7rem 8.5rem 8.5rem 8rem 9rem;
+            gap: 0.55rem;
+            align-items: center;
+            min-height: 3.18rem;
+            padding: 0.48rem 0.72rem;
+            border-bottom: 1px solid #EDF1F6;
+        }
+
+        .prime-invoice-row:last-child {
+            border-bottom: 0;
+        }
+
+        .prime-invoice-row--header {
+            min-height: 2.35rem;
+            background: #F6F8FB;
+            color: #7A899F;
+            font-size: 0.68rem;
+            font-weight: 920;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .prime-invoice-number {
+            color: #101929;
+            font-size: 0.82rem;
+            font-weight: 920;
+            text-decoration: none;
+        }
+
+        .prime-invoice-client {
+            overflow: hidden;
+            color: #23324A;
+            font-size: 0.8rem;
+            font-weight: 820;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .prime-invoice-muted {
+            color: #7F8DA3;
+            font-size: 0.72rem;
+            font-weight: 720;
+        }
+
+        .prime-invoice-money {
+            color: #18263D;
+            font-size: 0.8rem;
+            font-weight: 900;
+            text-align: right;
+        }
+
+        .prime-invoice-badge {
+            display: inline-flex;
+            width: fit-content;
+            min-height: 1.45rem;
+            align-items: center;
+            padding: 0 0.52rem;
+            border-radius: 999px;
+            font-size: 0.68rem;
+            font-weight: 920;
+        }
+
+        .prime-invoice-badge--paid {
+            background: #E8F8EF;
+            color: #168A46;
+        }
+
+        .prime-invoice-badge--pending {
+            background: #FFF5D8;
+            color: #9B6A00;
+        }
+
+        .prime-invoice-badge--overdue {
+            background: #FEECEB;
+            color: #C7362F;
+        }
+
+        .prime-invoice-badge--muted {
+            background: #EEF2F7;
+            color: #66758B;
+        }
+
+        .prime-invoice-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.35rem;
+        }
+
+        .prime-invoice-mini-btn {
+            display: inline-flex;
+            min-height: 1.88rem;
+            align-items: center;
+            justify-content: center;
+            padding: 0 0.54rem;
+            border: 1px solid #DCE5EF;
+            border-radius: 0.58rem;
+            background: #FFFFFF;
+            color: #30425D;
+            font-size: 0.7rem;
+            font-weight: 880;
+            text-decoration: none;
+        }
+
+        .prime-invoice-mini-btn--success {
+            border-color: rgba(22, 138, 70, 0.26);
+            background: #E8F8EF;
+            color: #168A46;
+        }
+
+        @media (max-width: 1199.98px) {
+            .prime-invoice-row {
+                grid-template-columns: minmax(10rem, 1fr) minmax(10rem, 1fr) repeat(2, 7rem);
+            }
+
+            .prime-invoice-row > :nth-child(5),
+            .prime-invoice-row > :nth-child(6),
+            .prime-invoice-row > :nth-child(7) {
+                display: none;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .prime-invoice-row,
+            .prime-invoice-row--header {
+                grid-template-columns: 1fr;
+            }
+
+            .prime-invoice-row--header {
+                display: none;
+            }
+
+            .prime-invoice-money,
+            .prime-invoice-actions {
+                justify-content: flex-start;
+                text-align: left;
+            }
+        }
+    </style>
+@endpush
+
+<div class="prime-clients-page prime-finance-page">
     <div class="prime-clients-toolbar">
         <div class="prime-clients-toolbar__left">
             <h1 class="prime-page-title mb-0">Financeiro</h1>
@@ -189,6 +359,56 @@
                     <strong>{{ auth()->user()->name ?? config('brand.short', 'MGTEAM') }}</strong>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="prime-panel prime-panel--compact">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h2 class="prime-section-title h6 mb-0">Faturas recentes</h2>
+            <a href="{{ route('finance.index', ['tab' => 'transactions']) }}" class="prime-btn-ghost prime-btn-ghost--sm">Ver todas</a>
+        </div>
+        <div class="prime-invoice-board">
+            <div class="prime-invoice-row prime-invoice-row--header">
+                <span>Fatura</span>
+                <span>Cliente</span>
+                <span>Status</span>
+                <span class="text-end">Total</span>
+                <span class="text-end">Pago</span>
+                <span>Vencimento</span>
+                <span class="text-end">Ações</span>
+            </div>
+            @forelse($recentInvoices as $invoice)
+                @php $statusMeta = $invoiceStatusMeta($invoice); @endphp
+                <div class="prime-invoice-row">
+                    <a href="{{ route('invoices.show', $invoice) }}" class="prime-invoice-number">{{ $invoice->invoice_number }}</a>
+                    <div>
+                        <div class="prime-invoice-client">{{ $invoice->member?->name ?? 'Cliente não informado' }}</div>
+                        <div class="prime-invoice-muted">{{ optional($invoice->invoice_date)->format('d/m/Y') ?? 'Sem emissão' }}</div>
+                    </div>
+                    <span class="prime-invoice-badge {{ $statusMeta['class'] }}">{{ $statusMeta['label'] }}</span>
+                    <div class="prime-invoice-money">{{ $money($invoice->total_amount) }}</div>
+                    <div class="prime-invoice-money">{{ $money($invoice->paid_amount) }}</div>
+                    <div class="prime-invoice-muted">{{ optional($invoice->due_date)->format('d/m/Y') ?? '—' }}</div>
+                    <div class="prime-invoice-actions">
+                        <a href="{{ route('invoices.show', $invoice) }}" class="prime-invoice-mini-btn">Ver</a>
+                        @if(! $invoice->isPaid() && $invoice->remaining_balance > 0)
+                            <form method="POST" action="{{ route('invoices.addPayment', $invoice) }}" onsubmit="return confirm('Dar baixa integral nesta fatura?')">
+                                @csrf
+                                <input type="hidden" name="amount" value="{{ number_format($invoice->remaining_balance, 2, '.', '') }}">
+                                <input type="hidden" name="payment_date" value="{{ now()->toDateString() }}">
+                                <input type="hidden" name="payment_method" value="bank_transfer">
+                                <input type="hidden" name="notes" value="Baixa manual registrada pelo dashboard financeiro.">
+                                <button type="submit" class="prime-invoice-mini-btn prime-invoice-mini-btn--success">Dar baixa</button>
+                            </form>
+                        @endif
+                    </div>
+                </div>
+            @empty
+                <div class="prime-empty-state prime-empty-state--compact">
+                    <i class="ri-file-list-3-line"></i>
+                    <p>Nenhuma fatura emitida.</p>
+                </div>
+            @endforelse
         </div>
     </div>
 

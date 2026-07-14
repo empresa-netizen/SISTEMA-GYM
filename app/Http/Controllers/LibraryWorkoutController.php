@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\LibraryWorkout;
 use App\Models\Member;
-use App\Models\Workout;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -68,9 +67,18 @@ class LibraryWorkoutController extends Controller
             'status' => ['nullable', Rule::in(['draft', 'published', 'archived'])],
             'description' => ['nullable', 'string'],
             'notes' => ['nullable', 'string'],
+            'activities' => ['nullable', 'array'],
+            'activities.*.exercise_name' => ['required_with:activities', 'string', 'max:255'],
+            'activities.*.description' => ['nullable', 'string'],
+            'activities.*.sets' => ['nullable', 'integer', 'min:0'],
+            'activities.*.reps' => ['nullable', 'integer', 'min:0'],
+            'activities.*.duration_minutes' => ['nullable', 'integer', 'min:0'],
+            'activities.*.rest_seconds' => ['nullable', 'integer', 'min:0'],
+            'activities.*.weight_kg' => ['nullable', 'numeric', 'min:0'],
+            'activities.*.notes' => ['nullable', 'string'],
         ]);
 
-        LibraryWorkout::create([
+        $template = LibraryWorkout::create([
             'parent_id' => parentId(),
             'title' => $validated['title'],
             'focus' => $validated['focus'] ?? null,
@@ -81,6 +89,20 @@ class LibraryWorkoutController extends Controller
             'description' => $validated['description'] ?? null,
             'notes' => $validated['notes'] ?? null,
         ]);
+
+        foreach ($validated['activities'] ?? [] as $index => $activity) {
+            $template->activities()->create([
+                'exercise_name' => $activity['exercise_name'],
+                'description' => $activity['description'] ?? null,
+                'sets' => $activity['sets'] ?? null,
+                'reps' => $activity['reps'] ?? null,
+                'duration_minutes' => $activity['duration_minutes'] ?? null,
+                'rest_seconds' => $activity['rest_seconds'] ?? null,
+                'weight_kg' => $activity['weight_kg'] ?? null,
+                'order' => $index,
+                'notes' => $activity['notes'] ?? null,
+            ]);
+        }
 
         return back()->with('success', 'Template de treino criado na biblioteca.');
     }
@@ -95,15 +117,7 @@ class LibraryWorkoutController extends Controller
 
         $member = Member::where('parent_id', parentId())->findOrFail($validated['member_id']);
 
-        Workout::create([
-            'parent_id' => parentId(),
-            'member_id' => $member->id,
-            'name' => $template->title,
-            'description' => $template->description,
-            'notes' => trim(($template->notes ? $template->notes."\n" : '').'Importado da biblioteca #'.$template->id),
-            'workout_date' => now()->toDateString(),
-            'status' => 'active',
-        ]);
+        app(\App\Services\LibraryWorkoutAssigner::class)->assign($template, $member);
 
         return back()->with('success', "Template atribuído a {$member->name}.");
     }

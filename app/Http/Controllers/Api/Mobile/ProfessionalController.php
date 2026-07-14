@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\Mobile;
 use App\Http\Controllers\Controller;
 use App\Models\ClientFeedback;
 use App\Models\CoachFeedItem;
+use App\Models\CommunityGroup;
+use App\Models\CommunityPost;
 use App\Models\Conversation;
 use App\Models\DietFood;
 use App\Models\DietPrescription;
@@ -112,14 +114,48 @@ class ProfessionalController extends Controller
         return response()->json($feed);
     }
 
-    public function posts(): JsonResponse
+    public function posts(Request $request): JsonResponse
     {
-        return response()->json([]);
+        $tenantId = $this->tenantId($request);
+
+        $posts = CoachFeedItem::query()
+            ->where('parent_id', $tenantId)
+            ->with('member:id,name,email,photo')
+            ->latest()
+            ->take(50)
+            ->get();
+
+        return response()->json($posts);
     }
 
-    public function community(): JsonResponse
+    public function community(Request $request): JsonResponse
     {
-        return response()->json([]);
+        $tenantId = $this->tenantId($request);
+
+        $groups = CommunityGroup::query()
+            ->where('parent_id', $tenantId)
+            ->withCount('posts')
+            ->with([
+                'posts' => fn ($query) => $query
+                    ->with('member:id,name,email,photo')
+                    ->latest()
+                    ->limit(5),
+            ])
+            ->latest()
+            ->take(50)
+            ->get();
+
+        $recentPosts = CommunityPost::query()
+            ->where('parent_id', $tenantId)
+            ->with(['group:id,parent_id,name', 'member:id,name,email,photo'])
+            ->latest()
+            ->take(30)
+            ->get();
+
+        return response()->json([
+            'groups' => $groups->map(fn (CommunityGroup $group) => $this->mapCommunityGroup($group))->values(),
+            'recent_posts' => $recentPosts->map(fn (CommunityPost $post) => $this->mapCommunityPost($post))->values(),
+        ]);
     }
 
     public function prescriptions(Request $request): JsonResponse
@@ -193,6 +229,44 @@ class ProfessionalController extends Controller
             ],
             'activeSubscription' => null,
             'xp' => 0,
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function mapCommunityGroup(CommunityGroup $group): array
+    {
+        return [
+            'id' => $group->id,
+            'name' => $group->name,
+            'description' => $group->description,
+            'members_count' => $group->members_count,
+            'posts_count' => $group->posts_count ?? $group->posts()->count(),
+            'created_at' => $group->created_at?->toIso8601String(),
+            'posts' => $group->posts
+                ->map(fn (CommunityPost $post) => $this->mapCommunityPost($post))
+                ->values(),
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function mapCommunityPost(CommunityPost $post): array
+    {
+        $member = $post->member;
+
+        return [
+            'id' => $post->id,
+            'group_id' => $post->community_group_id,
+            'group_name' => $post->group?->name,
+            'member_id' => $post->member_id,
+            'author_name' => $member?->name ?? 'Coach',
+            'author_image' => $member?->photo ? asset('storage/'.$member->photo) : null,
+            'content' => $post->content,
+            'likes_count' => $post->likes_count,
+            'created_at' => $post->created_at?->toIso8601String(),
         ];
     }
 }

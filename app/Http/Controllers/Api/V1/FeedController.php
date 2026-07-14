@@ -7,6 +7,7 @@ use App\Http\Resources\V1\ClientFeedbackResource;
 use App\Http\Resources\V1\FeedPostResource;
 use App\Models\ClientFeedback;
 use App\Models\CoachFeedItem;
+use App\Models\Member;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -48,10 +49,12 @@ class FeedController extends Controller
             'meta' => ['nullable', 'string', 'max:255'],
         ]);
 
+        $memberId = $this->resolveTenantMemberId($validated['member_id'] ?? null);
+
         $item = CoachFeedItem::query()->create([
             'parent_id' => $this->tenantId(),
             'author_id' => auth()->id(),
-            'member_id' => $validated['member_id'] ?? null,
+            'member_id' => $memberId,
             'type' => $validated['type'] ?? 'POST',
             'title' => $validated['title'],
             'description' => $validated['description'] ?? null,
@@ -82,5 +85,17 @@ class FeedController extends Controller
     private function tenantId(): int
     {
         return (int) (parentId() ?? auth()->id());
+    }
+
+    private function resolveTenantMemberId(null|int|string $memberId): ?int
+    {
+        if (! $memberId) {
+            return null;
+        }
+
+        return Member::query()
+            ->whereKey($memberId)
+            ->firstOrFail()
+            ->id;
     }
 }

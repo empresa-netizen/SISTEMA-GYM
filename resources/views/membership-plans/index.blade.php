@@ -30,7 +30,7 @@
 <div class="prime-clients-page prime-products-page">
     <div class="prime-clients-toolbar">
         <div class="prime-clients-toolbar__left">
-            <h1 class="prime-page-title mb-0">Produtos</h1>
+            <h1 class="prime-page-title mb-0">Meus produtos</h1>
             <p class="prime-page-sub">Gerencie os seus produtos</p>
         </div>
     </div>
@@ -178,7 +178,7 @@
                 $checkoutUrl = route('membership-plans.show', $plan);
                 $installmentsLabel = $plan->duration_type === 'lifetime' ? '1x' : max(1, (int) $plan->duration_value).'x';
             @endphp
-            <div class="prime-product-row">
+            <div class="prime-product-row prime-product-card">
                 <div class="prime-product-row__check">
                     <input type="checkbox" aria-label="Selecionar {{ $plan->name }}">
                 </div>
@@ -252,6 +252,7 @@
                         <li>
                             <form method="POST" action="{{ route('membership-plans.destroy', $plan) }}" onsubmit="return confirm('Excluir este produto?')">
                                 @csrf
+                                <input type="hidden" name="_response" value="redirect">
                                 <button type="submit" class="dropdown-item text-danger">
                                     <i class="ri-delete-bin-line me-2"></i> Excluir
                                 </button>

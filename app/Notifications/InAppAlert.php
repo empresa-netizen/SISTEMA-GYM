@@ -4,6 +4,7 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
 
 class InAppAlert extends Notification implements ShouldQueue
@@ -20,7 +21,7 @@ class InAppAlert extends Notification implements ShouldQueue
 
     public function via(object $notifiable): array
     {
-        return ['database'];
+        return ['database', 'broadcast'];
     }
 
     public function toArray(object $notifiable): array
@@ -32,5 +33,15 @@ class InAppAlert extends Notification implements ShouldQueue
             'icon' => $this->icon,
             'level' => $this->level,
         ];
+    }
+
+    public function toBroadcast(object $notifiable): BroadcastMessage
+    {
+        return new BroadcastMessage($this->toArray($notifiable));
+    }
+
+    public function broadcastAs(): string
+    {
+        return 'InAppAlert';
     }
 }

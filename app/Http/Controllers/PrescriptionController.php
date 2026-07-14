@@ -55,10 +55,12 @@ class PrescriptionController extends Controller
             $workoutsQuery->whereDate('workout_date', $filters['date']);
             $dietsQuery->whereDate('scheduled_at', $filters['date']);
         } elseif ($filters['days'] !== 'all') {
+            // Inclui atrasadas recentes + próximas N dias (senão dietas passadas somem da lista)
+            $start = now()->subDays(7)->startOfDay();
             $end = now()->addDays($days)->endOfDay();
 
-            $workoutsQuery->whereBetween('workout_date', [now()->startOfDay(), $end]);
-            $dietsQuery->whereBetween('scheduled_at', [now()->startOfDay(), $end]);
+            $workoutsQuery->whereBetween('workout_date', [$start, $end]);
+            $dietsQuery->whereBetween('scheduled_at', [$start, $end]);
         }
 
         $rows = collect();

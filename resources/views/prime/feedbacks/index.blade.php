@@ -16,6 +16,13 @@
         'viewed' => ['Visualizado', 'prime-chip--info'],
         'resolved' => ['Resolvido', 'prime-chip--success'],
     ];
+    $contextLabels = [
+        'workout' => ['Treino', 'ri-run-line'],
+        'exercise' => ['Exercício', 'ri-weight-line'],
+        'diet' => ['Dieta', 'ri-restaurant-2-line'],
+        'meal' => ['Refeição', 'ri-bowl-line'],
+        'general' => ['Geral', 'ri-chat-quote-line'],
+    ];
 @endphp
 
 <div class="prime-clients-page">
@@ -124,6 +131,15 @@
                         </div>
                         <div class="prime-client-chips">
                             <span class="prime-chip {{ $statusChip }}">{{ $statusLabel }}</span>
+                            @if($feedback->context_type)
+                                @php
+                                    [$contextLabel, $contextIcon] = $contextLabels[$feedback->context_type] ?? [Str::title($feedback->context_type), 'ri-link'];
+                                @endphp
+                                <span class="prime-chip prime-chip--info">
+                                    <i class="{{ $contextIcon }}"></i>
+                                    {{ $contextLabel }}@if($feedback->context_id) #{{ $feedback->context_id }}@endif
+                                </span>
+                            @endif
                             @if($feedback->photo_path)
                                 <span class="prime-chip"><i class="ri-image-line"></i> Foto anexada</span>
                             @endif

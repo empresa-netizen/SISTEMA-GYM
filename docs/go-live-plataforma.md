@@ -1,58 +1,47 @@
 # Go-live — plataforma.mgteamoficial.site
 
-## 1. Subdomínio (Hostinger)
+**Status (2026-07-10):** no ar em shared hosting Hostinger.
 
-A API MCP da Hostinger está retornando `ECONNRESET` neste momento. Crie o subdomínio pelo hPanel:
+| Item | Valor |
+|------|--------|
+| URL | https://plataforma.mgteamoficial.site |
+| Docroot | `/home/u953703540/domains/mgteamoficial.site/public_html/plataforma` |
+| PHP | 8.3.30 (LiteSpeed) |
+| DB | `u953703540_plataforma` |
+| Login demo | `coach@mgteam.app` / `password` |
 
-1. [hPanel](https://hpanel.hostinger.com/) → **Domains** → `mgteamoficial.site`
-2. **Subdomains** → Create → prefixo `plataforma`
-3. Document root sugerido (Laravel): `plataforma.mgteamoficial.site/public`  
-   (ou pasta do addon apontando o vhost Nginx `root` para `/public`)
-4. DNS: registro **A** `plataforma` → IP do hosting/VPS (TTL 300)
-5. SSL: SSL/TLS no painel (Let's Encrypt) para `plataforma.mgteamoficial.site`
+## Validado
 
-Quando a API Hostinger voltar, dá para criar via:
-`hosting_createWebsiteSubdomainV1(username, domain=mgteamoficial.site, subdomain=plataforma)`.
+- `GET /api/health` → `{"status":"ok","database":"ok"}`
+- `POST /api/v1/login` → Bearer token
+- `GET /api/v1/dashboard` → KPIs
+- `/` e `/login` → 200 (MGTEAM)
 
-## 2. Servidor
+## Crons (hPanel)
 
-- PHP 8.3 FPM + extensões (mbstring, pdo_mysql, bcmath, gd, zip, pcntl, exif)
-- MySQL 8
-- Nginx (`deployment/nginx-plataforma.mgteamoficial.site.conf`)
-- Supervisor (`deployment/supervisor-queue.conf.example`) apontando para o path real
-
-## 3. Deploy do código
-
-```bash
-# No servidor (path exemplo)
-cd /var/www/plataforma.mgteamoficial.site
-git pull origin main
-cp deployment/env.production.example .env   # preencher secrets
-php artisan key:generate --force
-chmod +x deploy.sh
-./deploy.sh
-chown -R www-data:www-data storage bootstrap/cache
+```
+* * * * * cd .../plataforma && php artisan schedule:run
+* * * * * cd .../plataforma && php artisan queue:work --stop-when-empty --max-time=50
 ```
 
-Ou: secrets `DEPLOY_*` no GitHub + workflow **Deploy**.
+(`symlink` e `exec` estão desabilitados no shared — queue via cron, storage sem `storage:link`.)
 
-## 4. Validação Dia 1
+## Redeploy
 
-```bash
-curl -s https://plataforma.mgteamoficial.site/api/health
-curl -s -H "Accept: application/json" -H "Content-Type: application/json" \
-  -d '{"email":"...","password":"..."}' \
-  https://plataforma.mgteamoficial.site/api/v1/login
-# Bearer → /api/v1/dashboard
-# Com DSN: /api/v1/debug-sentry (bloqueado se APP_ENV=production)
-```
+1. Build zip local (vendor `--no-dev` + `public/build` + `.env` de produção).
+2. MCP `hosting_deployStaticWebsite` com `domain=plataforma.mgteamoficial.site`.
+3. Se precisar migrate: rodar Artisan via script one-shot ou File Manager + cron.
 
-## 5. Checklist
+## Pendências opcionais
 
-- [ ] `APP_ENV=production` / `APP_DEBUG=false`
-- [ ] `APP_URL=https://plataforma.mgteamoficial.site`
-- [ ] `SENTRY_LARAVEL_DSN` preenchido
-- [ ] SMTP real
-- [ ] Supervisor `queue:work` UP
-- [ ] Backup MySQL diário
-- [ ] HTTPS válido
+- [ ] SMTP real (`MAIL_*`)
+- [ ] `SENTRY_LARAVEL_DSN`
+- [ ] Trocar senha demo em produção
+- [ ] Reativar VPS `srv1712804` se quiser Nginx/Supervisor dedicados (hoje está `suspended`)
+- [ ] Remover `public/install-once.php` / `debug-boot.php` se ainda existirem no File Manager
+
+## Notas
+
+- VPS Hostinger não foi usado (suspenso).
+- Shared hosting: deploy por archive MCP; sem SSH/rsync.
+- Não commitar `.env` de produção nem senha do banco.

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Mobile;
 use App\Http\Controllers\Controller;
 use App\Models\Member;
 use App\Models\User;
+use App\Support\AdminCredentials;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -21,7 +22,9 @@ class MobileAuthController extends Controller
         ]);
 
         /** @var User|null $user */
-        $user = User::query()->where('email', $validated['email'])->first();
+        $user = User::query()
+            ->where('email', AdminCredentials::resolveEmail($validated['email']))
+            ->first();
 
         if (! $user || ! Hash::check($validated['password'], $user->password)) {
             return response()->json([

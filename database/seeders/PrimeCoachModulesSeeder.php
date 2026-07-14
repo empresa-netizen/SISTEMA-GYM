@@ -182,25 +182,109 @@ class PrimeCoachModulesSeeder extends Seeder
             ]);
         }
 
-        if (! DietFood::where('parent_id', $owner->id)->exists()) {
-            foreach ([
-                ['name' => 'Peito de frango grelhado', 'food_group' => 'Proteínas', 'calories' => 165, 'protein' => 31, 'carbs' => 0, 'fat' => 3.6],
-                ['name' => 'Arroz integral cozido', 'food_group' => 'Carboidratos', 'calories' => 124, 'protein' => 2.6, 'carbs' => 26, 'fat' => 1],
-                ['name' => 'Abacate', 'food_group' => 'Gorduras', 'calories' => 160, 'protein' => 2, 'carbs' => 9, 'fat' => 15],
-            ] as $food) {
-                DietFood::create(array_merge($food, ['parent_id' => $owner->id]));
-            }
+        foreach ([
+            ['name' => 'Peito de frango grelhado', 'food_group' => 'Proteínas', 'calories' => 165, 'protein' => 31, 'carbs' => 0, 'fat' => 3.6],
+            ['name' => 'Arroz integral cozido', 'food_group' => 'Carboidratos', 'calories' => 124, 'protein' => 2.6, 'carbs' => 26, 'fat' => 1],
+            ['name' => 'Ovos inteiros', 'food_group' => 'Proteínas', 'calories' => 143, 'protein' => 13, 'carbs' => 1.1, 'fat' => 9.5],
+            ['name' => 'Aveia em flocos', 'food_group' => 'Carboidratos', 'calories' => 389, 'protein' => 16.9, 'carbs' => 66.3, 'fat' => 6.9],
+            ['name' => 'Banana prata', 'food_group' => 'Frutas', 'calories' => 89, 'protein' => 1.1, 'carbs' => 22.8, 'fat' => 0.3],
+            ['name' => 'Batata doce cozida', 'food_group' => 'Carboidratos', 'calories' => 86, 'protein' => 1.6, 'carbs' => 20.1, 'fat' => 0.1],
+            ['name' => 'Abacate', 'food_group' => 'Gorduras', 'calories' => 160, 'protein' => 2, 'carbs' => 9, 'fat' => 15],
+        ] as $food) {
+            DietFood::updateOrCreate(
+                ['parent_id' => $owner->id, 'name' => $food['name']],
+                array_merge($food, ['parent_id' => $owner->id, 'unit' => '100g'])
+            );
         }
 
-        if (! DietMenu::where('parent_id', $owner->id)->exists()) {
-            DietMenu::create([
+        $menu = DietMenu::updateOrCreate(
+            ['parent_id' => $owner->id, 'name' => 'Cutting — Semana 1'],
+            [
                 'parent_id' => $owner->id,
                 'name' => 'Cutting — Semana 1',
                 'status' => 'published',
                 'meals_count' => 5,
                 'total_calories' => 1800,
                 'description' => 'Cardápio hipocalórico para fase de definição.',
-            ]);
+            ]
+        );
+
+        if ($menu->meals()->count() === 0) {
+            $foods = DietFood::where('parent_id', $owner->id)->get()->keyBy('name');
+
+            $meals = [
+                [
+                    'name' => 'Café da manhã',
+                    'time_label' => '07:00',
+                    'notes' => 'Café sem açúcar liberado.',
+                    'foods' => [
+                        ['name' => 'Ovos inteiros', 'quantity_in_grams' => 120],
+                        ['name' => 'Aveia em flocos', 'quantity_in_grams' => 40],
+                        ['name' => 'Banana prata', 'quantity_in_grams' => 80],
+                    ],
+                ],
+                [
+                    'name' => 'Almoço',
+                    'time_label' => '12:30',
+                    'notes' => 'Vegetais verdes à vontade.',
+                    'foods' => [
+                        ['name' => 'Peito de frango grelhado', 'quantity_in_grams' => 160],
+                        ['name' => 'Arroz integral cozido', 'quantity_in_grams' => 130],
+                        ['name' => 'Abacate', 'quantity_in_grams' => 50],
+                    ],
+                ],
+                [
+                    'name' => 'Pré-treino',
+                    'time_label' => '16:30',
+                    'notes' => 'Consumir 60–90 min antes do treino.',
+                    'foods' => [
+                        ['name' => 'Banana prata', 'quantity_in_grams' => 100],
+                        ['name' => 'Aveia em flocos', 'quantity_in_grams' => 25],
+                    ],
+                ],
+                [
+                    'name' => 'Jantar',
+                    'time_label' => '20:00',
+                    'notes' => 'Manter hidratação alta no período da noite.',
+                    'foods' => [
+                        ['name' => 'Peito de frango grelhado', 'quantity_in_grams' => 150],
+                        ['name' => 'Batata doce cozida', 'quantity_in_grams' => 180],
+                    ],
+                ],
+                [
+                    'name' => 'Ceia',
+                    'time_label' => '22:30',
+                    'notes' => 'Opcional se houver fome.',
+                    'foods' => [
+                        ['name' => 'Ovos inteiros', 'quantity_in_grams' => 80],
+                        ['name' => 'Abacate', 'quantity_in_grams' => 60],
+                    ],
+                ],
+            ];
+
+            foreach ($meals as $index => $mealData) {
+                $meal = $menu->meals()->create([
+                    'name' => $mealData['name'],
+                    'time_label' => $mealData['time_label'],
+                    'order' => $index + 1,
+                    'notes' => $mealData['notes'],
+                ]);
+
+                foreach ($mealData['foods'] as $foodIndex => $mealFood) {
+                    $food = $foods->get($mealFood['name']);
+                    if (! $food) {
+                        continue;
+                    }
+
+                    $meal->mealFoods()->create([
+                        'diet_food_id' => $food->id,
+                        'quantity_in_grams' => $mealFood['quantity_in_grams'],
+                        'order' => $foodIndex + 1,
+                    ]);
+                }
+            }
+
+            $menu->syncAggregateCounters();
         }
 
         if (! Coupon::where('parent_id', $owner->id)->exists()) {

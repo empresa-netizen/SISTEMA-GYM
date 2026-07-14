@@ -31,7 +31,13 @@ class FinanceController extends Controller
             ->take(8)
             ->get();
 
-        $stats = compact('availableBalance', 'pendingBalance', 'monthRevenue', 'monthTransactions', 'recentPayments', 'tab');
+        $recentInvoices = Invoice::where('parent_id', $parentId)
+            ->with('member')
+            ->latest()
+            ->take(8)
+            ->get();
+
+        $stats = compact('availableBalance', 'pendingBalance', 'monthRevenue', 'monthTransactions', 'recentPayments', 'recentInvoices', 'tab');
 
         if ($tab === 'withdrawals') {
             return view('prime.finance.withdrawals', $stats);

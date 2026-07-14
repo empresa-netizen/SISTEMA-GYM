@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\HasTenantScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class LibraryWorkout extends Model
 {
@@ -25,5 +26,10 @@ class LibraryWorkout extends Model
     public function parent(): BelongsTo
     {
         return $this->belongsTo(User::class, 'parent_id');
+    }
+
+    public function activities(): HasMany
+    {
+        return $this->hasMany(LibraryWorkoutActivity::class)->orderBy('order');
     }
 }

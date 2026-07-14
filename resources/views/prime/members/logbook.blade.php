@@ -9,11 +9,19 @@
         'TRAINING' => ['label' => 'Registros de treino', 'icon' => 'ri-dumbbell-line'],
         'DIET' => ['label' => 'Registros de dieta', 'icon' => 'ri-restaurant-2-line'],
         'CARDIO' => ['label' => 'Registros de cardio', 'icon' => 'ri-heart-pulse-line'],
+        'WEIGHT' => ['label' => 'Peso corporal', 'icon' => 'ri-scales-3-line'],
     ];
     $typeStyles = [
         'TRAINING' => ['label' => 'Treino', 'icon' => 'ri-dumbbell-line', 'chip' => 'prime-chip--info', 'gradient' => 'linear-gradient(135deg,#1d4ed8,#3b82f6)'],
         'DIET' => ['label' => 'Dieta', 'icon' => 'ri-restaurant-2-line', 'chip' => 'prime-chip--success', 'gradient' => 'linear-gradient(135deg,#15803d,#22c55e)'],
         'CARDIO' => ['label' => 'Cardio', 'icon' => 'ri-heart-pulse-line', 'chip' => 'prime-chip--danger', 'gradient' => 'linear-gradient(135deg,#be123c,#fb7185)'],
+        'WEIGHT' => ['label' => 'Peso', 'icon' => 'ri-scales-3-line', 'chip' => 'prime-chip--warn', 'gradient' => 'linear-gradient(135deg,#7c3aed,#a855f7)'],
+    ];
+    $sourceLabels = [
+        'student_weight_quick_log' => ['Peso no app', 'ri-smartphone-line'],
+        'student_diet_free_meal' => ['Refeição livre', 'ri-restaurant-line'],
+        'student_diet_meal_complete' => ['Refeição concluída', 'ri-checkbox-circle-line'],
+        'student_workout_complete' => ['Treino concluído', 'ri-run-line'],
     ];
 @endphp
 
@@ -96,6 +104,9 @@
                 $name = $entry->member?->name ?? 'Cliente removido';
                 $initials = collect(explode(' ', $name))->map(fn ($w) => mb_substr($w, 0, 1))->take(2)->implode('');
                 $hasFeedback = $entry->member?->feedbacks?->isNotEmpty() ?? false;
+                $metadata = is_array($entry->metadata) ? $entry->metadata : [];
+                $source = $metadata['source'] ?? null;
+                [$sourceLabel, $sourceIcon] = $sourceLabels[$source] ?? [null, null];
             @endphp
             <div class="prime-client-card">
                 <div class="prime-client-card__main">
@@ -117,6 +128,14 @@
                             <span class="prime-chip {{ $style['chip'] }}">{{ $style['label'] }}</span>
                             @if($entry->rating)
                                 <span class="prime-chip prime-chip--warn">{{ $entry->rating }} ★</span>
+                            @endif
+                            @if($entry->numeric_value !== null)
+                                <span class="prime-chip">
+                                    {{ number_format((float) $entry->numeric_value, 2, ',', '.') }} {{ $entry->unit }}
+                                </span>
+                            @endif
+                            @if($sourceLabel)
+                                <span class="prime-chip prime-chip--info"><i class="{{ $sourceIcon }}"></i> {{ $sourceLabel }}</span>
                             @endif
                             <span class="prime-chip {{ $hasFeedback ? 'prime-chip--success' : '' }}">
                                 {{ $hasFeedback ? 'Com feedback' : 'Sem feedback' }}

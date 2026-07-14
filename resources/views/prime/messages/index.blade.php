@@ -138,9 +138,9 @@
                         <a href="{{ route('members.show', $active->member) }}" class="prime-btn-ghost prime-btn-ghost--sm">Ver ficha</a>
                     @endif
                 </div>
-                <div class="prime-chat-messages" id="chatMessages">
+                <div class="prime-chat-messages" id="chatMessages" @if($active) data-conversation-id="{{ $active->id }}" @endif>
                     @forelse($active->messages as $msg)
-                        <div class="prime-chat-bubble {{ $msg->sender_type === 'coach' ? 'is-sent' : 'is-received' }}">
+                        <div class="prime-chat-bubble {{ $msg->sender_type === 'coach' ? 'is-sent' : 'is-received' }}" data-message-id="{{ $msg->id }}">
                             <p class="mb-0">{{ $msg->content }}</p>
                             <span class="prime-chat-time">{{ $msg->created_at->format('d/m H:i') }}</span>
                         </div>
@@ -170,6 +170,9 @@
 @endsection
 
 @section('script')
+@if($active)
+    @vite(['resources/js/chat-realtime.js'])
+@endif
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const el = document.getElementById('chatMessages');
