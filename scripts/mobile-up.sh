@@ -3,79 +3,60 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
-DB_URL="postgresql://trabalho:123456@localhost:5433/coachpro?schema=public"
-SEED_DIR="/Users/trabalho/codex/coach-pro"
 
 log() { echo "▶ $*"; }
 
-log "Parando processos locais antigos (se houver)..."
-pkill -f "tsx watch src/index.ts" 2>/dev/null || true
+LAN_IP="$(ipconfig getifaddr en0 2>/dev/null || ipconfig getifaddr en1 2>/dev/null || echo "localhost")"
+
+log "Garantindo Laravel local no ar..."
+docker compose up -d
+
+log "Parando processos Expo locais antigos (se houver)..."
 pkill -f "expo start --web --host lan --port 8086" 2>/dev/null || true
-pkill -f "expo start --web --host lan --port 8089" 2>/dev/null || true
-rm -rf /tmp/mg-mobile 2>/dev/null || true
 
-log "Subindo stack mobile via Docker..."
-docker compose -f docker-compose.mobile.yml up -d mobile-db
-
-log "Aguardando PostgreSQL..."
-for i in $(seq 1 30); do
-  docker exec mgteam_mobile_db pg_isready -U trabalho -d coachpro >/dev/null 2>&1 && break
-  sleep 2
-done
-
-if ! docker exec mgteam_mobile_db psql -U trabalho -d coachpro -tAc "SELECT 1 FROM users LIMIT 1" 2>/dev/null | grep -q 1; then
-  log "Seed inicial (coach-pro)..."
-  if [[ -d "$SEED_DIR/node_modules" ]]; then
-    (
-      cd "$SEED_DIR"
-      DATABASE_URL="$DB_URL" DIRECT_DATABASE_URL="$DB_URL" npx prisma db push --accept-data-loss
-      DATABASE_URL="$DB_URL" DIRECT_DATABASE_URL="$DB_URL" npm run db:seed
-    )
-  else
-    log "⚠️  Rode o seed manualmente se login falhar:"
-    log "   cd $SEED_DIR && DATABASE_URL='$DB_URL' npm run db:seed"
-  fi
-fi
-
-log "Subindo API + apps (execução inicial pode levar 3–5 min para instalar deps)..."
-docker compose -f docker-compose.mobile.yml up -d mobile-api mobile-aluno mobile-pro
+log "Subindo App do Aluno via Docker..."
+docker compose -f docker-compose.mobile.yml up -d mobile-aluno
 
 log "Aguardando serviços (até 5 min)..."
-api_ok=0 aluno_ok=0 pro_ok=0
+web_ok=0
+student_ok=0
 for i in $(seq 1 150); do
-  a=$(curl -s -o /dev/null -w '%{http_code}' http://localhost:8088/health 2>/dev/null || echo 000)
-  s=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8086 2>/dev/null || echo 000)
-  p=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8089 2>/dev/null || echo 000)
-  [[ "$a" == "200" ]] && api_ok=1
-  [[ "$s" =~ ^[23] ]] && aluno_ok=1
-  [[ "$p" =~ ^[23] ]] && pro_ok=1
-  if [[ $api_ok -eq 1 && $aluno_ok -eq 1 && $pro_ok -eq 1 ]]; then
+  web_code=$(curl --max-time 5 -s -o /dev/null -w '%{http_code}' http://localhost:8000/login 2>/dev/null || echo 000)
+  student_code=$(curl --max-time 5 -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8086 2>/dev/null || echo 000)
+
+  [[ "$web_code" =~ ^[23] ]] && web_ok=1
+  [[ "$student_code" =~ ^[23] ]] && student_ok=1
+
+  if [[ $web_ok -eq 1 && $student_ok -eq 1 ]]; then
     break
   fi
+
   if (( i % 15 == 0 )); then
-    echo "   ...ainda compilando ($i/150) api:$a aluno:$s pro:$p"
+    echo "   ...ainda iniciando ($i/150) web:$web_code aluno:$student_code"
     docker compose -f docker-compose.mobile.yml ps --format 'table {{.Name}}\t{{.Status}}' 2>/dev/null | head -5
   fi
+
   sleep 2
 done
 
 echo ""
-if [[ $api_ok -eq 1 && $aluno_ok -eq 1 && $pro_ok -eq 1 ]]; then
-  echo "✅ Apps mobile no ar (Docker)."
+if [[ $web_ok -eq 1 && $student_ok -eq 1 ]]; then
+  echo "✅ Web + App do Aluno no ar."
 else
   echo "⚠️  Ainda iniciando — acompanhe:"
-  echo "   docker compose -f docker-compose.mobile.yml logs -f mobile-aluno mobile-pro"
+  echo "   docker compose -f docker-compose.mobile.yml logs -f mobile-aluno"
 fi
 
 echo ""
-echo "  API:          http://localhost:8088/health"
-echo "  Aluno:        http://localhost:8086"
-echo "  Profissional: http://localhost:8089"
-echo "  Hub Laravel:  http://localhost:8000/apps"
+echo "  Web Laravel:  http://localhost:8000/login"
+echo "  API local:    http://localhost:8000/api/v1"
+echo "  App Aluno:    http://localhost:8086"
+echo "  Celular Wi-Fi: http://$LAN_IP:8086"
+echo "  Backend Wi-Fi: http://$LAN_IP:8000"
 echo ""
 echo "Login demo:"
-echo "  Profissional → admin@mgteam.app / 123456"
-echo "  Aluno        → anabeatriz@gmail.com / 123456"
+echo "  Admin/Coach → admin@mgteam.app / 123456"
+echo "  Aluno       → anabeatriz@gmail.com / 123456"
 echo ""
 echo "Status:  ./scripts/mobile-status.sh"
 echo "Logs:    docker compose -f docker-compose.mobile.yml logs -f"
