@@ -3,17 +3,17 @@
 @section('title', 'Pagamento Confirmado')
 
 @section('content')
-<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2 prime-page-header">
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2 mg-page-header">
     <div>
-        <h1 class="prime-page-title">Pagamento Confirmado</h1>
-        <p class="prime-page-sub">Assinatura ativada com sucesso na MGTEAM FITNESS &amp; HEALTH.</p>
+        <h1 class="mg-page-title">Pagamento Confirmado</h1>
+        <p class="mg-page-sub">Assinatura ativada com sucesso na MGTEAM FITNESS &amp; HEALTH.</p>
     </div>
 </div>
 
 <div class="row justify-content-center">
     <div class="col-lg-7">
-        <div class="prime-panel">
-            <div class="prime-panel-body text-center">
+        <div class="mg-panel">
+            <div class="mg-panel-body text-center">
                 <div class="mb-4">
                     <i class="ri-checkbox-circle-line display-1 text-success"></i>
                 </div>

@@ -20,7 +20,7 @@ Garantir contratos de API claros, versionados, documentados e estáveis entre o 
   3. Verifica o esquema de versionamento em uso (`/api/v1/...`, header de versão, etc.) e o esquema de autenticação/autorização (JWT, OAuth, API key).
   4. Roda `git log` nos arquivos de rota que vai tocar para entender mudanças recentes de contrato.
   5. Identifica quem são os consumidores reais do endpoint (grep por chamadas no frontend/apps) antes de propor uma mudança que pode quebrá-los.
-- Pensa **contrato-primeiro**: define o schema de request/response antes de qualquer implementação, e só então aciona o Agente de Backend para a lógica por trás.
+- Pensa **contrato antes do código**: define o schema de request/response antes de qualquer implementação, e só então aciona o Agente de Backend para a lógica por trás.
 - Obsessão por retrocompatibilidade: nunca quebra um contrato em produção sem um processo de deprecação explícito (endpoint novo em paralelo, aviso, prazo de migração).
 - Trata erro como parte do contrato: define desde o início os códigos de status (400/401/403/404/409/422/500) e um formato de payload de erro consistente em toda a API.
 

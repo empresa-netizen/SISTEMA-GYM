@@ -12,18 +12,18 @@ log "Parando processos locais antigos (se houver)..."
 pkill -f "tsx watch src/index.ts" 2>/dev/null || true
 pkill -f "expo start --web --host lan --port 8086" 2>/dev/null || true
 pkill -f "expo start --web --host lan --port 8089" 2>/dev/null || true
-rm -rf /tmp/prime-mobile 2>/dev/null || true
+rm -rf /tmp/mg-mobile 2>/dev/null || true
 
 log "Subindo stack mobile via Docker..."
 docker compose -f docker-compose.mobile.yml up -d mobile-db
 
 log "Aguardando PostgreSQL..."
 for i in $(seq 1 30); do
-  docker exec prime_mobile_db pg_isready -U trabalho -d coachpro >/dev/null 2>&1 && break
+  docker exec mgteam_mobile_db pg_isready -U trabalho -d coachpro >/dev/null 2>&1 && break
   sleep 2
 done
 
-if ! docker exec prime_mobile_db psql -U trabalho -d coachpro -tAc "SELECT 1 FROM users LIMIT 1" 2>/dev/null | grep -q 1; then
+if ! docker exec mgteam_mobile_db psql -U trabalho -d coachpro -tAc "SELECT 1 FROM users LIMIT 1" 2>/dev/null | grep -q 1; then
   log "Seed inicial (coach-pro)..."
   if [[ -d "$SEED_DIR/node_modules" ]]; then
     (
@@ -37,7 +37,7 @@ if ! docker exec prime_mobile_db psql -U trabalho -d coachpro -tAc "SELECT 1 FRO
   fi
 fi
 
-log "Subindo API + apps (primeira vez pode levar 3–5 min para instalar deps)..."
+log "Subindo API + apps (execução inicial pode levar 3–5 min para instalar deps)..."
 docker compose -f docker-compose.mobile.yml up -d mobile-api mobile-aluno mobile-pro
 
 log "Aguardando serviços (até 5 min)..."

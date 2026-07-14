@@ -35,7 +35,7 @@ class LibraryWorkoutController extends Controller
             ->orderBy('name')
             ->get(['id', 'name']);
 
-        return view('prime.library.workout-templates', [
+        return view('mgteam.library.workout-templates', [
             'templates' => $templates,
             'members' => $members,
             'filters' => array_merge([

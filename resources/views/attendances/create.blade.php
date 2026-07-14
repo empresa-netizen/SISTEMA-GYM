@@ -5,8 +5,8 @@
 @section('content')
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
     <div>
-        <h1 class="prime-page-title">Check-in</h1>
-        <p class="prime-page-sub">Registre a entrada de um aluno na academia.</p>
+        <h1 class="mg-page-title">Check-in</h1>
+        <p class="mg-page-sub">Registre a entrada de um aluno na academia.</p>
     </div>
     <a href="{{ route('attendances.index') }}" class="btn btn-outline-secondary">
         <i class="ri-arrow-left-line me-1"></i> Voltar
@@ -16,8 +16,8 @@
 <form action="{{ route('attendances.store') }}" method="POST">
     @csrf
 
-    <div class="prime-panel mb-3">
-        <div class="prime-panel-label mb-3">DADOS DO CHECK-IN</div>
+    <div class="mg-panel mb-3">
+        <div class="mg-panel-label mb-3">DADOS DO CHECK-IN</div>
         <div class="row g-3">
             <div class="col-12">
                 <label for="member_id" class="form-label">Cliente <span class="text-danger">*</span></label>

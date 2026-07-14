@@ -12,6 +12,6 @@ class WelcomeController extends Controller
             return redirect()->route('dashboard');
         }
 
-        return view('prime.welcome');
+        return view('mgteam.welcome');
     }
 }

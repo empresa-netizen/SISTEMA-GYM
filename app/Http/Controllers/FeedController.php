@@ -31,7 +31,7 @@ class FeedController extends Controller
             'feedbacks' => CoachFeedItem::where('type', 'FEEDBACK')->count(),
         ];
 
-        return view('prime.feed.index', compact('items', 'summary', 'likedIds'));
+        return view('mgteam.feed.index', compact('items', 'summary', 'likedIds'));
     }
 
     public function news(): View
@@ -53,7 +53,7 @@ class FeedController extends Controller
             'member_posts' => CoachFeedItem::whereIn('type', ['POST', 'NEWS'])->whereNotNull('member_id')->count(),
         ];
 
-        return view('prime.feed.news', compact('items', 'summary', 'likedIds'));
+        return view('mgteam.feed.news', compact('items', 'summary', 'likedIds'));
     }
 
     public function store(Request $request): RedirectResponse

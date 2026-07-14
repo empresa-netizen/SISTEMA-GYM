@@ -15,12 +15,12 @@ class ToolsController extends Controller
     {
         $entries = MemberAnamnesis::with('member')->latest()->paginate(25);
 
-        return view('prime.tools.anamnesis', compact('entries'));
+        return view('mgteam.tools.anamnesis', compact('entries'));
     }
 
     public function importCustomers(): View
     {
-        return view('prime.tools.import-customers');
+        return view('mgteam.tools.import-customers');
     }
 
     public function importCustomersStore(Request $request): RedirectResponse
@@ -72,7 +72,7 @@ class ToolsController extends Controller
 
     public function importProtocols(): View
     {
-        return view('prime.tools.import-protocols');
+        return view('mgteam.tools.import-protocols');
     }
 
     public function patchNotes(): View
@@ -82,7 +82,7 @@ class ToolsController extends Controller
                 'version' => '1.5.0',
                 'date' => '09/07/2026',
                 'area' => 'Web Profissional',
-                'title' => 'Notas de Atualização no padrão Prime',
+                'title' => 'Notas de Atualização no padrão MGTEAM',
                 'summary' => 'Página local com acordeão escuro, badges NEW e releases MGTEAM organizadas por produto.',
                 'is_new' => true,
                 'items' => [
@@ -95,7 +95,7 @@ class ToolsController extends Controller
                 'version' => '1.4.0',
                 'date' => '08/07/2026',
                 'area' => 'Web Profissional',
-                'title' => 'Clientes e Perfil 360 com visual Prime',
+                'title' => 'Clientes e Perfil 360 com visual MGTEAM',
                 'summary' => 'Cards, filtros e abas de evolução ganharam densidade visual para operação diária do coach.',
                 'is_new' => true,
                 'items' => [
@@ -122,7 +122,7 @@ class ToolsController extends Controller
                 'date' => '06/07/2026',
                 'area' => 'Web Profissional',
                 'title' => 'Dashboard operacional MGTEAM',
-                'summary' => 'Visão inicial para receita, agenda e indicadores-chave do negócio no layout Prime.',
+                'summary' => 'Visão inicial para receita, agenda e indicadores-chave do negócio no layout MGTEAM.',
                 'is_new' => false,
                 'items' => [
                     'Cards de resumo para acompanhar operação e evolução financeira.',
@@ -132,6 +132,6 @@ class ToolsController extends Controller
             ],
         ];
 
-        return view('prime.tools.patch-notes', compact('notes'));
+        return view('mgteam.tools.patch-notes', compact('notes'));
     }
 }

@@ -42,7 +42,7 @@ class FeedbackController extends Controller
             'all' => ClientFeedback::count(),
         ];
 
-        return view('prime.feedbacks.index', compact('feedbacks', 'tab', 'counts'));
+        return view('mgteam.feedbacks.index', compact('feedbacks', 'tab', 'counts'));
     }
 
     public function updateStatus(Request $request, ClientFeedback $feedback)

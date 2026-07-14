@@ -120,7 +120,7 @@ class MemberHubController extends Controller
             'expired_count' => $kpiMembers->filter(fn ($member) => $member->membership_end_date && $member->membership_end_date->isPast())->count(),
         ];
 
-        return view('prime.members.renewals', compact('members', 'plans', 'filters', 'stats', 'renewedMemberIds', 'periodDays'));
+        return view('mgteam.members.renewals', compact('members', 'plans', 'filters', 'stats', 'renewedMemberIds', 'periodDays'));
     }
 
     private function renewedMemberIds(int $periodDays): \Illuminate\Support\Collection
@@ -144,7 +144,7 @@ class MemberHubController extends Controller
             ->latest()
             ->paginate(20);
 
-        return view('prime.members.pending', compact('members'));
+        return view('mgteam.members.pending', compact('members'));
     }
 
     public function all(Request $request): View
@@ -203,7 +203,7 @@ class MemberHubController extends Controller
         $members = $membersQuery->paginate(30)->withQueryString();
         $plans = MembershipPlan::orderBy('name')->get();
 
-        return view('prime.members.all', compact('members', 'plans', 'filters'));
+        return view('mgteam.members.all', compact('members', 'plans', 'filters'));
     }
 
     public function groups(Request $request): View
@@ -246,7 +246,7 @@ class MemberHubController extends Controller
             'total_members' => CommunityGroup::sum('members_count'),
         ];
 
-        return view('prime.members.groups', compact('groups', 'plans', 'filters', 'stats'));
+        return view('mgteam.members.groups', compact('groups', 'plans', 'filters', 'stats'));
     }
 
     public function engagement(Request $request): View|StreamedResponse
@@ -381,7 +381,7 @@ class MemberHubController extends Controller
 
         $seasonLabel = $seasonStart->format('d/m/Y').' a '.now()->format('d/m/Y');
 
-        return view('prime.members.engagement', compact('members', 'filters', 'seasonLabel'));
+        return view('mgteam.members.engagement', compact('members', 'filters', 'seasonLabel'));
     }
 
     public function dropouts(Request $request): View|StreamedResponse
@@ -429,7 +429,7 @@ class MemberHubController extends Controller
         $members = $membersQuery->paginate(25)->withQueryString();
         $plans = MembershipPlan::orderBy('name')->get();
 
-        return view('prime.members.dropouts', compact('members', 'plans', 'filters', 'stats'));
+        return view('mgteam.members.dropouts', compact('members', 'plans', 'filters', 'stats'));
     }
 
     private function dropoutMembersQuery(array $filters): Builder
@@ -496,7 +496,7 @@ class MemberHubController extends Controller
             ->orderBy('start_time')
             ->get();
 
-        return view('prime.members.attendances', compact('pending', 'active'));
+        return view('mgteam.members.attendances', compact('pending', 'active'));
     }
 
     public function logbook(Request $request): View
@@ -535,7 +535,7 @@ class MemberHubController extends Controller
             'WEIGHT' => MemberLogbook::where('parent_id', $parentId)->where('type', 'WEIGHT')->count(),
         ];
 
-        return view('prime.members.logbook', compact('entries', 'counts', 'activeType'));
+        return view('mgteam.members.logbook', compact('entries', 'counts', 'activeType'));
     }
 
     public function destroyLogbook(MemberLogbook $entry): RedirectResponse

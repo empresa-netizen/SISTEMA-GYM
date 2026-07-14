@@ -10,7 +10,7 @@ class AdminCredentials
 
     public const LEGACY_ADMIN_EMAIL = 'admin@mgteam.app';
 
-    public const LEGACY_COACH_EMAIL = 'coach@primecoaching.com.br';
+    public const LEGACY_COACH_EMAIL = 'coach@mgteam.local';
 
     /**
      * @var array<string, string>

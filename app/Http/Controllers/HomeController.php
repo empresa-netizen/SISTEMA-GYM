@@ -2,17 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ClientFeedback;
-use App\Models\Conversation;
-use App\Models\Event;
 use App\Models\Invoice;
 use App\Models\InvoicePayment;
-use App\Models\Member;
-use App\Models\Subscription;
-use App\Models\SupportTicket;
 use App\Models\User;
-use App\Models\Workout;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -79,7 +71,7 @@ class HomeController extends Controller
             ['label' => 'Endereço', 'complete' => filled($fieldValue(['address', 'endereco']))],
         ];
 
-        return view('prime.awards', compact('revenueTotal', 'goal', 'progress', 'remaining', 'profileChecklist'));
+        return view('mgteam.awards', compact('revenueTotal', 'goal', 'progress', 'remaining', 'profileChecklist'));
     }
 
     public function root()

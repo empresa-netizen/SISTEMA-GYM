@@ -3,10 +3,10 @@
 @else
 <div class="app-menu navbar-menu">
     <div class="navbar-brand-box">
-        <a href="{{ route('dashboard') }}" class="prime-sidebar-brand">
-            <span class="prime-logo-mark">P</span>
+        <a href="{{ route('dashboard') }}" class="mg-sidebar-brand">
+            <span class="mg-logo-mark">P</span>
             <span>
-                <strong>prime</strong>
+                <strong>MGTEAM</strong>
                 <span>COACHING</span>
             </span>
         </a>

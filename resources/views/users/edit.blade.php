@@ -4,14 +4,14 @@
 
 @section('content')
 <div class="mb-4">
-    <h1 class="prime-page-title">Editar colaborador</h1>
-    <p class="prime-section-label mb-1">Atualize dados, perfil e senha de {{ $user->name }}.</p>
+    <h1 class="mg-page-title">Editar colaborador</h1>
+    <p class="mg-section-label mb-1">Atualize dados, perfil e senha de {{ $user->name }}.</p>
 </div>
 
 <div class="row">
     <div class="col-lg-12">
-        <div class="prime-panel">
-            <div class="prime-panel-body">
+        <div class="mg-panel">
+            <div class="mg-panel-body">
                 <h4 class="mb-3">Informações do colaborador</h4>
                 <form action="{{ route('users.update', $user->id) }}" method="POST">
                     @csrf
@@ -82,10 +82,10 @@
                     </div>
 
                     <div class="d-flex justify-content-end gap-2">
-                        <a href="{{ route('account.collaborators') }}" class="prime-btn prime-btn-outline">
+                        <a href="{{ route('account.collaborators') }}" class="mg-btn mg-btn-outline">
                             <i class="ri-close-line align-middle me-1"></i> Cancelar
                         </a>
-                        <button type="submit" class="prime-btn">
+                        <button type="submit" class="mg-btn">
                             <i class="ri-save-line align-middle me-1"></i> Salvar colaborador
                         </button>
                     </div>

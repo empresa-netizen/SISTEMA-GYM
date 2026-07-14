@@ -1,0 +1,42 @@
+---
+description: Regras do clone Referencia Visual Laravel — domínio, tenancy, UI e ecossistema
+alwaysApply: true
+---
+
+# Referencia Visual Clone (SISTEMA-GYM)
+
+## Escopo
+
+Plataforma MGTEAM independente em Laravel 12. Roadmap D1–D7 em `MGTEAM_PLATFORM.md`.
+
+## UI
+
+- Usuários **coach/owner**: shell MGTEAM (`layouts/mg-*`, `body.mg-app`, `public/css/mg-app.css`)
+- **super-admin**: Velzon legado — não migrar sem pedido
+- Páginas novas: `mg-page-title`, `mg-page-sub`, `mg-panel`, `mg-stat-card`
+- Evitar `components.breadcrumb` Velzon em módulos MGTEAM
+
+## Dados
+
+- Seeders: `Mgteam*` — manter base limpa (1 coach, 2 clientes demo)
+- Métricas financeiras: somar `InvoicePayment` via `whereHas('invoice', parent_id)`
+- Locale PT-BR, moeda R$, datas `d/m/Y`
+
+## Ecossistema anterior
+
+Projeto irmão em `/Users/trabalho/CLAUDE` (mobile+API) e `/Users/trabalho/codex/coach-pro` (Next.js web).
+Ver `docs/ECOSYSTEM_BRIDGE.md` antes de espelhar domínios (chat, prescrições, CRM).
+Não portar código React/Expo — portar **contratos, tokens e padrões de tela**.
+
+## Agentes
+
+Playbooks em `docs/agents/`. Orquestração em `docs/ORQUESTRACAO.md`.
+
+## Docker
+
+```bash
+docker compose exec -T app php artisan migrate --force
+docker compose exec -T app php artisan db:seed --class=MgteamPaymentSeeder --force
+```
+
+Login: `coach@mgteam.local` / `password` @ localhost:8000

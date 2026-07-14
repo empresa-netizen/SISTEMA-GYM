@@ -5,8 +5,8 @@
 @section('content')
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
     <div>
-        <h1 class="prime-page-title">Nova aula</h1>
-        <p class="prime-page-sub">Cadastre uma turma e configure os horários.</p>
+        <h1 class="mg-page-title">Nova aula</h1>
+        <p class="mg-page-sub">Cadastre uma turma e configure os horários.</p>
     </div>
     <a href="{{ route('gym-classes.index') }}" class="btn btn-outline-secondary">
         <i class="ri-arrow-left-line me-1"></i> Voltar
@@ -16,8 +16,8 @@
 <form action="{{ route('gym-classes.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
 
-    <div class="prime-panel mb-3">
-        <div class="prime-panel-label mb-3">INFORMAÇÕES DA AULA</div>
+    <div class="mg-panel mb-3">
+        <div class="mg-panel-label mb-3">INFORMAÇÕES DA AULA</div>
         <div class="row g-3">
             <div class="col-md-6">
                 <label for="name" class="form-label">Nome da aula <span class="text-danger">*</span></label>
@@ -81,9 +81,9 @@
         </div>
     </div>
 
-    <div class="prime-panel mb-3">
+    <div class="mg-panel mb-3">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <div class="prime-panel-label mb-0">HORÁRIOS</div>
+            <div class="mg-panel-label mb-0">HORÁRIOS</div>
             <button type="button" class="btn btn-sm btn-primary" onclick="addSchedule()">
                 <i class="ri-add-line me-1"></i> Adicionar horário
             </button>

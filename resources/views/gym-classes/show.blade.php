@@ -30,8 +30,8 @@
 
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
     <div>
-        <h1 class="prime-page-title">{{ $gymClass->name }}</h1>
-        <p class="prime-page-sub">{{ $gymClass->class_id }} · {{ $gymClass->category->name ?? 'Sem categoria' }}</p>
+        <h1 class="mg-page-title">{{ $gymClass->name }}</h1>
+        <p class="mg-page-sub">{{ $gymClass->class_id }} · {{ $gymClass->category->name ?? 'Sem categoria' }}</p>
     </div>
     <div class="d-flex gap-2">
         <a href="{{ route('gym-classes.edit', $gymClass->id) }}" class="btn btn-primary btn-sm"><i class="ri-pencil-line me-1"></i> Editar</a>
@@ -41,11 +41,11 @@
 
 <div class="row g-3">
     <div class="col-lg-4">
-        <div class="prime-panel text-center">
+        <div class="mg-panel text-center">
             @if($gymClass->image)
                 <img src="{{ asset('storage/'.$gymClass->image) }}" class="rounded mb-3 img-fluid" alt="">
             @else
-                <div class="prime-list-avatar mx-auto mb-3" style="width:4rem;height:4rem;font-size:1.1rem">{{ strtoupper($initials) }}</div>
+                <div class="mg-list-avatar mx-auto mb-3" style="width:4rem;height:4rem;font-size:1.1rem">{{ strtoupper($initials) }}</div>
             @endif
             <span class="badge {{ $status[1] }}">{{ $status[0] }}</span>
             <span class="badge {{ $difficulty[1] }} ms-1">{{ $difficulty[0] }}</span>
@@ -53,9 +53,9 @@
         </div>
     </div>
     <div class="col-lg-8">
-        <div class="prime-panel mb-3" style="height:auto">
-            <div class="prime-panel-label mb-3">DETALHES</div>
-            <dl class="prime-detail-grid mb-0">
+        <div class="mg-panel mb-3" style="height:auto">
+            <div class="mg-panel-label mb-3">DETALHES</div>
+            <dl class="mg-detail-grid mb-0">
                 <dt>Código</dt><dd>{{ $gymClass->class_id }}</dd>
                 <dt>Nome</dt><dd>{{ $gymClass->name }}</dd>
                 <dt>Categoria</dt><dd>{{ $gymClass->category->name ?? '—' }}</dd>
@@ -67,13 +67,13 @@
             </dl>
         </div>
 
-        <div class="prime-panel" style="height:auto">
-            <div class="prime-panel-label mb-3">HORÁRIOS</div>
+        <div class="mg-panel" style="height:auto">
+            <div class="mg-panel-label mb-3">HORÁRIOS</div>
             @forelse($gymClass->schedules as $schedule)
-                <div class="prime-list-row">
-                    <div class="prime-list-body">
-                        <div class="prime-list-title">{{ $dayLabels[$schedule->day_of_week] ?? ucfirst($schedule->day_of_week) }}</div>
-                        <div class="prime-list-sub">
+                <div class="mg-list-row">
+                    <div class="mg-list-body">
+                        <div class="mg-list-title">{{ $dayLabels[$schedule->day_of_week] ?? ucfirst($schedule->day_of_week) }}</div>
+                        <div class="mg-list-sub">
                             {{ \Carbon\Carbon::parse($schedule->start_time)->format('H:i') }} – {{ \Carbon\Carbon::parse($schedule->end_time)->format('H:i') }}
                             · {{ $schedule->trainer->name ?? 'Sem treinador' }}
                             · {{ $schedule->room_location ?? 'Salão principal' }}

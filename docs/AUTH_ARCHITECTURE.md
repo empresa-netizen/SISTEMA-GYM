@@ -9,7 +9,7 @@ Hoje existem **dois sistemas paralelos**, nascidos de stacks diferentes:
 | App | Laravel Blade `:8000` | Expo RN `:8086` / `:8089` |
 | API | Sessão cookie + Sanctum `/api/v1` | Express JWT `:8088` |
 | Banco | **MySQL** (`mazer`) | **PostgreSQL** (`coachpro` :5433) |
-| Usuário coach demo (antes) | `coach@primecoaching.com.br` | `admin@mgteam.app` |
+| Usuário coach demo (antes) | `coach@mgteam.local` | `admin@mgteam.app` |
 | Aluno demo | `ana.silva@cliente.com` | `anabeatriz@gmail.com` |
 
 Por isso o mesmo e-mail/senha **não funcionava** nos dois lados: não era bug de formulário — eram **identidades e bancos diferentes**.

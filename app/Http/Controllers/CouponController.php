@@ -13,7 +13,7 @@ class CouponController extends Controller
     {
         $coupons = Coupon::latest()->paginate(20);
 
-        return view('prime.products.coupons', compact('coupons'));
+        return view('mgteam.products.coupons', compact('coupons'));
     }
 
     public function store(Request $request): RedirectResponse

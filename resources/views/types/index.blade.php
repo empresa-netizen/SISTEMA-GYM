@@ -7,18 +7,18 @@
 @endsection
 
 @section('content')
-<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2 prime-page-header">
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2 mg-page-header">
     <div>
-        <h1 class="prime-page-title">Tipos Financeiros</h1>
-        <p class="prime-page-sub">Organize categorias de receita e despesa da MGTEAM FITNESS &amp; HEALTH.</p>
+        <h1 class="mg-page-title">Tipos Financeiros</h1>
+        <p class="mg-page-sub">Organize categorias de receita e despesa da MGTEAM FITNESS &amp; HEALTH.</p>
     </div>
     <a href="{{ route('types.create') }}" class="btn btn-primary">
         <i class="ri-add-line align-middle me-1"></i> Novo tipo
     </a>
 </div>
 
-<div class="prime-panel">
-    <div class="prime-panel-body">
+<div class="mg-panel">
+    <div class="mg-panel-body">
         @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <i class="ri-check-line align-middle me-2"></i> {{ session('success') }}

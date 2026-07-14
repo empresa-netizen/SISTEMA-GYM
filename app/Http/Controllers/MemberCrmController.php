@@ -144,7 +144,7 @@ class MemberCrmController extends Controller
         $prescription->load(['dietMenu', 'member']);
         $summary = $auditor->summarize($prescription);
 
-        return view('prime.diets.print', [
+        return view('mgteam.diets.print', [
             'prescription' => $prescription,
             'summary' => $summary,
             'member' => $prescription->member,

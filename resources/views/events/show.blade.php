@@ -16,8 +16,8 @@
 
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
     <div>
-        <h1 class="prime-page-title">{{ $event->title }}</h1>
-        <p class="prime-page-sub">{{ $event->location ?? 'Sem local definido' }}</p>
+        <h1 class="mg-page-title">{{ $event->title }}</h1>
+        <p class="mg-page-sub">{{ $event->location ?? 'Sem local definido' }}</p>
     </div>
     <div class="d-flex gap-2">
         <a href="{{ route('events.edit', $event) }}" class="btn btn-primary btn-sm"><i class="ri-pencil-line me-1"></i> Editar</a>
@@ -27,11 +27,11 @@
 
 <div class="row g-3">
     <div class="col-lg-4">
-        <div class="prime-panel text-center">
+        <div class="mg-panel text-center">
             @if($event->image)
                 <img src="{{ asset('storage/'.$event->image) }}" class="rounded mb-3 img-fluid" alt="">
             @else
-                <div class="prime-list-avatar mx-auto mb-3" style="width:4rem;height:4rem;font-size:1.1rem">{{ strtoupper($initials) }}</div>
+                <div class="mg-list-avatar mx-auto mb-3" style="width:4rem;height:4rem;font-size:1.1rem">{{ strtoupper($initials) }}</div>
             @endif
             <span class="badge {{ $status[1] }}">{{ $status[0] }}</span>
             @if($event->member)
@@ -40,8 +40,8 @@
         </div>
     </div>
     <div class="col-lg-8">
-        <div class="prime-panel">
-            <dl class="prime-detail-grid mb-0">
+        <div class="mg-panel">
+            <dl class="mg-detail-grid mb-0">
                 <dt>Início</dt><dd>{{ $event->start_time->format('d/m/Y H:i') }}</dd>
                 <dt>Término</dt><dd>{{ $event->end_time->format('d/m/Y H:i') }}</dd>
                 <dt>Participantes</dt><dd>{{ $event->registered_count }} / {{ $event->max_participants ?? 'Ilimitado' }}</dd>

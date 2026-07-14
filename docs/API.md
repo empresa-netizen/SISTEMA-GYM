@@ -1,4 +1,4 @@
-# API v1 - Plataforma Coach (Prime/MGTeam)
+# API v1 - Plataforma Coach (MGTEAM/MGTeam)
 
 Esta documentacao descreve a camada REST `v1` para consumo mobile.
 
@@ -34,7 +34,7 @@ Response `200`:
   "access_token": "1|token...",
   "user": {
     "id": 1,
-    "name": "Coach Prime",
+    "name": "Coach MGTEAM",
     "email": "coach@exemplo.com",
     "parent_id": null,
     "tenant_id": 1,

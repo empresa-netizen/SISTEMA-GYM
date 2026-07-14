@@ -5,8 +5,8 @@
 @section('content')
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
     <div>
-        <h1 class="prime-page-title">Novo evento</h1>
-        <p class="prime-page-sub">Agende consultas, avaliações ou atendimentos.</p>
+        <h1 class="mg-page-title">Novo evento</h1>
+        <p class="mg-page-sub">Agende consultas, avaliações ou atendimentos.</p>
     </div>
     <a href="{{ route('events.index') }}" class="btn btn-outline-secondary">
         <i class="ri-arrow-left-line me-1"></i> Voltar
@@ -15,7 +15,7 @@
 
 <div class="row">
     <div class="col-lg-8">
-        <div class="prime-panel">
+        <div class="mg-panel">
             <form action="{{ route('events.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 

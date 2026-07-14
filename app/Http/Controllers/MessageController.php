@@ -47,7 +47,7 @@ class MessageController extends Controller
             $conversations->firstWhere('id', $active->id)?->forceFill(['unread_by_coach' => false]);
         }
 
-        return view('prime.messages.index', compact('conversations', 'active', 'plans', 'status'));
+        return view('mgteam.messages.index', compact('conversations', 'active', 'plans', 'status'));
     }
 
     public function store(Request $request, Conversation $conversation): RedirectResponse

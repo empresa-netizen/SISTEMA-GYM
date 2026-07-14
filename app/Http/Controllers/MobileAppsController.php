@@ -78,7 +78,7 @@ class MobileAppsController extends Controller
             ],
         ];
 
-        return view('prime.apps.index', compact('integrations', 'statusMap'));
+        return view('mgteam.apps.index', compact('integrations', 'statusMap'));
     }
 
     public function status(): JsonResponse

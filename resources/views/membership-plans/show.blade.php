@@ -16,53 +16,53 @@
     $durationLabel = $durationTypes[$membershipPlan->duration_type] ?? ucfirst($membershipPlan->duration_type);
 @endphp
 
-<div class="prime-clients-page">
-    <div class="prime-clients-toolbar">
-        <div class="prime-clients-toolbar__left">
-            <h1 class="prime-page-title mb-0">{{ $membershipPlan->name }}</h1>
-            <div class="prime-clients-counters">
-                <span class="prime-clients-counter">
+<div class="mg-clients-page">
+    <div class="mg-clients-toolbar">
+        <div class="mg-clients-toolbar__left">
+            <h1 class="mg-page-title mb-0">{{ $membershipPlan->name }}</h1>
+            <div class="mg-clients-counters">
+                <span class="mg-clients-counter">
                     <i class="ri-price-tag-3-line"></i>
                     Plano de consultoria
                 </span>
             </div>
         </div>
-        <div class="prime-clients-toolbar__right">
-            <a href="{{ route('membership-plans.edit', $membershipPlan->id) }}" class="prime-btn-primary">
+        <div class="mg-clients-toolbar__right">
+            <a href="{{ route('membership-plans.edit', $membershipPlan->id) }}" class="mg-btn-primary">
                 <i class="ri-pencil-line"></i> Editar
             </a>
-            <a href="{{ route('membership-plans.index') }}" class="prime-btn-ghost">
+            <a href="{{ route('membership-plans.index') }}" class="mg-btn-ghost">
                 <i class="ri-arrow-left-line"></i> Voltar
             </a>
         </div>
     </div>
 
-    <div class="prime-product-show">
-        <div class="prime-panel prime-panel--compact prime-product-show__price">
-            <div class="prime-panel-value prime-panel-value--sm mb-2">R$ {{ number_format($membershipPlan->price, 2, ',', '.') }}</div>
+    <div class="mg-product-show">
+        <div class="mg-panel mg-panel--compact mg-product-show__price">
+            <div class="mg-panel-value mg-panel-value--sm mb-2">R$ {{ number_format($membershipPlan->price, 2, ',', '.') }}</div>
             <p class="text-muted mb-3">{{ $membershipPlan->duration_value }} {{ strtolower($durationLabel) }}</p>
             @if($membershipPlan->is_active)
-                <span class="prime-chip prime-chip--success">Ativo</span>
+                <span class="mg-chip mg-chip--success">Ativo</span>
             @else
-                <span class="prime-chip prime-chip--danger">Inativo</span>
+                <span class="mg-chip mg-chip--danger">Inativo</span>
             @endif
             @if($membershipPlan->personal_training)
                 <p class="small text-muted mt-3 mb-0"><i class="ri-user-star-line me-1"></i> Inclui treino personalizado</p>
             @endif
         </div>
 
-        <div class="prime-panel prime-panel--compact">
-            <div class="prime-panel-label mb-3">Detalhes</div>
-            <dl class="prime-detail-grid mb-0">
+        <div class="mg-panel mg-panel--compact">
+            <div class="mg-panel-label mb-3">Detalhes</div>
+            <dl class="mg-detail-grid mb-0">
                 <dt>Nome</dt><dd>{{ $membershipPlan->name }}</dd>
                 <dt>Preço</dt><dd>R$ {{ number_format($membershipPlan->price, 2, ',', '.') }}</dd>
                 <dt>Duração</dt><dd>{{ $membershipPlan->duration_value }} {{ strtolower($durationLabel) }}</dd>
                 <dt>Status</dt>
                 <dd>
                     @if($membershipPlan->is_active)
-                        <span class="prime-chip prime-chip--success">Ativo</span>
+                        <span class="mg-chip mg-chip--success">Ativo</span>
                     @else
-                        <span class="prime-chip prime-chip--danger">Inativo</span>
+                        <span class="mg-chip mg-chip--danger">Inativo</span>
                     @endif
                 </dd>
                 <dt>Treino personalizado</dt>

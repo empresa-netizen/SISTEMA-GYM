@@ -16,8 +16,8 @@
 
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
     <div>
-        <h1 class="prime-page-title">{{ $expense->title }}</h1>
-        <p class="prime-page-sub">{{ $expense->expense_number }} · {{ $expense->type->name ?? 'Sem categoria' }}</p>
+        <h1 class="mg-page-title">{{ $expense->title }}</h1>
+        <p class="mg-page-sub">{{ $expense->expense_number }} · {{ $expense->type->name ?? 'Sem categoria' }}</p>
     </div>
     <div class="d-flex gap-2">
         <a href="{{ route('expenses.edit', $expense->id) }}" class="btn btn-primary btn-sm"><i class="ri-pencil-line me-1"></i> Editar</a>
@@ -27,16 +27,16 @@
 
 <div class="row g-3">
     <div class="col-lg-4">
-        <div class="prime-panel text-center">
-            <div class="prime-panel-value prime-panel-value--sm mb-2 text-danger">R$ {{ number_format($expense->amount, 2, ',', '.') }}</div>
+        <div class="mg-panel text-center">
+            <div class="mg-panel-value mg-panel-value--sm mb-2 text-danger">R$ {{ number_format($expense->amount, 2, ',', '.') }}</div>
             <span class="badge bg-info-subtle text-info">{{ $expense->type->name ?? 'Sem categoria' }}</span>
             <p class="small text-muted mt-3 mb-0">{{ $expense->expense_date->format('d/m/Y') }}</p>
         </div>
     </div>
     <div class="col-lg-8">
-        <div class="prime-panel" style="height:auto">
-            <div class="prime-panel-label mb-3">DETALHES</div>
-            <dl class="prime-detail-grid mb-0">
+        <div class="mg-panel" style="height:auto">
+            <div class="mg-panel-label mb-3">DETALHES</div>
+            <dl class="mg-detail-grid mb-0">
                 <dt>Número</dt><dd>{{ $expense->expense_number }}</dd>
                 <dt>Título</dt><dd>{{ $expense->title }}</dd>
                 <dt>Tipo</dt><dd>{{ $expense->type->name ?? 'Sem categoria' }}</dd>

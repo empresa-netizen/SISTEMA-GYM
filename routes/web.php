@@ -99,7 +99,7 @@ Route::middleware(['auth', 'verify2fa'])->group(function () {
     Route::get('/products/affiliates', [App\Http\Controllers\ProductHubController::class, 'affiliates'])->name('products.affiliates');
     Route::get('/products/cart-recovery', [App\Http\Controllers\ProductHubController::class, 'cartRecovery'])->name('products.cart-recovery');
     Route::get('/products/list', fn () => redirect()->route('membership-plans.index'))->name('products.list');
-    Route::view('/library/workout', 'prime.library.workout')->name('library.workout');
+    Route::view('/library/workout', 'mgteam.library.workout')->name('library.workout');
     Route::get('/library/workout/templates', [App\Http\Controllers\LibraryWorkoutController::class, 'index'])->name('workout-templates.index');
     Route::post('/library/workout/templates', [App\Http\Controllers\LibraryWorkoutController::class, 'store'])->name('workout-templates.store');
     Route::post('/library/workout/templates/{template}/assign', [App\Http\Controllers\LibraryWorkoutController::class, 'assign'])->name('workout-templates.assign');
@@ -107,7 +107,7 @@ Route::middleware(['auth', 'verify2fa'])->group(function () {
     Route::post('/library/courses', [App\Http\Controllers\LibraryDietController::class, 'storeCourse'])->name('library.courses.store');
     Route::get('/feed/news', [App\Http\Controllers\FeedController::class, 'news'])->name('feed.news');
     Route::get('/feed/community', [App\Http\Controllers\CommunityController::class, 'index'])->name('feed.community');
-    Route::view('/help', 'prime.help')->name('help');
+    Route::view('/help', 'mgteam.help')->name('help');
     Route::get('/profile', [App\Http\Controllers\ReportsController::class, 'profile'])->name('profile');
     Route::get('/account/settings', [App\Http\Controllers\AccountController::class, 'settings'])->name('account.settings');
     Route::post('/account/settings', [App\Http\Controllers\AccountController::class, 'updateProfile'])->name('account.profile.update');
@@ -135,7 +135,7 @@ Route::middleware(['auth', 'verify2fa'])->group(function () {
     Route::get('/apps/status', [App\Http\Controllers\MobileAppsController::class, 'status'])->name('apps.status');
     Route::get('/products/hub', [App\Http\Controllers\ProductHubController::class, 'hub'])->name('products.hub');
     Route::post('/products/hub', [App\Http\Controllers\ProductHubController::class, 'quickStore'])->name('products.quick-store');
-    Route::view('/library/hub', 'prime.library.hub')->name('library.hub');
+    Route::view('/library/hub', 'mgteam.library.hub')->name('library.hub');
 
     // Settings Management
     Route::get('settings', [App\Http\Controllers\SettingsController::class, 'index'])->name('settings.index');

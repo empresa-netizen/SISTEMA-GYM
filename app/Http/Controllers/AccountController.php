@@ -19,7 +19,7 @@ class AccountController extends Controller
             ? $user
             : (\App\Models\User::find($user->parent_id) ?? $user);
 
-        return view('prime.account.settings', [
+        return view('mgteam.account.settings', [
             'user' => $user,
             'tenant' => $tenant,
             'companyName' => settings('app_name', config('brand.name', 'MGTEAM FITNESS & HEALTH')),

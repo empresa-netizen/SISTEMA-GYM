@@ -9,8 +9,8 @@
 @section('content')
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
     <div>
-        <h1 class="prime-page-title">Relatório de frequência</h1>
-        <p class="prime-page-sub">Análise de visitas e permanência na academia.</p>
+        <h1 class="mg-page-title">Relatório de frequência</h1>
+        <p class="mg-page-sub">Análise de visitas e permanência na academia.</p>
     </div>
     <a href="{{ route('attendances.index') }}" class="btn btn-outline-secondary btn-sm">
         <i class="ri-arrow-left-line me-1"></i> Voltar
@@ -19,32 +19,32 @@
 
 <div class="row g-2 mb-4">
     <div class="col-md-3">
-        <div class="prime-stat-mini">
+        <div class="mg-stat-mini">
             <span>Total de visitas</span>
             <strong>{{ $stats['total_visits'] }}</strong>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="prime-stat-mini">
+        <div class="mg-stat-mini">
             <span>Clientes únicos</span>
             <strong>{{ $stats['unique_members'] }}</strong>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="prime-stat-mini">
+        <div class="mg-stat-mini">
             <span>Duração média</span>
             <strong>{{ $stats['avg_duration'] }} min</strong>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="prime-stat-mini">
+        <div class="mg-stat-mini">
             <span>Total de horas</span>
             <strong>{{ $stats['total_hours'] }}h</strong>
         </div>
     </div>
 </div>
 
-<div class="prime-panel" style="height:auto">
+<div class="mg-panel" style="height:auto">
     <form method="GET" class="row g-2 mb-3">
         <div class="col-md-4">
             <label class="form-label">Data inicial</label>

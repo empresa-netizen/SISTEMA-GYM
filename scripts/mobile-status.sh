@@ -11,7 +11,7 @@ check() {
   fi
 }
 
-echo "Prime Mobile — status"
+echo "MGTEAM Mobile — status"
 echo "====================="
 check "API"         "http://localhost:8088/health"
 check "App Aluno"   "http://127.0.0.1:8086"

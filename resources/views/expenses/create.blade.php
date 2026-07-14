@@ -5,8 +5,8 @@
 @section('content')
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
     <div>
-        <h1 class="prime-page-title">Nova despesa</h1>
-        <p class="prime-page-sub">Registre um gasto ou saída financeira.</p>
+        <h1 class="mg-page-title">Nova despesa</h1>
+        <p class="mg-page-sub">Registre um gasto ou saída financeira.</p>
     </div>
     <a href="{{ route('expenses.index') }}" class="btn btn-outline-secondary">
         <i class="ri-arrow-left-line me-1"></i> Voltar
@@ -16,8 +16,8 @@
 <form action="{{ route('expenses.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
 
-    <div class="prime-panel mb-3">
-        <div class="prime-panel-label mb-3">DETALHES DA DESPESA</div>
+    <div class="mg-panel mb-3">
+        <div class="mg-panel-label mb-3">DETALHES DA DESPESA</div>
         <div class="row g-3">
             <div class="col-md-6">
                 <label for="type_id" class="form-label">Tipo de despesa <span class="text-danger">*</span></label>

@@ -9,18 +9,18 @@
 
 @push('styles')
 <style>
-    .prime-collaborators-page {
+    .mg-collaborators-page {
         display: grid;
         gap: 0.85rem;
     }
 
-    .prime-collaborators-stats {
+    .mg-collaborators-stats {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 0.62rem;
     }
 
-    .prime-collaborator-stat {
+    .mg-collaborator-stat {
         padding: 0.72rem 0.82rem;
         border: 1px solid #DDE5EF;
         border-radius: 0.82rem;
@@ -28,21 +28,21 @@
         box-shadow: 0 8px 22px rgba(23, 37, 56, 0.04);
     }
 
-    .prime-collaborator-stat__value {
+    .mg-collaborator-stat__value {
         color: #101929;
         font-size: 1.18rem;
         font-weight: 930;
         line-height: 1;
     }
 
-    .prime-collaborators-filter {
+    .mg-collaborators-filter {
         display: grid;
         grid-template-columns: minmax(14rem, 1fr) minmax(10rem, 0.35fr) minmax(10rem, 0.35fr) auto;
         gap: 0.52rem;
         align-items: end;
     }
 
-    .prime-collaborators-table-wrap {
+    .mg-collaborators-table-wrap {
         overflow: hidden;
         padding: 0.72rem;
         border: 1px solid #DDE5EF;
@@ -51,8 +51,8 @@
         box-shadow: 0 10px 28px rgba(23, 37, 56, 0.045);
     }
 
-    .prime-collaborators-table,
-    .prime-collaborators-table.dataTable {
+    .mg-collaborators-table,
+    .mg-collaborators-table.dataTable {
         width: 100% !important;
         margin: 0 !important;
         color: #1D2C43;
@@ -60,7 +60,7 @@
         border-spacing: 0 !important;
     }
 
-    .prime-collaborators-table thead th {
+    .mg-collaborators-table thead th {
         padding: 0.58rem 0.68rem !important;
         border: 0 !important;
         border-bottom: 1px solid #E5EBF3 !important;
@@ -72,7 +72,7 @@
         text-transform: uppercase;
     }
 
-    .prime-collaborators-table tbody td {
+    .mg-collaborators-table tbody td {
         padding: 0.58rem 0.68rem !important;
         border: 0 !important;
         border-bottom: 1px solid #EDF1F6 !important;
@@ -81,7 +81,7 @@
         vertical-align: middle;
     }
 
-    .prime-collaborator-avatar {
+    .mg-collaborator-avatar {
         display: inline-flex;
         width: 2rem;
         height: 2rem;
@@ -94,14 +94,14 @@
         font-weight: 900;
     }
 
-    .prime-collaborator-name {
+    .mg-collaborator-name {
         color: #101929;
         font-weight: 890;
     }
 
-    .prime-collaborator-badge,
-    .prime-role-pill,
-    .prime-status-pill {
+    .mg-collaborator-badge,
+    .mg-role-pill,
+    .mg-status-pill {
         display: inline-flex;
         align-items: center;
         gap: 0.22rem;
@@ -111,26 +111,26 @@
         font-weight: 880;
     }
 
-    .prime-collaborator-badge,
-    .prime-role-pill {
+    .mg-collaborator-badge,
+    .mg-role-pill {
         border: 1px solid rgba(59, 149, 255, 0.24);
         background: rgba(59, 149, 255, 0.09);
         color: #246EC8;
     }
 
-    .prime-status-pill--active {
+    .mg-status-pill--active {
         border: 1px solid rgba(22, 138, 70, 0.22);
         background: #E8F8EF;
         color: #168A46;
     }
 
-    .prime-status-pill--pending {
+    .mg-status-pill--pending {
         border: 1px solid rgba(245, 158, 11, 0.26);
         background: #FFF5D8;
         color: #9B6A00;
     }
 
-    .prime-kebab {
+    .mg-kebab {
         display: inline-flex;
         width: 1.9rem;
         height: 1.9rem;
@@ -142,27 +142,27 @@
         color: #2C3E59;
     }
 
-    .prime-action-menu .dropdown-menu {
+    .mg-action-menu .dropdown-menu {
         border: 1px solid #DDE5EF;
         border-radius: 0.72rem;
         background: #FFFFFF;
         box-shadow: 0 18px 44px rgba(15, 28, 46, 0.16);
     }
 
-    .prime-action-menu .dropdown-item {
+    .mg-action-menu .dropdown-item {
         color: #263852;
         font-size: 0.78rem;
         font-weight: 760;
     }
 
-    .prime-action-menu .dropdown-item:hover,
-    .prime-action-menu .dropdown-item:focus {
+    .mg-action-menu .dropdown-item:hover,
+    .mg-action-menu .dropdown-item:focus {
         background: #EEF5FF;
         color: #246EC8;
     }
 
-    .prime-collaborators-page .dataTables_wrapper .top-container,
-    .prime-collaborators-page .dataTables_wrapper .bottom-container {
+    .mg-collaborators-page .dataTables_wrapper .top-container,
+    .mg-collaborators-page .dataTables_wrapper .bottom-container {
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
@@ -173,20 +173,20 @@
         font-weight: 720;
     }
 
-    .prime-collaborators-page .dataTables_wrapper .top-container {
+    .mg-collaborators-page .dataTables_wrapper .top-container {
         margin-bottom: 0.62rem;
     }
 
-    .prime-collaborators-page .dataTables_wrapper .bottom-container {
+    .mg-collaborators-page .dataTables_wrapper .bottom-container {
         margin-top: 0.62rem;
     }
 
-    .prime-collaborators-page .dataTables_filter,
-    .prime-collaborators-page .dt-buttons {
+    .mg-collaborators-page .dataTables_filter,
+    .mg-collaborators-page .dt-buttons {
         display: none;
     }
 
-    .prime-collaborators-page .dataTables_length select {
+    .mg-collaborators-page .dataTables_length select {
         min-width: 4.4rem;
         border-color: #DCE5EF;
         border-radius: 0.58rem;
@@ -194,7 +194,7 @@
         color: #1D2C43;
     }
 
-    .prime-collaborators-page .page-link {
+    .mg-collaborators-page .page-link {
         border-color: #DCE5EF;
         background: #FFFFFF;
         color: #30425D;
@@ -202,17 +202,17 @@
         font-weight: 800;
     }
 
-    .prime-collaborators-page .page-item.active .page-link {
+    .mg-collaborators-page .page-item.active .page-link {
         border-color: #3B95FF;
         background: #3B95FF;
         color: #FFFFFF;
     }
 
-    .prime-team-modal .modal-dialog {
+    .mg-team-modal .modal-dialog {
         max-width: 680px;
     }
 
-    .prime-team-modal .modal-content {
+    .mg-team-modal .modal-content {
         overflow: hidden;
         border: 1px solid #D7DFEA;
         border-radius: 1rem;
@@ -220,27 +220,27 @@
         box-shadow: 0 24px 80px rgba(15, 28, 46, 0.24);
     }
 
-    .prime-team-modal .modal-header,
-    .prime-team-modal .modal-footer {
+    .mg-team-modal .modal-header,
+    .mg-team-modal .modal-footer {
         padding: 0.78rem 1rem;
         border-color: #DDE5EF;
         background: #FFFFFF;
     }
 
-    .prime-team-modal .modal-body {
+    .mg-team-modal .modal-body {
         padding: 0.92rem;
     }
 
-    .prime-team-form-grid {
+    .mg-team-form-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 0.5rem;
     }
 
     @media (max-width: 992px) {
-        .prime-collaborators-filter,
-        .prime-collaborators-stats,
-        .prime-team-form-grid {
+        .mg-collaborators-filter,
+        .mg-collaborators-stats,
+        .mg-team-form-grid {
             grid-template-columns: 1fr;
         }
     }
@@ -259,71 +259,71 @@
     $currentSearch = request('search_value', request('search'));
 @endphp
 
-<div class="prime-collaborators-page">
+<div class="mg-collaborators-page">
     <span class="visually-hidden">Usuários</span>
 
-    <div class="prime-clients-toolbar">
-        <div class="prime-clients-toolbar__left">
-            <h1 class="prime-page-title mb-0">Meus colaboradores</h1>
-            <div class="prime-clients-counters">
-                <span class="prime-clients-counter"><i class="ri-team-line"></i> {{ $stats['total'] }} usuários</span>
-                <span class="prime-clients-counter prime-clients-counter--delivered"><i class="ri-checkbox-circle-line"></i> {{ $stats['active'] }} ativos</span>
-                <span class="prime-clients-counter prime-clients-counter--pending"><i class="ri-time-line"></i> {{ $stats['pending'] }} pendentes</span>
+    <div class="mg-clients-toolbar">
+        <div class="mg-clients-toolbar__left">
+            <h1 class="mg-page-title mb-0">Meus colaboradores</h1>
+            <div class="mg-clients-counters">
+                <span class="mg-clients-counter"><i class="ri-team-line"></i> {{ $stats['total'] }} usuários</span>
+                <span class="mg-clients-counter mg-clients-counter--delivered"><i class="ri-checkbox-circle-line"></i> {{ $stats['active'] }} ativos</span>
+                <span class="mg-clients-counter mg-clients-counter--pending"><i class="ri-time-line"></i> {{ $stats['pending'] }} pendentes</span>
             </div>
         </div>
-        <div class="prime-clients-toolbar__right">
-            <a href="{{ route('account.settings') }}" class="prime-btn-ghost"><i class="ri-arrow-left-line"></i> Conta</a>
+        <div class="mg-clients-toolbar__right">
+            <a href="{{ route('account.settings') }}" class="mg-btn-ghost"><i class="ri-arrow-left-line"></i> Conta</a>
             @can('create users')
-                <button type="button" class="prime-btn-primary" data-bs-toggle="modal" data-bs-target="#teamInviteModal">
+                <button type="button" class="mg-btn-primary" data-bs-toggle="modal" data-bs-target="#teamInviteModal">
                     <i class="ri-user-add-line"></i> Adicionar membro
                 </button>
             @endcan
         </div>
     </div>
 
-    <p class="prime-page-sub mb-0">Gerencie treinadores assistentes, gestores e permissões usando roles Spatie.</p>
+    <p class="mg-page-sub mb-0">Gerencie treinadores assistentes, gestores e permissões usando roles Spatie.</p>
 
-    <div class="prime-collaborators-stats">
-        <div class="prime-collaborator-stat">
-            <div class="prime-panel-label mb-2">Total local</div>
-            <div class="prime-collaborator-stat__value">{{ $stats['total'] }}</div>
-            <p class="prime-panel-hint mb-0">Staff vinculado ao tenant</p>
+    <div class="mg-collaborators-stats">
+        <div class="mg-collaborator-stat">
+            <div class="mg-panel-label mb-2">Total local</div>
+            <div class="mg-collaborator-stat__value">{{ $stats['total'] }}</div>
+            <p class="mg-panel-hint mb-0">Staff vinculado ao tenant</p>
         </div>
-        <div class="prime-collaborator-stat">
-            <div class="prime-panel-label mb-2">Ativos</div>
-            <div class="prime-collaborator-stat__value">{{ $stats['active'] }}</div>
-            <p class="prime-panel-hint mb-0">E-mail verificado</p>
+        <div class="mg-collaborator-stat">
+            <div class="mg-panel-label mb-2">Ativos</div>
+            <div class="mg-collaborator-stat__value">{{ $stats['active'] }}</div>
+            <p class="mg-panel-hint mb-0">E-mail verificado</p>
         </div>
-        <div class="prime-collaborator-stat">
-            <div class="prime-panel-label mb-2">Pendentes</div>
-            <div class="prime-collaborator-stat__value">{{ $stats['pending'] }}</div>
-            <p class="prime-panel-hint mb-0">Aguardando verificação</p>
+        <div class="mg-collaborator-stat">
+            <div class="mg-panel-label mb-2">Pendentes</div>
+            <div class="mg-collaborator-stat__value">{{ $stats['pending'] }}</div>
+            <p class="mg-panel-hint mb-0">Aguardando verificação</p>
         </div>
     </div>
 
-    <form method="get" action="{{ url()->current() }}" class="prime-panel prime-panel--compact prime-collaborators-filter">
+    <form method="get" action="{{ url()->current() }}" class="mg-panel mg-panel--compact mg-collaborators-filter">
         <div>
-            <label for="searchInput" class="prime-field-label">Buscar nome ou email</label>
+            <label for="searchInput" class="mg-field-label">Buscar nome ou email</label>
             <input
                 type="search"
                 id="searchInput"
                 name="search_value"
-                class="prime-field"
+                class="mg-field"
                 placeholder="Digite nome ou email"
                 value="{{ $currentSearch }}"
             >
         </div>
         <div>
-            <label for="statusFilter" class="prime-field-label">Status</label>
-            <select class="prime-field" id="statusFilter" name="status">
+            <label for="statusFilter" class="mg-field-label">Status</label>
+            <select class="mg-field" id="statusFilter" name="status">
                 <option value="">Todos</option>
                 <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Ativo</option>
                 <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pendente</option>
             </select>
         </div>
         <div>
-            <label for="roleFilter" class="prime-field-label">Perfil</label>
-            <select class="prime-field" id="roleFilter" name="role">
+            <label for="roleFilter" class="mg-field-label">Perfil</label>
+            <select class="mg-field" id="roleFilter" name="role">
                 <option value="">Todos os perfis</option>
                 @foreach($roles as $role)
                     <option value="{{ $role->name }}" {{ request('role') == $role->name ? 'selected' : '' }}>
@@ -333,16 +333,16 @@
             </select>
         </div>
         <div class="d-flex gap-2">
-            <button type="submit" class="prime-btn-primary">
+            <button type="submit" class="mg-btn-primary">
                 <i class="ri-filter-3-line"></i> Filtrar
             </button>
-            <a href="{{ url()->current() }}" id="resetFilters" class="prime-btn-ghost">
+            <a href="{{ url()->current() }}" id="resetFilters" class="mg-btn-ghost">
                 <i class="ri-close-line"></i> Limpar
             </a>
         </div>
     </form>
 
-    <section class="prime-collaborators-table-wrap">
+    <section class="mg-collaborators-table-wrap">
         <div class="table-responsive">
             {!! $dataTable->table() !!}
         </div>
@@ -350,30 +350,30 @@
 </div>
 
 @can('create users')
-    <div class="modal fade prime-team-modal" id="teamInviteModal" tabindex="-1">
+    <div class="modal fade mg-team-modal" id="teamInviteModal" tabindex="-1">
         <div class="modal-dialog">
             <form method="POST" action="{{ route('users.store') }}" class="modal-content">
                 @csrf
                 <div class="modal-header">
                     <div>
                         <h5 class="modal-title">Adicionar membro da equipe</h5>
-                        <p class="prime-panel-hint mb-0">Crie o acesso e atribua o perfil operacional.</p>
+                        <p class="mg-panel-hint mb-0">Crie o acesso e atribua o perfil operacional.</p>
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="prime-team-form-grid">
+                    <div class="mg-team-form-grid">
                         <div>
-                            <label class="prime-field-label">Nome</label>
-                            <input type="text" name="name" class="prime-field" value="{{ old('name') }}" placeholder="Nome do colaborador" required>
+                            <label class="mg-field-label">Nome</label>
+                            <input type="text" name="name" class="mg-field" value="{{ old('name') }}" placeholder="Nome do colaborador" required>
                         </div>
                         <div>
-                            <label class="prime-field-label">E-mail</label>
-                            <input type="email" name="email" class="prime-field" value="{{ old('email') }}" placeholder="email@empresa.com" required>
+                            <label class="mg-field-label">E-mail</label>
+                            <input type="email" name="email" class="mg-field" value="{{ old('email') }}" placeholder="email@empresa.com" required>
                         </div>
                         <div>
-                            <label class="prime-field-label">Perfil</label>
-                            <select name="role" class="prime-field" required>
+                            <label class="mg-field-label">Perfil</label>
+                            <select name="role" class="mg-field" required>
                                 @foreach($roles as $role)
                                     <option value="{{ $role->name }}" @selected(old('role', 'trainer') === $role->name)>
                                         {{ $roleLabels[$role->name] ?? ucfirst($role->name) }}
@@ -382,22 +382,22 @@
                             </select>
                         </div>
                         <div>
-                            <label class="prime-field-label">Avatar URL</label>
-                            <input type="text" name="avatar" class="prime-field" value="{{ old('avatar') }}" placeholder="Opcional">
+                            <label class="mg-field-label">Avatar URL</label>
+                            <input type="text" name="avatar" class="mg-field" value="{{ old('avatar') }}" placeholder="Opcional">
                         </div>
                         <div>
-                            <label class="prime-field-label">Senha inicial</label>
-                            <input type="password" name="password" class="prime-field" autocomplete="new-password" required>
+                            <label class="mg-field-label">Senha inicial</label>
+                            <input type="password" name="password" class="mg-field" autocomplete="new-password" required>
                         </div>
                         <div>
-                            <label class="prime-field-label">Confirmar senha</label>
-                            <input type="password" name="password_confirmation" class="prime-field" autocomplete="new-password" required>
+                            <label class="mg-field-label">Confirmar senha</label>
+                            <input type="password" name="password_confirmation" class="mg-field" autocomplete="new-password" required>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="prime-btn-ghost" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="prime-btn-primary"><i class="ri-user-add-line"></i> Adicionar</button>
+                    <button type="button" class="mg-btn-ghost" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="mg-btn-primary"><i class="ri-user-add-line"></i> Adicionar</button>
                 </div>
             </form>
         </div>

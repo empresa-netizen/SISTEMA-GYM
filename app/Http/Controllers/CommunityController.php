@@ -25,7 +25,7 @@ class CommunityController extends Controller
             'comments' => 0,
         ];
 
-        return view('prime.community.index', compact('groups', 'recentPosts', 'summary'));
+        return view('mgteam.community.index', compact('groups', 'recentPosts', 'summary'));
     }
 
     public function show(CommunityGroup $group): View
@@ -33,7 +33,7 @@ class CommunityController extends Controller
         abort_unless($group->parent_id === parentId(), 403);
         $group->load(['posts.member']);
 
-        return view('prime.community.show', compact('group'));
+        return view('mgteam.community.show', compact('group'));
     }
 
     public function storeGroup(Request $request): RedirectResponse

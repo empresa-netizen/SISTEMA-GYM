@@ -5,8 +5,8 @@
 @section('content')
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
     <div>
-        <h1 class="prime-page-title">Medição de {{ $health->member?->name ?? 'cliente' }}</h1>
-        <p class="prime-page-sub">{{ $health->measurement_date?->format('d/m/Y') ?? '—' }}</p>
+        <h1 class="mg-page-title">Medição de {{ $health->member?->name ?? 'cliente' }}</h1>
+        <p class="mg-page-sub">{{ $health->measurement_date?->format('d/m/Y') ?? '—' }}</p>
     </div>
     <div class="d-flex gap-2">
         <a href="{{ route('healths.edit', $health) }}" class="btn btn-primary btn-sm"><i class="ri-pencil-line me-1"></i> Editar</a>
@@ -16,10 +16,10 @@
 
 <div class="row g-3">
     <div class="col-lg-4">
-        <div class="prime-panel">
-            <div class="prime-panel-label mb-2">RESUMO</div>
+        <div class="mg-panel">
+            <div class="mg-panel-label mb-2">RESUMO</div>
             @if($health->bmi)
-                <div class="prime-panel-value prime-panel-value--sm mb-1">{{ $health->bmi }}</div>
+                <div class="mg-panel-value mg-panel-value--sm mb-1">{{ $health->bmi }}</div>
                 <span class="badge @if($health->bmi_category == 'Normal') bg-success @elseif($health->bmi_category == 'Overweight') bg-warning text-dark @elseif($health->bmi_category == 'Obese') bg-danger @else bg-info @endif">{{ $health->bmi_category }}</span>
             @else
                 <p class="text-muted mb-0 small">IMC não calculado.</p>
@@ -30,8 +30,8 @@
         </div>
     </div>
     <div class="col-lg-8">
-        <div class="prime-panel">
-            <h2 class="prime-section-title h6 mb-3">Medidas</h2>
+        <div class="mg-panel">
+            <h2 class="mg-section-title h6 mb-3">Medidas</h2>
             <div class="table-responsive">
                 <table class="table mb-0 align-middle">
                     <thead><tr><th>Tipo</th><th>Valor</th></tr></thead>

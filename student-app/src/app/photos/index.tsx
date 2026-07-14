@@ -311,7 +311,7 @@ export default function StudentPhotosScreen() {
             <Text style={styles.emptyIcon}>📸</Text>
             <Text style={[styles.emptyTitle, { color: colors.text }]}>Nenhuma foto enviada ainda</Text>
             <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
-              Seu primeiro check-in visual aparecerá aqui assim que for enviado.
+              Seu check-in visual inicial aparecerá aqui assim que for enviado.
             </Text>
           </View>
         }

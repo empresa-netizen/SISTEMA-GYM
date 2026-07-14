@@ -3,10 +3,10 @@
 @section('title', 'Checkout da Assinatura')
 
 @section('content')
-<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2 prime-page-header">
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2 mg-page-header">
     <div>
-        <h1 class="prime-page-title">Checkout da Assinatura</h1>
-        <p class="prime-page-sub">Finalize seu plano na MGTEAM FITNESS &amp; HEALTH com seguranca.</p>
+        <h1 class="mg-page-title">Checkout da Assinatura</h1>
+        <p class="mg-page-sub">Finalize seu plano na MGTEAM FITNESS &amp; HEALTH com seguranca.</p>
     </div>
 </div>
 
@@ -19,8 +19,8 @@
 
 <div class="row g-4">
     <div class="col-lg-5">
-        <div class="prime-panel h-100">
-            <div class="prime-panel-body">
+        <div class="mg-panel h-100">
+            <div class="mg-panel-body">
                 <h5 class="mb-3">Resumo do Pedido</h5>
                 <div class="mb-3">
                     <h6 class="fw-semibold">{{ $plan->name }}</h6>
@@ -56,8 +56,8 @@
     </div>
 
     <div class="col-lg-7">
-        <div class="prime-panel h-100">
-            <div class="prime-panel-body">
+        <div class="mg-panel h-100">
+            <div class="mg-panel-body">
                 <h5 class="mb-3">Forma de Pagamento</h5>
 
                 <form action="{{ route('subscriptions.purchase', $plan->id) }}" method="POST">

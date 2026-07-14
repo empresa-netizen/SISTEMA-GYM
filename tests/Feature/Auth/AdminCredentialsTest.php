@@ -1,11 +1,11 @@
 <?php
 
 use App\Models\User;
-use Database\Seeders\PrimeCoachUserSeeder;
+use Database\Seeders\MgteamUserSeeder;
 use Illuminate\Support\Facades\Hash;
 
 it('seeds the canonical admin with a working password', function () {
-    $this->seed(PrimeCoachUserSeeder::class);
+    $this->seed(MgteamUserSeeder::class);
 
     $admin = User::query()->where('email', 'coach@mgteam.app')->first();
 
@@ -17,7 +17,7 @@ it('seeds the canonical admin with a working password', function () {
 });
 
 it('logs into the web dashboard with the legacy admin email alias', function () {
-    $this->seed(PrimeCoachUserSeeder::class);
+    $this->seed(MgteamUserSeeder::class);
 
     $admin = User::query()->where('email', 'coach@mgteam.app')->firstOrFail();
 
@@ -31,7 +31,7 @@ it('logs into the web dashboard with the legacy admin email alias', function () 
 });
 
 it('logs into API V1 with the legacy admin email alias', function () {
-    $this->seed(PrimeCoachUserSeeder::class);
+    $this->seed(MgteamUserSeeder::class);
 
     $admin = User::query()->where('email', 'coach@mgteam.app')->firstOrFail();
 
@@ -47,7 +47,7 @@ it('logs into API V1 with the legacy admin email alias', function () {
 });
 
 it('logs into the mobile professional API with the legacy admin email alias', function () {
-    $this->seed(PrimeCoachUserSeeder::class);
+    $this->seed(MgteamUserSeeder::class);
 
     $admin = User::query()->where('email', 'coach@mgteam.app')->firstOrFail();
 

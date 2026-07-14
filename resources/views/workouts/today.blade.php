@@ -5,13 +5,13 @@
 @section('content')
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
     <div>
-        <h1 class="prime-page-title">Treinos de hoje</h1>
-        <p class="prime-page-sub">{{ now()->translatedFormat('l, d \d\e F \d\e Y') }}</p>
+        <h1 class="mg-page-title">Treinos de hoje</h1>
+        <p class="mg-page-sub">{{ now()->translatedFormat('l, d \d\e F \d\e Y') }}</p>
     </div>
     <a href="{{ route('workouts.index') }}" class="btn btn-outline-secondary btn-sm"><i class="ri-arrow-left-line me-1"></i> Voltar</a>
 </div>
 
-<div class="prime-panel">
+<div class="mg-panel">
     @forelse($workouts as $workout)
     <div class="d-flex flex-wrap justify-content-between align-items-center py-3 border-bottom border-secondary border-opacity-25 gap-2">
         <div>

@@ -30,75 +30,75 @@
     ];
 @endphp
 
-<div class="prime-client-profile">
-    <header class="prime-client-hero">
-        <div class="prime-client-hero__top">
-            <a href="{{ route('members.index') }}" class="prime-icon-btn" title="Voltar"><i class="ri-arrow-left-line"></i></a>
+<div class="mg-client-profile">
+    <header class="mg-client-hero">
+        <div class="mg-client-hero__top">
+            <a href="{{ route('members.index') }}" class="mg-icon-btn" title="Voltar"><i class="ri-arrow-left-line"></i></a>
 
-            <div class="prime-client-hero__identity">
+            <div class="mg-client-hero__identity">
                 @if($member->photo)
-                    <img src="{{ asset('storage/'.$member->photo) }}" alt="" class="prime-client-hero__avatar-img">
+                    <img src="{{ asset('storage/'.$member->photo) }}" alt="" class="mg-client-hero__avatar-img">
                 @else
-                    <div class="prime-client-hero__avatar">{{ strtoupper($initials) }}</div>
+                    <div class="mg-client-hero__avatar">{{ strtoupper($initials) }}</div>
                 @endif
                 <div>
-                    <h1 class="prime-client-hero__name">{{ $member->name }}</h1>
-                    <div class="prime-client-hero__contact">
+                    <h1 class="mg-client-hero__name">{{ $member->name }}</h1>
+                    <div class="mg-client-hero__contact">
                         <span>{{ $member->email }}</span>
                         @if($appInstalled)
-                            <span class="prime-chip prime-chip--success"><i class="ri-smartphone-line"></i> App instalado</span>
+                            <span class="mg-chip mg-chip--success"><i class="ri-smartphone-line"></i> App instalado</span>
                         @else
-                            <span class="prime-chip"><i class="ri-smartphone-line"></i> App não instalado</span>
+                            <span class="mg-chip"><i class="ri-smartphone-line"></i> App não instalado</span>
                         @endif
                     </div>
                 </div>
             </div>
 
-            <div class="prime-client-hero__cta">
-                <a href="{{ route('members.edit', $member) }}" class="prime-btn-ghost"><i class="ri-pencil-line"></i> Editar cliente</a>
-                <button type="button" class="prime-btn-primary" data-bs-toggle="modal" data-bs-target="#assumeClientModal">
+            <div class="mg-client-hero__cta">
+                <a href="{{ route('members.edit', $member) }}" class="mg-btn-ghost"><i class="ri-pencil-line"></i> Editar cliente</a>
+                <button type="button" class="mg-btn-primary" data-bs-toggle="modal" data-bs-target="#assumeClientModal">
                     <i class="ri-user-shared-line"></i>
                     {{ $member->coach_user_id === auth()->id() ? 'Cliente sob sua responsabilidade' : 'Assumir cliente' }}
                 </button>
-                <button type="button" class="prime-btn-ghost" data-bs-toggle="modal" data-bs-target="#notifyClientModal">
+                <button type="button" class="mg-btn-ghost" data-bs-toggle="modal" data-bs-target="#notifyClientModal">
                     <i class="ri-notification-3-line"></i> Notificar
                 </button>
             </div>
         </div>
 
-        <div class="prime-client-hero__utils">
-            <a href="{{ route('members.show', [$member, 'tab' => 'progress']) }}" class="prime-icon-btn" title="Progresso"><i class="ri-checkbox-circle-line"></i></a>
-            <a href="{{ route('members.show', [$member, 'tab' => 'notes']) }}" class="prime-icon-btn" title="Histórico"><i class="ri-history-line"></i></a>
-            <button type="button" class="prime-icon-btn" title="Copiar link" onclick="navigator.clipboard?.writeText(window.location.href)"><i class="ri-link"></i></button>
-            <a href="mailto:{{ $member->email }}" class="prime-icon-btn" title="E-mail"><i class="ri-mail-line"></i></a>
-            <a href="{{ route('members.show', [$member, 'tab' => 'appointments']) }}" class="prime-icon-btn" title="Agenda"><i class="ri-calendar-line"></i></a>
+        <div class="mg-client-hero__utils">
+            <a href="{{ route('members.show', [$member, 'tab' => 'progress']) }}" class="mg-icon-btn" title="Progresso"><i class="ri-checkbox-circle-line"></i></a>
+            <a href="{{ route('members.show', [$member, 'tab' => 'notes']) }}" class="mg-icon-btn" title="Histórico"><i class="ri-history-line"></i></a>
+            <button type="button" class="mg-icon-btn" title="Copiar link" onclick="navigator.clipboard?.writeText(window.location.href)"><i class="ri-link"></i></button>
+            <a href="mailto:{{ $member->email }}" class="mg-icon-btn" title="E-mail"><i class="ri-mail-line"></i></a>
+            <a href="{{ route('members.show', [$member, 'tab' => 'appointments']) }}" class="mg-icon-btn" title="Agenda"><i class="ri-calendar-line"></i></a>
             <form method="POST" action="{{ route('messages.start', $member) }}" class="d-inline">
                 @csrf
-                <button type="submit" class="prime-icon-btn" title="Chat"><i class="ri-message-3-line"></i></button>
+                <button type="submit" class="mg-icon-btn" title="Chat"><i class="ri-message-3-line"></i></button>
             </form>
             @if($waPhone)
-                <a href="https://wa.me/{{ $waPhone }}" target="_blank" rel="noopener" class="prime-icon-btn prime-icon-btn--whatsapp" title="WhatsApp"><i class="ri-whatsapp-line"></i></a>
+                <a href="https://wa.me/{{ $waPhone }}" target="_blank" rel="noopener" class="mg-icon-btn mg-icon-btn--whatsapp" title="WhatsApp"><i class="ri-whatsapp-line"></i></a>
             @endif
         </div>
 
-        <div class="prime-client-chips prime-client-chips--hero">
+        <div class="mg-client-chips mg-client-chips--hero">
             @if($age !== null)
-                <span class="prime-chip">{{ $age }} anos</span>
+                <span class="mg-chip">{{ $age }} anos</span>
             @endif
             @if($height)
-                <span class="prime-chip">{{ rtrim(rtrim(number_format($height, 1, ',', ''), '0'), ',') }} cm</span>
+                <span class="mg-chip">{{ rtrim(rtrim(number_format($height, 1, ',', ''), '0'), ',') }} cm</span>
             @endif
             @if($weight)
-                <span class="prime-chip">{{ rtrim(rtrim(number_format($weight, 1, ',', ''), '0'), ',') }} kg</span>
+                <span class="mg-chip">{{ rtrim(rtrim(number_format($weight, 1, ',', ''), '0'), ',') }} kg</span>
             @endif
             @if($member->membershipPlan)
-                <span class="prime-chip">{{ $member->membershipPlan->name }}</span>
+                <span class="mg-chip">{{ $member->membershipPlan->name }}</span>
             @endif
             @if($daysLeft !== null)
                 @if($daysLeft < 0)
-                    <span class="prime-chip prime-chip--danger">Expirado</span>
+                    <span class="mg-chip mg-chip--danger">Expirado</span>
                 @else
-                    <span class="prime-chip prime-chip--success">{{ $daysLeft }} dias restantes</span>
+                    <span class="mg-chip mg-chip--success">{{ $daysLeft }} dias restantes</span>
                 @endif
             @endif
         </div>
@@ -119,13 +119,13 @@
         </div>
     @endif
 
-    <nav class="prime-client-tabs" aria-label="Abas do cliente">
+    <nav class="mg-client-tabs" aria-label="Abas do cliente">
         @foreach($tabs as $key => $label)
-            <a href="{{ route('members.show', [$member, 'tab' => $key]) }}" class="prime-client-tabs__link @if($tab === $key) is-active @endif">{{ $label }}</a>
+            <a href="{{ route('members.show', [$member, 'tab' => $key]) }}" class="mg-client-tabs__link @if($tab === $key) is-active @endif">{{ $label }}</a>
         @endforeach
     </nav>
 
-    <div class="prime-client-tab-body">
+    <div class="mg-client-tab-body">
         @include('members.tabs.'.$tab)
     </div>
 </div>

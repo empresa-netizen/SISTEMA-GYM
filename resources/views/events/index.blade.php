@@ -6,33 +6,33 @@
 @php
     $filtersOpen = request()->hasAny(['status', 'search']);
     $statusMap = [
-        'scheduled' => ['Agendado', 'prime-chip--info'],
-        'ongoing' => ['Em andamento', 'prime-chip--success'],
+        'scheduled' => ['Agendado', 'mg-chip--info'],
+        'ongoing' => ['Em andamento', 'mg-chip--success'],
         'completed' => ['Concluído', ''],
-        'cancelled' => ['Cancelado', 'prime-chip--danger'],
+        'cancelled' => ['Cancelado', 'mg-chip--danger'],
     ];
 @endphp
 
-<div class="prime-clients-page">
-    <div class="prime-clients-toolbar">
-        <div class="prime-clients-toolbar__left">
-            <h1 class="prime-page-title mb-0">Agenda</h1>
-            <div class="prime-clients-counters">
-                <span class="prime-clients-counter">
+<div class="mg-clients-page">
+    <div class="mg-clients-toolbar">
+        <div class="mg-clients-toolbar__left">
+            <h1 class="mg-page-title mb-0">Agenda</h1>
+            <div class="mg-clients-counters">
+                <span class="mg-clients-counter">
                     <i class="ri-calendar-event-line"></i>
                     {{ $events->total() }} eventos
                 </span>
-                <span class="prime-clients-counter prime-clients-counter--delivered">
+                <span class="mg-clients-counter mg-clients-counter--delivered">
                     <i class="ri-time-line"></i>
                     {{ $upcomingEvents->count() }} próximos
                 </span>
             </div>
         </div>
-        <div class="prime-clients-toolbar__right">
-            <a href="{{ route('events.schedule') }}" class="prime-btn-ghost">
+        <div class="mg-clients-toolbar__right">
+            <a href="{{ route('events.schedule') }}" class="mg-btn-ghost">
                 <i class="ri-calendar-2-line"></i> Calendário
             </a>
-            <a href="{{ route('events.create') }}" class="prime-btn-primary">
+            <a href="{{ route('events.create') }}" class="mg-btn-primary">
                 <i class="ri-add-line"></i> Novo evento
             </a>
         </div>
@@ -46,18 +46,18 @@
     @endif
 
     @if($upcomingEvents->count() > 0)
-        <div class="prime-agenda-upcoming">
-            <div class="prime-panel-label">Próximos</div>
-            <div class="prime-agenda-upcoming__grid">
+        <div class="mg-agenda-upcoming">
+            <div class="mg-panel-label">Próximos</div>
+            <div class="mg-agenda-upcoming__grid">
                 @foreach($upcomingEvents as $event)
-                    <a href="{{ route('events.show', $event) }}" class="prime-agenda-upcoming__card">
-                        <div class="prime-agenda-upcoming__title">{{ $event->title }}</div>
-                        <div class="prime-agenda-upcoming__meta">
+                    <a href="{{ route('events.show', $event) }}" class="mg-agenda-upcoming__card">
+                        <div class="mg-agenda-upcoming__title">{{ $event->title }}</div>
+                        <div class="mg-agenda-upcoming__meta">
                             <span><i class="ri-calendar-line"></i> {{ $event->start_time->translatedFormat('d M, H:i') }}</span>
                             <span><i class="ri-map-pin-line"></i> {{ $event->location ?? 'A definir' }}</span>
                         </div>
                         @if($event->max_participants)
-                            <span class="prime-chip prime-chip--info">{{ $event->available_spots }} vagas</span>
+                            <span class="mg-chip mg-chip--info">{{ $event->available_spots }} vagas</span>
                         @endif
                     </a>
                 @endforeach
@@ -65,17 +65,17 @@
         </div>
     @endif
 
-    <div class="prime-clients-filters">
-        <button type="button" class="prime-btn-ghost prime-filters-toggle {{ $filtersOpen ? 'is-open' : '' }}" data-bs-toggle="collapse" data-bs-target="#primeEventsFilters" aria-expanded="{{ $filtersOpen ? 'true' : 'false' }}">
+    <div class="mg-clients-filters">
+        <button type="button" class="mg-btn-ghost mg-filters-toggle {{ $filtersOpen ? 'is-open' : '' }}" data-bs-toggle="collapse" data-bs-target="#mgEventsFilters" aria-expanded="{{ $filtersOpen ? 'true' : 'false' }}">
             <i class="ri-filter-3-line"></i> Filtros
-            <i class="ri-arrow-down-s-line prime-filters-chevron"></i>
+            <i class="ri-arrow-down-s-line mg-filters-chevron"></i>
         </button>
-        <div class="collapse {{ $filtersOpen ? 'show' : '' }}" id="primeEventsFilters">
-            <form method="get" action="{{ route('events.index') }}" class="prime-clients-filters__form">
-                <div class="prime-clients-filters__grid prime-clients-filters__grid--3">
+        <div class="collapse {{ $filtersOpen ? 'show' : '' }}" id="mgEventsFilters">
+            <form method="get" action="{{ route('events.index') }}" class="mg-clients-filters__form">
+                <div class="mg-clients-filters__grid mg-clients-filters__grid--3">
                     <div>
-                        <label class="prime-field-label">Status</label>
-                        <select name="status" class="prime-field">
+                        <label class="mg-field-label">Status</label>
+                        <select name="status" class="mg-field">
                             <option value="">Todos</option>
                             <option value="scheduled" @selected(request('status') === 'scheduled')>Agendado</option>
                             <option value="ongoing" @selected(request('status') === 'ongoing')>Em andamento</option>
@@ -83,67 +83,67 @@
                             <option value="cancelled" @selected(request('status') === 'cancelled')>Cancelado</option>
                         </select>
                     </div>
-                    <div class="prime-clients-filters__actions">
-                        <button type="submit" class="prime-btn-primary">Aplicar</button>
-                        <a href="{{ route('events.index') }}" class="prime-btn-ghost">Limpar</a>
+                    <div class="mg-clients-filters__actions">
+                        <button type="submit" class="mg-btn-primary">Aplicar</button>
+                        <a href="{{ route('events.index') }}" class="mg-btn-ghost">Limpar</a>
                     </div>
                 </div>
             </form>
         </div>
     </div>
 
-    <div class="prime-client-list">
+    <div class="mg-client-list">
         @forelse($events as $event)
             @php
                 [$label, $chip] = $statusMap[$event->status] ?? [$event->status, ''];
             @endphp
-            <div class="prime-client-card prime-product-card">
-                <a href="{{ route('events.show', $event) }}" class="prime-client-card__main text-decoration-none">
-                    <div class="prime-client-card__avatar" style="background:linear-gradient(135deg,#0f766e,#14b8a6)">
+            <div class="mg-client-card mg-product-card">
+                <a href="{{ route('events.show', $event) }}" class="mg-client-card__main text-decoration-none">
+                    <div class="mg-client-card__avatar" style="background:linear-gradient(135deg,#0f766e,#14b8a6)">
                         <i class="ri-calendar-event-line"></i>
                     </div>
-                    <div class="prime-client-card__identity">
-                        <div class="prime-client-card__name">{{ $event->title }}</div>
-                        <div class="prime-client-card__meta">
+                    <div class="mg-client-card__identity">
+                        <div class="mg-client-card__name">{{ $event->title }}</div>
+                        <div class="mg-client-card__meta">
                             <span>{{ $event->start_time->format('d/m/Y H:i') }}</span>
-                            <span class="prime-client-card__sep">|</span>
+                            <span class="mg-client-card__sep">|</span>
                             <span>{{ $event->location ?? 'Sem local' }}</span>
                             @if($event->max_participants)
-                                <span class="prime-client-card__sep">|</span>
+                                <span class="mg-client-card__sep">|</span>
                                 <span>{{ $event->registered_count }}/{{ $event->max_participants }} participantes</span>
                             @elseif($event->registered_count)
-                                <span class="prime-client-card__sep">|</span>
+                                <span class="mg-client-card__sep">|</span>
                                 <span>{{ $event->registered_count }} participantes</span>
                             @endif
                         </div>
-                        <div class="prime-client-chips">
-                            <span class="prime-chip {{ $chip }}">{{ $label }}</span>
+                        <div class="mg-client-chips">
+                            <span class="mg-chip {{ $chip }}">{{ $label }}</span>
                         </div>
                     </div>
                 </a>
-                <div class="prime-client-card__actions prime-product-card__actions">
-                    <a href="{{ route('events.edit', $event) }}" class="prime-btn-ghost prime-btn-ghost--sm" title="Editar">
+                <div class="mg-client-card__actions mg-product-card__actions">
+                    <a href="{{ route('events.edit', $event) }}" class="mg-btn-ghost mg-btn-ghost--sm" title="Editar">
                         <i class="ri-pencil-line"></i>
                     </a>
-                    <button type="button" class="prime-btn-ghost prime-btn-ghost--sm prime-btn-danger-ghost" title="Excluir" onclick="deleteEvent({{ $event->id }})">
+                    <button type="button" class="mg-btn-ghost mg-btn-ghost--sm mg-btn-danger-ghost" title="Excluir" onclick="deleteEvent({{ $event->id }})">
                         <i class="ri-delete-bin-line"></i>
                     </button>
-                    <a href="{{ route('events.show', $event) }}" class="prime-client-card__chevron-link">
-                        <i class="ri-arrow-right-s-line prime-client-card__chevron"></i>
+                    <a href="{{ route('events.show', $event) }}" class="mg-client-card__chevron-link">
+                        <i class="ri-arrow-right-s-line mg-client-card__chevron"></i>
                     </a>
                 </div>
             </div>
         @empty
-            <div class="prime-empty-state">
+            <div class="mg-empty-state">
                 <i class="ri-calendar-event-line"></i>
                 <p>Nenhum evento cadastrado.</p>
-                <a href="{{ route('events.create') }}" class="prime-btn-primary">Criar evento</a>
+                <a href="{{ route('events.create') }}" class="mg-btn-primary">Criar evento</a>
             </div>
         @endforelse
     </div>
 
     @if($events->hasPages())
-        <div class="prime-pagination">{{ $events->withQueryString()->links() }}</div>
+        <div class="mg-pagination">{{ $events->withQueryString()->links() }}</div>
     @endif
 </div>
 

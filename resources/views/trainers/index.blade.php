@@ -9,8 +9,8 @@
 @section('content')
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
     <div>
-        <h1 class="prime-page-title">Treinadores</h1>
-        <p class="prime-page-sub">Gerencie a equipe de profissionais da academia.</p>
+        <h1 class="mg-page-title">Treinadores</h1>
+        <p class="mg-page-sub">Gerencie a equipe de profissionais da academia.</p>
     </div>
     @can('create trainers')
         <a href="{{ route('trainers.create') }}" class="btn btn-primary">
@@ -19,7 +19,7 @@
     @endcan
 </div>
 
-<div class="prime-panel" style="height:auto">
+<div class="mg-panel" style="height:auto">
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}

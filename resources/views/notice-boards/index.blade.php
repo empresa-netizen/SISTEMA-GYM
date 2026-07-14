@@ -7,18 +7,18 @@
 @endpush
 
 @section('content')
-<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2 prime-page-header">
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2 mg-page-header">
     <div>
-        <h1 class="prime-page-title">Quadro de Avisos</h1>
-        <p class="prime-page-sub">Publique e acompanhe comunicados da MGTEAM FITNESS &amp; HEALTH.</p>
+        <h1 class="mg-page-title">Quadro de Avisos</h1>
+        <p class="mg-page-sub">Publique e acompanhe comunicados da MGTEAM FITNESS &amp; HEALTH.</p>
     </div>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#noticeModal" onclick="openCreateModal()">
         <i class="ri-add-line align-bottom me-1"></i> Novo aviso
     </button>
 </div>
 
-<div class="prime-panel mb-3">
-    <div class="prime-panel-body">
+<div class="mg-panel mb-3">
+    <div class="mg-panel-body">
         <form action="{{ route('notice-boards.index') }}" method="GET">
             <div class="search-box">
                 <input type="text" class="form-control search" name="search" value="{{ request('search') }}" placeholder="Buscar avisos...">
@@ -101,13 +101,13 @@
         </div>
     @empty
         <div class="col-12">
-            <div class="prime-panel">
-                <div class="prime-panel-body text-center py-5">
+            <div class="mg-panel">
+                <div class="mg-panel-body text-center py-5">
                     <div class="mb-3">
                         <i class="ri-notification-3-line display-4 text-muted"></i>
                     </div>
                     <h5>Nenhum aviso encontrado</h5>
-                    <p class="text-muted">Comece criando o primeiro aviso.</p>
+                    <p class="text-muted">Comece criando o aviso inicial.</p>
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#noticeModal" onclick="openCreateModal()">
                         <i class="ri-add-line me-1"></i> Novo aviso
                     </button>

@@ -5,15 +5,15 @@
 @section('content')
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
     <div>
-        <h1 class="prime-page-title">Nova venda</h1>
-        <p class="prime-page-sub">Registre uma fatura para um cliente.</p>
+        <h1 class="mg-page-title">Nova venda</h1>
+        <p class="mg-page-sub">Registre uma fatura para um cliente.</p>
     </div>
     <a href="{{ route('invoices.index') }}" class="btn btn-outline-secondary">
         <i class="ri-arrow-left-line me-1"></i> Voltar
     </a>
 </div>
 
-<div class="prime-panel">
+<div class="mg-panel">
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul class="mb-0">

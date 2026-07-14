@@ -1,0 +1,46 @@
+---
+description: Padrões de frontend MGTEAM para views Blade e CSS
+globs: resources/views/mgteam/**,resources/views/members/**,resources/views/invoices/**,resources/views/events/**,resources/views/workouts/**,resources/views/exercises/**,resources/views/healths/**,resources/views/support-tickets/**,public/css/mg*.css
+alwaysApply: false
+---
+
+# Frontend MGTEAM (Blade)
+
+## Layout
+
+```blade
+@extends('layouts.master')
+@section('title', 'Título')
+@section('content')
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+    <div>
+        <h1 class="mg-page-title">Título</h1>
+        <p class="mg-page-sub">Subtítulo</p>
+    </div>
+    <a href="..." class="btn btn-primary">Ação</a>
+</div>
+@endsection
+```
+
+## Componentes
+
+- Cards métricas: `mg-stat-card`, `mg-stat-label`, `mg-stat-value`
+- Painéis dashboard: `mg-panel`, `mg-panel-label`, `mg-panel-value`
+- Financeiro: `mg-finance-tabs`, `mg-finance-icon`
+- Badges status: `bg-success`, `bg-warning`, `bg-danger` (Bootstrap 5)
+
+## CSS
+
+- Tokens MGTEAM: `--mg-bg`, `--mg-blue`, `--mg-text` em `mg-app.css`
+- Tokens MGTEAM (ecossistema): `--mgteam-brand` etc. — usar só se pedido unificação de marca
+- Não adicionar `app.min.css` Velzon no shell coach
+
+## DataTables
+
+Scripts via `layouts/mg-vendor-scripts.blade.php`. Textos PT-BR em `DataTableConfigTrait`.
+
+## Referência visual
+
+1. referencia-visual-local (prioridade)
+2. `resources/views/mgteam/dashboard.blade.php`
+3. coach-pro `(dashboard)/**` para estrutura de abas/conteúdo

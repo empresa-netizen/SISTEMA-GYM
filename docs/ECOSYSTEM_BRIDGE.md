@@ -6,7 +6,7 @@ Este documento explica o que existe em cada repositório e **o que pode (e não 
 
 | Projeto | Caminho | Stack | Papel |
 |---------|---------|-------|-------|
-| **SISTEMA-GYM** (este) | `Documents/CURSOR COACH/SISTEMA-GYM` | Laravel 12, Blade, MySQL | Clone web Prime Coaching (D1–D7) |
+| **SISTEMA-GYM** (este) | `Documents/CURSOR COACH/SISTEMA-GYM` | Laravel 12, Blade, MySQL | Clone web Referencia Visual (D1–D7) |
 | **coach-pro** | `/Users/trabalho/codex/coach-pro` | Next.js 15, Prisma, PostgreSQL | Web SaaS completo (referência de telas) |
 | **mgteam-api** | `/Users/trabalho/CLAUDE/mgteam-api` | Express, JWT, Prisma | API REST para apps mobile |
 | **mgteam-pro-app** | `/Users/trabalho/CLAUDE/mgteam-pro-app` | Expo 57, RN Web | App do coach |
@@ -19,7 +19,7 @@ A pasta `/Users/trabalho/CLAUDE` **não é o front web**. Ela contém:
 - API mobile (`mgteam-api`) — ~70 endpoints, schema Prisma 31 modelos
 - Apps Expo (coach + aluno) — UI em React Native `StyleSheet`, não HTML/CSS
 - Orquestração de agentes (`.claude/agents/`, `AGENTS.md`, `BLACKBOARD.json`)
-- Design tokens mobile em `mgteam-*/constants/colors.ts` (MGTEAM aqua `#14B8A6`)
+- Design tokens mobile em `mg-*/constants/colors.ts` (MGTEAM aqua `#14B8A6`)
 
 O **front web** do ecossistema anterior está em **coach-pro** (`localhost:8081`).
 
@@ -29,13 +29,13 @@ O **front web** do ecossistema anterior está em **coach-pro** (`localhost:8081`
 
 | Origem | Destino | Motivo |
 |--------|---------|--------|
-| `CLAUDE/AGENTS.md` (regras de domínio) | `.cursor/rules/prime-coaching-clone.mdc` | Efeito dominó, no-mock, contratos |
+| `CLAUDE/AGENTS.md` (regras de domínio) | `.cursor/rules/mg-coaching-clone.mdc` | Efeito dominó, no-mock, contratos |
 | `CLAUDE/.claude/agents/*.md` | `docs/agents/*.md` | Playbook para subagentes Cursor |
 | `CLAUDE/MODELO_ORQUESTRACAO_SUBAGENTES.md` | `docs/ORQUESTRACAO.md` | Prompt mestre reutilizável |
 | `CLAUDE/mgteam-api/prisma/schema.prisma` | Referência para migrations Laravel | Modelo de domínio |
 | `CLAUDE/mgteam-api/src/routes/*.ts` | Referência para API futura | Contratos REST |
-| `mgteam-*/constants/colors.ts` | `public/css/prime-app.css` (`--mgteam-*`) | Tokens visuais |
-| `coach-pro/src/app/(dashboard)/**` | `resources/views/prime/**` | Layout/UX das telas web |
+| `mg-*/constants/colors.ts` | `public/css/mg-app.css` (`--mg-*`) | Tokens visuais |
+| `coach-pro/src/app/(dashboard)/**` | `resources/views/mgteam/**` | Layout/UX das telas web |
 
 ### ⚠️ Não portar código literal
 
@@ -48,7 +48,7 @@ O **front web** do ecossistema anterior está em **coach-pro** (`localhost:8081`
 
 ### 🔄 Reaproveitar padrão visual
 
-1. **Prime original** (`app.primecoaching.com.br`) — referência principal do clone (azul escuro, rail sidebar)
+1. **Referencia visual** (`referencia-visual-local`) — referência principal do clone (azul escuro, rail sidebar)
 2. **coach-pro** — estrutura de páginas (finance tabs, clientes CRM, biblioteca)
 3. **MGTEAM tokens** — variáveis CSS opcionais para futura unificação de marca
 
@@ -59,7 +59,7 @@ Subagentes do ecossistema CLAUDE mapeados para Cursor:
 | Agente CLAUDE | Quando usar no SISTEMA-GYM |
 |---------------|----------------------------|
 | `database-specialist` | Migrations, seeders, tenancy `parent_id` |
-| `frontend-specialist` | Blade `resources/views/prime/**`, CSS |
+| `frontend-specialist` | Blade `resources/views/mgteam/**`, CSS |
 | `api-specialist` | Rotas API Laravel (se expor mobile) |
 | `backend-specialist` | Controllers, models, policies |
 | `mobile-*` | Somente se conectar mgteam-api ao Laravel |
@@ -91,7 +91,7 @@ cd "/Users/trabalho/Documents/CURSOR  COACH/SISTEMA-GYM"
 | API (mgteam-api) | http://localhost:8088 |
 | Hub no Laravel | http://localhost:8000/apps |
 
-**Arquitetura:** PostgreSQL no Docker (`prime_mobile_db` :5433) + API e apps Expo.
+**Arquitetura:** PostgreSQL no Docker (`mgteam_mobile_db` :5433) + API e apps Expo.
 
 > **Auth:** credenciais demo unificadas com o painel Laravel via `./scripts/unify-demo-auth.sh`.
 > Login profissional: `coach@mgteam.app` / `password` (web + app).

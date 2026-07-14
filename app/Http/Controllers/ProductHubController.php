@@ -17,7 +17,7 @@ class ProductHubController extends Controller
             ->take(50)
             ->get();
 
-        return view('prime.products.hub', compact('products'));
+        return view('mgteam.products.hub', compact('products'));
     }
 
     public function quickStore(Request $request): RedirectResponse
@@ -73,7 +73,7 @@ class ProductHubController extends Controller
             ['name' => 'Mariana Santos', 'email' => 'mari.santos@email.com', 'conversions' => 1, 'commission' => 149.90, 'status' => 'ativo', 'joined' => '20/06/2026'],
         ]);
 
-        return view('prime.products.affiliates', compact('inviteCode', 'inviteUrl', 'stats', 'affiliates'));
+        return view('mgteam.products.affiliates', compact('inviteCode', 'inviteUrl', 'stats', 'affiliates'));
     }
 
     public function cartRecovery(): View
@@ -96,6 +96,6 @@ class ProductHubController extends Controller
             ['client' => 'Thiago Martins', 'email' => 'thiago.m@email.com', 'product' => 'Nutrição + Treino', 'value' => 349.00, 'abandoned_at' => '04/07/2026 21:30', 'status' => 'recuperado', 'attempts' => 3],
         ]);
 
-        return view('prime.products.cart-recovery', compact('stats', 'carts'));
+        return view('mgteam.products.cart-recovery', compact('stats', 'carts'));
     }
 }

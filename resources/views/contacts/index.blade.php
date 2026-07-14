@@ -7,10 +7,10 @@
 @endpush
 
 @section('content')
-<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2 prime-page-header">
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2 mg-page-header">
     <div>
-        <h1 class="prime-page-title">Contatos</h1>
-        <p class="prime-page-sub">Gerencie mensagens e relacionamento da MGTEAM FITNESS &amp; HEALTH.</p>
+        <h1 class="mg-page-title">Contatos</h1>
+        <p class="mg-page-sub">Gerencie mensagens e relacionamento da MGTEAM FITNESS &amp; HEALTH.</p>
     </div>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contactModal" onclick="openCreateModal()">
         <i class="ri-add-line align-bottom me-1"></i> Novo contato
@@ -24,8 +24,8 @@
     </div>
 @endif
 
-<div class="prime-panel">
-    <div class="prime-panel-body">
+<div class="mg-panel">
+    <div class="mg-panel-body">
         <div class="d-flex justify-content-sm-end gap-2 mb-3">
             <form method="GET" class="d-flex gap-2">
                 <div class="search-box">
@@ -148,7 +148,7 @@
                                 <i class="ri-contacts-line display-4 text-muted"></i>
                             </div>
                             <h5>Nenhum contato encontrado</h5>
-                            <p class="text-muted">Comece adicionando o primeiro contato.</p>
+                            <p class="text-muted">Comece adicionando o contato inicial.</p>
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contactModal" onclick="openCreateModal()">
                                 <i class="ri-add-line me-1"></i> Novo contato
                             </button>
@@ -450,7 +450,7 @@ function showToast(message, type = 'success') {
         </div>
     `);
 
-    $('.prime-page-header').after($alert);
+    $('.mg-page-header').after($alert);
     setTimeout(() => $alert.alert('close'), 3000);
 }
 

@@ -7,10 +7,10 @@
 @endsection
 
 @section('content')
-<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2 prime-page-header">
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2 mg-page-header">
     <div>
-        <h1 class="prime-page-title">Gestao de Armarios</h1>
-        <p class="prime-page-sub">Controle ocupacao e disponibilidade na MGTEAM FITNESS &amp; HEALTH.</p>
+        <h1 class="mg-page-title">Gestao de Armarios</h1>
+        <p class="mg-page-sub">Controle ocupacao e disponibilidade na MGTEAM FITNESS &amp; HEALTH.</p>
     </div>
     <a href="{{ route('lockers.create') }}" class="btn btn-primary">
         <i class="ri-add-line align-middle me-1"></i> Novo armario
@@ -19,24 +19,24 @@
 
 <div class="row mb-3 g-3">
     <div class="col-md-4">
-        <div class="prime-panel h-100">
-            <div class="prime-panel-body">
+        <div class="mg-panel h-100">
+            <div class="mg-panel-body">
                 <p class="text-uppercase fw-medium text-muted mb-1">Total de armarios</p>
                 <h4 class="fs-22 fw-semibold ff-secondary mb-0">{{ $stats['total'] }}</h4>
             </div>
         </div>
     </div>
     <div class="col-md-4">
-        <div class="prime-panel h-100">
-            <div class="prime-panel-body">
+        <div class="mg-panel h-100">
+            <div class="mg-panel-body">
                 <p class="text-uppercase fw-medium text-muted mb-1">Disponiveis</p>
                 <h4 class="fs-22 fw-semibold ff-secondary mb-0 text-success">{{ $stats['available'] }}</h4>
             </div>
         </div>
     </div>
     <div class="col-md-4">
-        <div class="prime-panel h-100">
-            <div class="prime-panel-body">
+        <div class="mg-panel h-100">
+            <div class="mg-panel-body">
                 <p class="text-uppercase fw-medium text-muted mb-1">Ocupados</p>
                 <h4 class="fs-22 fw-semibold ff-secondary mb-0 text-danger">{{ $stats['occupied'] }}</h4>
             </div>
@@ -44,8 +44,8 @@
     </div>
 </div>
 
-<div class="prime-panel">
-    <div class="prime-panel-body">
+<div class="mg-panel">
+    <div class="mg-panel-body">
         @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <i class="ri-check-line align-middle me-2"></i> {{ session('success') }}

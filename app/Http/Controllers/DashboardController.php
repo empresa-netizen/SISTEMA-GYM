@@ -120,7 +120,7 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        return view('prime.dashboard', compact(
+        return view('mgteam.dashboard', compact(
             'stats', 'recentClients', 'recentPayments', 'upcomingEvents', 'upcomingDays',
             'pendingFeedbacksList', 'recentConversations', 'upcomingRenewals', 'dailyTrend',
             'startOfMonth', 'endOfMonth', 'pendingInvoices', 'birthdays', 'expiringWorkouts'

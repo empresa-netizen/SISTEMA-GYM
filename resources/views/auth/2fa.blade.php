@@ -1,18 +1,18 @@
-@extends('prime.layouts.auth')
+@extends('mgteam.layouts.auth')
 
 @section('title', 'Verificação em duas etapas')
 
 @section('content')
-<div class="prime-auth-split">
-    <div class="prime-auth-brand"><span class="prime-logo-mark">P</span></div>
-    <div class="prime-auth-form-wrap">
-        <div class="prime-form-card">
-            <div class="prime-form-icon"><i class="ri-shield-keyhole-line"></i></div>
+<div class="mg-auth-split">
+    <div class="mg-auth-brand"><span class="mg-logo-mark">P</span></div>
+    <div class="mg-auth-form-wrap">
+        <div class="mg-form-card">
+            <div class="mg-form-icon"><i class="ri-shield-keyhole-line"></i></div>
             <h1>Verificação em duas etapas</h1>
-            <p class="prime-subtitle">Digite o código de 6 dígitos do seu autenticador</p>
+            <p class="mg-subtitle">Digite o código de 6 dígitos do seu autenticador</p>
 
             @if ($errors->any())
-                <div class="prime-alert">
+                <div class="mg-alert">
                     @foreach ($errors->all() as $error)
                         <div>{{ $error }}</div>
                     @endforeach

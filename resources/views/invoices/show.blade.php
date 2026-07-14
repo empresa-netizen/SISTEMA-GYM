@@ -22,8 +22,8 @@
 
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
     <div>
-        <h1 class="prime-page-title">Fatura {{ $invoice->invoice_number }}</h1>
-        <p class="prime-page-sub">{{ $invoice->member->name }} · {{ $invoice->invoice_date->format('d/m/Y') }}</p>
+        <h1 class="mg-page-title">Fatura {{ $invoice->invoice_number }}</h1>
+        <p class="mg-page-sub">{{ $invoice->member->name }} · {{ $invoice->invoice_date->format('d/m/Y') }}</p>
     </div>
     <div class="d-flex gap-2">
         <a href="{{ route('invoices.index') }}" class="btn btn-outline-secondary">
@@ -39,7 +39,7 @@
 
 <div class="row justify-content-center">
     <div class="col-xxl-9">
-        <div class="prime-panel">
+        <div class="mg-panel">
             <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4 pb-3 border-bottom">
                 <div>
                     <h5 class="mb-1">{{ config('brand.name', 'MGTEAM FITNESS & HEALTH') }}</h5>

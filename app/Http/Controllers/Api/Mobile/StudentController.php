@@ -546,7 +546,7 @@ class StudentController extends Controller
         $summary = $auditor->summarize($prescription);
         $prescription->loadMissing('dietMenu', 'member');
 
-        return view('prime.diets.print', [
+        return view('mgteam.diets.print', [
             'prescription' => $prescription,
             'summary' => $summary,
             'member' => $member ?? $prescription->member,

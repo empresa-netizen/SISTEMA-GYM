@@ -40,7 +40,7 @@ class FinanceController extends Controller
         $stats = compact('availableBalance', 'pendingBalance', 'monthRevenue', 'monthTransactions', 'recentPayments', 'recentInvoices', 'tab');
 
         if ($tab === 'withdrawals') {
-            return view('prime.finance.withdrawals', $stats);
+            return view('mgteam.finance.withdrawals', $stats);
         }
 
         if ($tab === 'reports') {
@@ -53,7 +53,7 @@ class FinanceController extends Controller
                 ->reverse()
                 ->values();
 
-            return view('prime.finance.reports', array_merge($stats, compact('byMonth')));
+            return view('mgteam.finance.reports', array_merge($stats, compact('byMonth')));
         }
 
         if ($tab === 'transactions') {
@@ -86,11 +86,11 @@ class FinanceController extends Controller
             $totalPaid = InvoicePayment::whereIn('invoice_id', $invoiceIds)->sum('amount');
             $totalDue = max(0, $totalAmount - $totalPaid);
 
-            return $dataTable->render('prime.finance.transactions', array_merge($stats, compact(
+            return $dataTable->render('mgteam.finance.transactions', array_merge($stats, compact(
                 'totalAmount', 'totalPaid', 'totalDue'
             )));
         }
 
-        return view('prime.finance.index', $stats);
+        return view('mgteam.finance.index', $stats);
     }
 }

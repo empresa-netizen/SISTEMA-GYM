@@ -5,8 +5,8 @@
 @section('content')
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
     <div>
-        <h1 class="prime-page-title">Editar treinador</h1>
-        <p class="prime-page-sub">{{ $trainer->name }} · {{ $trainer->trainer_id }}</p>
+        <h1 class="mg-page-title">Editar treinador</h1>
+        <p class="mg-page-sub">{{ $trainer->name }} · {{ $trainer->trainer_id }}</p>
     </div>
     <a href="{{ route('trainers.index') }}" class="btn btn-outline-secondary">
         <i class="ri-arrow-left-line me-1"></i> Voltar
@@ -17,8 +17,8 @@
     @csrf
     @method('PUT')
 
-    <div class="prime-panel mb-3">
-        <div class="prime-panel-label mb-3">DADOS PESSOAIS</div>
+    <div class="mg-panel mb-3">
+        <div class="mg-panel-label mb-3">DADOS PESSOAIS</div>
         <div class="row g-3">
             <div class="col-md-6">
                 <label for="name" class="form-label">Nome completo <span class="text-danger">*</span></label>
@@ -72,8 +72,8 @@
         </div>
     </div>
 
-    <div class="prime-panel mb-3">
-        <div class="prime-panel-label mb-3">DADOS PROFISSIONAIS</div>
+    <div class="mg-panel mb-3">
+        <div class="mg-panel-label mb-3">DADOS PROFISSIONAIS</div>
         <div class="row g-3">
             <div class="col-12">
                 <label for="bio" class="form-label">Bio / descrição</label>

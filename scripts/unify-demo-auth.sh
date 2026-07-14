@@ -16,7 +16,7 @@ echo "▶ Unificando auth demo (web MySQL + mobile Postgres)..."
 # --- Web (Laravel / MySQL) ---
 docker compose exec -T app php artisan tinker --execute="
 \$pwd = Illuminate\Support\Facades\Hash::make('password');
-\$u = App\Models\User::whereIn('email', ['coach@mgteam.app','coach@primecoaching.com.br','admin@mgteam.app'])->first();
+\$u = App\Models\User::whereIn('email', ['coach@mgteam.app','coach@mgteam.local','admin@mgteam.app'])->first();
 if (!\$u) {
   \$u = App\Models\User::create([
     'name' => 'Coach MGTEAM',
@@ -60,7 +60,7 @@ SET email = '${COACH_EMAIL}',
     name = '${COACH_NAME}',
     password = '${HASH}',
     "updatedAt" = NOW()
-WHERE email IN ('admin@mgteam.app', 'coach@mgteam.app', 'coach@primecoaching.com.br')
+WHERE email IN ('admin@mgteam.app', 'coach@mgteam.app', 'coach@mgteam.local')
    OR role = 'ADMIN';
 
 -- Garante pelo menos o coach unificado

@@ -1,3 +1,3 @@
-<body class="prime-app">
+<body class="mg-app">
 
 <!-- <body data-layout="horizontal"> -->

@@ -17,7 +17,7 @@ class LibraryDietController extends Controller
 {
     public function index(): View
     {
-        return view('prime.library.diet.index');
+        return view('mgteam.library.diet.index');
     }
 
     public function courses(Request $request): View
@@ -58,7 +58,7 @@ class LibraryDietController extends Controller
             ->orderBy('product')
             ->pluck('product');
 
-        return view('prime.library.courses', [
+        return view('mgteam.library.courses', [
             'courses' => $courses,
             'filters' => $filters,
             'products' => $products,
@@ -109,7 +109,7 @@ class LibraryDietController extends Controller
 
         $groups = DietFood::distinct()->pluck('food_group')->filter();
 
-        return view('prime.library.diet.foods', compact('foods', 'groups'));
+        return view('mgteam.library.diet.foods', compact('foods', 'groups'));
     }
 
     public function menus(Request $request): View
@@ -122,12 +122,12 @@ class LibraryDietController extends Controller
             ->orderBy('name')
             ->get(['id', 'name', 'food_group', 'calories', 'protein', 'carbs', 'fat']);
 
-        return view('prime.library.diet.menus', compact('foods', 'menus'));
+        return view('mgteam.library.diet.menus', compact('foods', 'menus'));
     }
 
     public function formulas(): View
     {
-        return view('prime.library.diet.stub', [
+        return view('mgteam.library.diet.stub', [
             'title' => 'Minhas fórmulas',
             'subtitle' => 'Área reservada para fórmulas nutricionais locais.',
             'icon' => 'ri-flask-line',
@@ -136,7 +136,7 @@ class LibraryDietController extends Controller
 
     public function predefinedMeals(): View
     {
-        return view('prime.library.diet.stub', [
+        return view('mgteam.library.diet.stub', [
             'title' => 'Refeições predefinidas',
             'subtitle' => 'Modelos prontos de refeições para acelerar prescrições.',
             'icon' => 'ri-bowl-line',

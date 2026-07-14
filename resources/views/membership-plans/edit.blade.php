@@ -15,47 +15,47 @@
     ];
 @endphp
 
-<div class="prime-clients-page">
-    <div class="prime-clients-toolbar">
-        <div class="prime-clients-toolbar__left">
-            <h1 class="prime-page-title mb-0">{{ $membershipPlan->name }}</h1>
-            <div class="prime-clients-counters">
-                <span class="prime-clients-counter">
+<div class="mg-clients-page">
+    <div class="mg-clients-toolbar">
+        <div class="mg-clients-toolbar__left">
+            <h1 class="mg-page-title mb-0">{{ $membershipPlan->name }}</h1>
+            <div class="mg-clients-counters">
+                <span class="mg-clients-counter">
                     <i class="ri-pencil-line"></i>
                     Editar plano de consultoria
                 </span>
             </div>
         </div>
-        <div class="prime-clients-toolbar__right">
-            <a href="{{ route('membership-plans.show', $membershipPlan) }}" class="prime-btn-ghost">
+        <div class="mg-clients-toolbar__right">
+            <a href="{{ route('membership-plans.show', $membershipPlan) }}" class="mg-btn-ghost">
                 <i class="ri-eye-line"></i> Ver
             </a>
-            <a href="{{ route('membership-plans.index') }}" class="prime-btn-ghost">
+            <a href="{{ route('membership-plans.index') }}" class="mg-btn-ghost">
                 <i class="ri-arrow-left-line"></i> Voltar
             </a>
         </div>
     </div>
 
-    <form action="{{ route('membership-plans.update', $membershipPlan->id) }}" method="POST" class="prime-form-stack">
+    <form action="{{ route('membership-plans.update', $membershipPlan->id) }}" method="POST" class="mg-form-stack">
         @csrf
         @method('PUT')
 
-        <div class="prime-panel prime-panel--compact">
-            <div class="prime-panel-label mb-3">Dados do plano</div>
-            <div class="prime-form-grid">
+        <div class="mg-panel mg-panel--compact">
+            <div class="mg-panel-label mb-3">Dados do plano</div>
+            <div class="mg-form-grid">
                 <div>
-                    <label for="name" class="prime-field-label">Nome do plano</label>
-                    <input type="text" class="prime-field @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name', $membershipPlan->name) }}" required>
+                    <label for="name" class="mg-field-label">Nome do plano</label>
+                    <input type="text" class="mg-field @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name', $membershipPlan->name) }}" required>
                     @error('name')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                 </div>
                 <div>
-                    <label for="price" class="prime-field-label">Preço (R$)</label>
-                    <input type="number" step="0.01" class="prime-field @error('price') is-invalid @enderror" id="price" name="price" value="{{ old('price', $membershipPlan->price) }}" required>
+                    <label for="price" class="mg-field-label">Preço (R$)</label>
+                    <input type="number" step="0.01" class="mg-field @error('price') is-invalid @enderror" id="price" name="price" value="{{ old('price', $membershipPlan->price) }}" required>
                     @error('price')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                 </div>
                 <div>
-                    <label for="duration_type" class="prime-field-label">Tipo de duração</label>
-                    <select class="prime-field @error('duration_type') is-invalid @enderror" id="duration_type" name="duration_type" required>
+                    <label for="duration_type" class="mg-field-label">Tipo de duração</label>
+                    <select class="mg-field @error('duration_type') is-invalid @enderror" id="duration_type" name="duration_type" required>
                         @foreach($durationTypes as $value => $label)
                             <option value="{{ $value }}" @selected(old('duration_type', $membershipPlan->duration_type) === $value)>{{ $label }}</option>
                         @endforeach
@@ -63,35 +63,35 @@
                     @error('duration_type')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                 </div>
                 <div>
-                    <label for="duration_value" class="prime-field-label">Quantidade</label>
-                    <input type="number" class="prime-field @error('duration_value') is-invalid @enderror" id="duration_value" name="duration_value" value="{{ old('duration_value', $membershipPlan->duration_value) }}" required>
+                    <label for="duration_value" class="mg-field-label">Quantidade</label>
+                    <input type="number" class="mg-field @error('duration_value') is-invalid @enderror" id="duration_value" name="duration_value" value="{{ old('duration_value', $membershipPlan->duration_value) }}" required>
                     @error('duration_value')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                 </div>
-                <div class="prime-form-grid__full">
-                    <label for="description" class="prime-field-label">Descrição</label>
-                    <textarea class="prime-field @error('description') is-invalid @enderror" id="description" name="description" rows="3">{{ old('description', $membershipPlan->description) }}</textarea>
+                <div class="mg-form-grid__full">
+                    <label for="description" class="mg-field-label">Descrição</label>
+                    <textarea class="mg-field @error('description') is-invalid @enderror" id="description" name="description" rows="3">{{ old('description', $membershipPlan->description) }}</textarea>
                     @error('description')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                 </div>
             </div>
         </div>
 
-        <div class="prime-panel prime-panel--compact">
-            <div class="prime-panel-label mb-3">Configurações</div>
-            <div class="prime-form-switches">
-                <label class="prime-switch">
+        <div class="mg-panel mg-panel--compact">
+            <div class="mg-panel-label mb-3">Configurações</div>
+            <div class="mg-form-switches">
+                <label class="mg-switch">
                     <input type="checkbox" id="personal_training" name="personal_training" value="1" @checked(old('personal_training', $membershipPlan->personal_training))>
                     <span>Inclui treino personalizado</span>
                 </label>
-                <label class="prime-switch">
+                <label class="mg-switch">
                     <input type="checkbox" id="is_active" name="is_active" value="1" @checked(old('is_active', $membershipPlan->is_active))>
                     <span>Plano ativo</span>
                 </label>
             </div>
         </div>
 
-        <div class="prime-form-actions">
-            <a href="{{ route('membership-plans.index') }}" class="prime-btn-ghost">Cancelar</a>
-            <button type="submit" class="prime-btn-primary"><i class="ri-save-line"></i> Salvar plano</button>
+        <div class="mg-form-actions">
+            <a href="{{ route('membership-plans.index') }}" class="mg-btn-ghost">Cancelar</a>
+            <button type="submit" class="mg-btn-primary"><i class="ri-save-line"></i> Salvar plano</button>
         </div>
     </form>
 </div>

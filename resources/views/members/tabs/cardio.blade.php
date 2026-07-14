@@ -12,32 +12,32 @@
     ];
 @endphp
 
-<div class="prime-tab-block">
-    <div class="prime-tab-block__head">
+<div class="mg-tab-block">
+    <div class="mg-tab-block__head">
         <div>
-            <p class="prime-section-label mb-1">Condicionamento</p>
-            <h2 class="prime-tab-block__title">Cardio</h2>
+            <p class="mg-section-label mb-1">Condicionamento</p>
+            <h2 class="mg-tab-block__title">Cardio</h2>
         </div>
-        <button type="button" class="prime-btn-primary" data-bs-toggle="modal" data-bs-target="#cardioPlanModal">
+        <button type="button" class="mg-btn-primary" data-bs-toggle="modal" data-bs-target="#cardioPlanModal">
             <i class="ri-add-line"></i> Novo plano de cardio
         </button>
     </div>
 
-    <div class="prime-tab-subnav">
-        <a href="#cardio-prescriptions" class="prime-tab-subnav__item is-active">Prescrições <span>{{ $cardioPlans->count() }}</span></a>
-        <a href="#cardio-records" class="prime-tab-subnav__item">Registros <span>{{ $cardioEntries->count() }}</span></a>
+    <div class="mg-tab-subnav">
+        <a href="#cardio-prescriptions" class="mg-tab-subnav__item is-active">Prescrições <span>{{ $cardioPlans->count() }}</span></a>
+        <a href="#cardio-records" class="mg-tab-subnav__item">Registros <span>{{ $cardioEntries->count() }}</span></a>
     </div>
 
-    <section id="cardio-prescriptions" class="prime-tab-section">
-        <div class="prime-prescription-list">
+    <section id="cardio-prescriptions" class="mg-tab-section">
+        <div class="mg-prescription-list">
         @forelse($cardioPlans as $plan)
-            <article class="prime-prescription-card">
-                <div class="prime-prescription-card__main">
-                    <div class="prime-prescription-card__eyebrow">
+            <article class="mg-prescription-card">
+                <div class="mg-prescription-card__main">
+                    <div class="mg-prescription-card__eyebrow">
                         {{ $plan->starts_at?->format('d/m/Y') ?? $plan->created_at?->format('d/m/Y') }}
                     </div>
-                    <h3 class="prime-prescription-card__title">{{ $plan->title }}</h3>
-                    <div class="prime-prescription-card__meta">
+                    <h3 class="mg-prescription-card__title">{{ $plan->title }}</h3>
+                    <div class="mg-prescription-card__meta">
                         @if($plan->modality)<span>{{ $plan->modality }}</span>@endif
                         @if($plan->duration_minutes)<span>{{ $plan->duration_minutes }} min</span>@endif
                         @if($plan->intensity)<span>{{ $plan->intensity }}</span>@endif
@@ -45,37 +45,37 @@
                         @if($plan->notes)<span>{{ \Illuminate\Support\Str::limit($plan->notes, 80) }}</span>@endif
                     </div>
                 </div>
-                <span class="prime-chip prime-chip--info">{{ $statusLabels[$plan->status] ?? $plan->status }}</span>
+                <span class="mg-chip mg-chip--info">{{ $statusLabels[$plan->status] ?? $plan->status }}</span>
             </article>
         @empty
-            <div class="prime-empty-state prime-empty-state--compact">
+            <div class="mg-empty-state mg-empty-state--compact">
                 <i class="ri-heart-pulse-line"></i>
                 <p>Nenhum plano de cardio cadastrado</p>
-                <button type="button" class="prime-btn-primary" data-bs-toggle="modal" data-bs-target="#cardioPlanModal">Novo plano de cardio</button>
+                <button type="button" class="mg-btn-primary" data-bs-toggle="modal" data-bs-target="#cardioPlanModal">Novo plano de cardio</button>
             </div>
         @endforelse
         </div>
     </section>
 
-    <section id="cardio-records" class="prime-tab-section">
-        <div class="prime-tab-section__head">
+    <section id="cardio-records" class="mg-tab-section">
+        <div class="mg-tab-section__head">
             <h3>Registros de cardio</h3>
         </div>
-        <div class="prime-prescription-list">
+        <div class="mg-prescription-list">
         @forelse($cardioEntries as $entry)
-            <article class="prime-prescription-card">
-                <div class="prime-prescription-card__main">
-                    <div class="prime-prescription-card__eyebrow">{{ $entry->logged_at?->format('d/m/Y') }}</div>
-                    <h3 class="prime-prescription-card__title">{{ $entry->title }}</h3>
-                    <div class="prime-prescription-card__meta">
+            <article class="mg-prescription-card">
+                <div class="mg-prescription-card__main">
+                    <div class="mg-prescription-card__eyebrow">{{ $entry->logged_at?->format('d/m/Y') }}</div>
+                    <h3 class="mg-prescription-card__title">{{ $entry->title }}</h3>
+                    <div class="mg-prescription-card__meta">
                         @if($entry->rating)<span>{{ $entry->rating }}/5</span>@endif
                         @if($entry->comment)<span>{{ $entry->comment }}</span>@endif
                     </div>
                 </div>
-                <span class="prime-chip prime-chip--info">Cardio</span>
+                <span class="mg-chip mg-chip--info">Cardio</span>
             </article>
         @empty
-            <div class="prime-empty-state prime-empty-state--compact">
+            <div class="mg-empty-state mg-empty-state--compact">
                 <i class="ri-book-open-line"></i>
                 <p>Nenhum registro de cardio ainda.</p>
                 <p class="small text-muted mb-0">Registros de corrida, bike ou cardio no diário aparecerão aqui.</p>

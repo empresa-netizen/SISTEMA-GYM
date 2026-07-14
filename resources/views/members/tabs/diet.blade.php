@@ -1,5 +1,5 @@
 @php
-    $deliveryBadge = ['PENDING' => 'prime-chip--warn', 'DELIVERED' => 'prime-chip--success', 'LATE' => 'prime-chip--danger'];
+    $deliveryBadge = ['PENDING' => 'mg-chip--warn', 'DELIVERED' => 'mg-chip--success', 'LATE' => 'mg-chip--danger'];
     $deliveryLabels = ['PENDING' => 'Pendente', 'DELIVERED' => 'Entregue', 'LATE' => 'Atrasada'];
     $dietLogs = $member->logbooks->filter(fn ($entry) => strtoupper((string) $entry->type) === 'DIET');
     $dietSort = request('diet_sort', 'recent');
@@ -22,7 +22,7 @@
 
 @push('styles')
 <style>
-    .prime-rx--diet {
+    .mg-rx--diet {
         --diet-bg: #020817;
         --diet-panel: #111A2B;
         --diet-panel-soft: #151F32;
@@ -34,14 +34,14 @@
         --diet-muted: #9EAAC0;
     }
 
-    .prime-rx--diet .prime-tab-block__head {
+    .mg-rx--diet .mg-tab-block__head {
         align-items: center;
         margin-bottom: 1.08rem;
         padding-bottom: 0.85rem;
         border-bottom: 1px solid rgba(72, 94, 126, 0.34);
     }
 
-    .prime-rx--diet .prime-tab-block__title {
+    .mg-rx--diet .mg-tab-block__title {
         margin: 0;
         color: var(--diet-text);
         font-size: 1.18rem;
@@ -49,7 +49,7 @@
         letter-spacing: -0.025em;
     }
 
-    .prime-rx--diet .prime-rx-subnav {
+    .mg-rx--diet .mg-rx-subnav {
         height: 4.05rem;
         margin-bottom: 1rem;
         padding: 0.45rem;
@@ -58,7 +58,7 @@
         background: #080E1A !important;
     }
 
-    .prime-rx--diet .prime-tab-subnav__item {
+    .mg-rx--diet .mg-tab-subnav__item {
         min-height: 2.86rem;
         padding: 0 1rem;
         border-radius: 0.7rem;
@@ -67,23 +67,23 @@
         font-weight: 860;
     }
 
-    .prime-rx--diet .prime-tab-subnav__item.is-active {
+    .mg-rx--diet .mg-tab-subnav__item.is-active {
         background: #202C3E !important;
         color: #EAF2FF !important;
     }
 
-    .prime-rx--diet .prime-prescription-list {
+    .mg-rx--diet .mg-prescription-list {
         gap: 0.7rem;
     }
 
-    .prime-rx--diet .prime-prescription-card {
+    .mg-rx--diet .mg-prescription-card {
         min-height: 4.9rem;
         padding: 0.82rem 0.95rem;
         border-radius: 0.9rem;
         background: var(--diet-panel) !important;
     }
 
-    .prime-rx--diet .prime-rx-card__icon {
+    .mg-rx--diet .mg-rx-card__icon {
         width: 2.2rem;
         height: 2.2rem;
         border: 0;
@@ -92,7 +92,7 @@
         color: #8CC5FF !important;
     }
 
-    .prime-rx--diet .prime-rx-macro-bars {
+    .mg-rx--diet .mg-rx-macro-bars {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 0.45rem;
@@ -100,7 +100,7 @@
         margin-top: 0.58rem;
     }
 
-    .prime-rx--diet .prime-rx-macro-line {
+    .mg-rx--diet .mg-rx-macro-line {
         display: grid;
         grid-template-columns: auto minmax(5.2rem, 1fr) auto;
         align-items: center;
@@ -113,76 +113,76 @@
         font-weight: 850;
     }
 
-    .prime-rx--diet .prime-rx-macro-line i {
+    .mg-rx--diet .mg-rx-macro-line i {
         height: 0.28rem;
         border-radius: 999px;
         background: rgba(103, 128, 163, 0.32) !important;
         overflow: hidden;
     }
 
-    .prime-rx--diet .prime-rx-macro-line i::after {
+    .mg-rx--diet .mg-rx-macro-line i::after {
         width: var(--macro-fill);
         border-radius: inherit;
     }
 
-    .prime-rx--diet .prime-rx-macro-line--protein i::after {
+    .mg-rx--diet .mg-rx-macro-line--protein i::after {
         background: var(--diet-blue);
     }
 
-    .prime-rx--diet .prime-rx-macro-line--carbs i::after {
+    .mg-rx--diet .mg-rx-macro-line--carbs i::after {
         background: var(--diet-yellow);
     }
 
-    .prime-rx--diet .prime-rx-macro-line--fat i::after {
+    .mg-rx--diet .mg-rx-macro-line--fat i::after {
         background: #C6CDD8;
     }
 
-    .prime-rx--diet .prime-rx-meal-row,
-    .prime-rx--diet .prime-rx-view-meal {
+    .mg-rx--diet .mg-rx-meal-row,
+    .mg-rx--diet .mg-rx-view-meal {
         border: 1px solid rgba(71, 93, 124, 0.35) !important;
         border-radius: 0.7rem;
         background: #0B1424 !important;
     }
 
-    .prime-rx-modal--wide .modal-dialog,
-    .prime-rx-modal--wide {
+    .mg-rx-modal--wide .modal-dialog,
+    .mg-rx-modal--wide {
         max-width: min(1120px, calc(100vw - 2rem));
     }
 
-    .prime-rx-modal .modal-content {
+    .mg-rx-modal .modal-content {
         border: 1px solid rgba(87, 111, 148, 0.36) !important;
         border-radius: 1rem;
         background: #111A2B !important;
     }
 
-    .prime-rx-modal .modal-header,
-    .prime-rx-modal .modal-footer {
+    .mg-rx-modal .modal-header,
+    .mg-rx-modal .modal-footer {
         border-color: rgba(87, 111, 148, 0.28) !important;
     }
 
-    .prime-rx-modal .modal-body {
+    .mg-rx-modal .modal-body {
         background: #0B1220 !important;
     }
 
-    .prime-rx--diet .prime-rx-form-grid,
-    .prime-rx-modal .prime-rx-form-grid {
+    .mg-rx--diet .mg-rx-form-grid,
+    .mg-rx-modal .mg-rx-form-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 0.68rem;
     }
 
-    .prime-rx-form-span {
+    .mg-rx-form-span {
         grid-column: 1 / -1;
     }
 
-    .prime-rx-builder {
+    .mg-rx-builder {
         margin-top: 0.9rem;
         border-radius: 0.95rem;
         background: #111A2B !important;
     }
 
-    .prime-rx-builder__head,
-    .prime-rx-meal-builder__head {
+    .mg-rx-builder__head,
+    .mg-rx-meal-builder__head {
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -191,7 +191,7 @@
         border-bottom: 1px solid rgba(87, 111, 148, 0.24);
     }
 
-    .prime-rx-meal-total {
+    .mg-rx-meal-total {
         display: inline-flex;
         align-items: center;
         min-height: 1.55rem;
@@ -203,21 +203,21 @@
         font-weight: 900;
     }
 
-    .prime-rx-macro-strip {
+    .mg-rx-macro-strip {
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 0.55rem;
         margin: 0.75rem 0;
     }
 
-    .prime-rx-macro-pill {
+    .mg-rx-macro-pill {
         min-height: 4.6rem;
         border: 1px solid rgba(87, 111, 148, 0.28) !important;
         border-radius: 0.84rem;
         background: #0B1424 !important;
     }
 
-    .prime-rx-food-row {
+    .mg-rx-food-row {
         grid-template-columns: minmax(14rem, 1.3fr) 5.4rem minmax(13rem, 0.9fr) minmax(10rem, 0.8fr) 2.8rem;
         gap: 0.45rem;
         padding: 0.5rem;
@@ -225,7 +225,7 @@
         background: #0B1424 !important;
     }
 
-    .prime-rx-food-macros {
+    .mg-rx-food-macros {
         min-height: 2.2rem;
         display: flex;
         align-items: center;
@@ -236,47 +236,47 @@
     }
 
     @media (max-width: 980px) {
-        .prime-rx--diet .prime-rx-form-grid,
-        .prime-rx-modal .prime-rx-form-grid,
-        .prime-rx-food-row,
-        .prime-rx-macro-strip {
+        .mg-rx--diet .mg-rx-form-grid,
+        .mg-rx-modal .mg-rx-form-grid,
+        .mg-rx-food-row,
+        .mg-rx-macro-strip {
             grid-template-columns: 1fr;
         }
     }
 </style>
 @endpush
 
-<div class="prime-tab-block prime-rx prime-rx--diet">
-    <div class="prime-tab-block__head">
+<div class="mg-tab-block mg-rx mg-rx--diet">
+    <div class="mg-tab-block__head">
         <div>
-            <p class="prime-section-label mb-1">Nutrição</p>
-            <h2 class="prime-tab-block__title">Dieta</h2>
+            <p class="mg-section-label mb-1">Nutrição</p>
+            <h2 class="mg-tab-block__title">Dieta</h2>
         </div>
-        <div class="prime-tab-actions prime-rx-actions">
-            <button type="button" class="prime-btn-primary prime-rx-btn" data-bs-toggle="modal" data-bs-target="#dietModal">
+        <div class="mg-tab-actions mg-rx-actions">
+            <button type="button" class="mg-btn-primary mg-rx-btn" data-bs-toggle="modal" data-bs-target="#dietModal">
                 <i class="ri-add-line"></i> Novo plano alimentar
             </button>
-            <button type="button" class="prime-btn-ghost prime-rx-btn" data-bs-toggle="modal" data-bs-target="#notifyClientModal">
+            <button type="button" class="mg-btn-ghost mg-rx-btn" data-bs-toggle="modal" data-bs-target="#notifyClientModal">
                 <i class="ri-notification-3-line"></i> Notificar cliente
             </button>
         </div>
     </div>
 
-    <div class="prime-tab-subnav prime-rx-subnav">
-        <a href="#diet-prescriptions" class="prime-tab-subnav__item is-active">Prescrições <span>{{ $dietPrescriptions->count() }}</span></a>
-        <a href="#diet-records" class="prime-tab-subnav__item">Registros <span>{{ $dietLogs->count() }}</span></a>
-        <form method="GET" action="{{ route('members.show', [$member, 'tab' => 'diet']) }}" class="prime-tab-sort prime-rx-sort">
+    <div class="mg-tab-subnav mg-rx-subnav">
+        <a href="#diet-prescriptions" class="mg-tab-subnav__item is-active">Prescrições <span>{{ $dietPrescriptions->count() }}</span></a>
+        <a href="#diet-records" class="mg-tab-subnav__item">Registros <span>{{ $dietLogs->count() }}</span></a>
+        <form method="GET" action="{{ route('members.show', [$member, 'tab' => 'diet']) }}" class="mg-tab-sort mg-rx-sort">
             <input type="hidden" name="tab" value="diet">
-            <label class="prime-field-label mb-0">Ordenar</label>
-            <select name="diet_sort" class="prime-field prime-field--sm" onchange="this.form.submit()">
+            <label class="mg-field-label mb-0">Ordenar</label>
+            <select name="diet_sort" class="mg-field mg-field--sm" onchange="this.form.submit()">
                 <option value="recent" @selected($dietSort === 'recent')>Mais recentes</option>
                 <option value="oldest" @selected($dietSort === 'oldest')>Mais antigos</option>
             </select>
         </form>
     </div>
 
-    <section id="diet-prescriptions" class="prime-tab-section">
-        <div class="prime-prescription-list">
+    <section id="diet-prescriptions" class="mg-tab-section">
+        <div class="mg-prescription-list">
         @forelse($dietPrescriptions as $diet)
             @php
                 $menu = $diet->dietMenu;
@@ -286,13 +286,13 @@
                 $carbsPercent = $menuMacros ? min(100, ((float) $menuMacros['carbs'] / $macroTotal) * 100) : 0;
                 $fatPercent = $menuMacros ? min(100, ((float) $menuMacros['fat'] / $macroTotal) * 100) : 0;
             @endphp
-            <article class="prime-prescription-card prime-rx-card">
-                <div class="prime-prescription-card__main">
-                    <span class="prime-rx-card__icon"><i class="ri-restaurant-line"></i></span>
-                    <div class="prime-rx-card__content">
-                        <div class="prime-prescription-card__eyebrow">{{ $diet->scheduled_at?->format('d/m/Y H:i') ?? $diet->created_at?->format('d/m/Y') }}</div>
-                        <h3 class="prime-prescription-card__title">{{ $diet->title }}</h3>
-                        <div class="prime-prescription-card__meta">
+            <article class="mg-prescription-card mg-rx-card">
+                <div class="mg-prescription-card__main">
+                    <span class="mg-rx-card__icon"><i class="ri-restaurant-line"></i></span>
+                    <div class="mg-rx-card__content">
+                        <div class="mg-prescription-card__eyebrow">{{ $diet->scheduled_at?->format('d/m/Y H:i') ?? $diet->created_at?->format('d/m/Y') }}</div>
+                        <h3 class="mg-prescription-card__title">{{ $diet->title }}</h3>
+                        <div class="mg-prescription-card__meta">
                             <span>{{ $menu?->name ?? 'Plano personalizado' }}</span>
                             @if($menuMacros)
                                 <span>{{ $menuMacros['meals_count'] }} refeições</span>
@@ -304,22 +304,22 @@
                         </div>
                         @if($menu?->meals->isNotEmpty())
                             @if($menuMacros)
-                                <div class="prime-rx-macro-bars" aria-label="Distribuição de macros">
-                                    <span class="prime-rx-macro-line prime-rx-macro-line--protein" style="--macro-fill: {{ $proteinPercent }}%">
+                                <div class="mg-rx-macro-bars" aria-label="Distribuição de macros">
+                                    <span class="mg-rx-macro-line mg-rx-macro-line--protein" style="--macro-fill: {{ $proteinPercent }}%">
                                         <b>Proteína</b><i></i><em>{{ number_format((float) $menuMacros['protein'], 1, ',', '.') }}g</em>
                                     </span>
-                                    <span class="prime-rx-macro-line prime-rx-macro-line--carbs" style="--macro-fill: {{ $carbsPercent }}%">
+                                    <span class="mg-rx-macro-line mg-rx-macro-line--carbs" style="--macro-fill: {{ $carbsPercent }}%">
                                         <b>Carbo</b><i></i><em>{{ number_format((float) $menuMacros['carbs'], 1, ',', '.') }}g</em>
                                     </span>
-                                    <span class="prime-rx-macro-line prime-rx-macro-line--fat" style="--macro-fill: {{ $fatPercent }}%">
+                                    <span class="mg-rx-macro-line mg-rx-macro-line--fat" style="--macro-fill: {{ $fatPercent }}%">
                                         <b>Gordura</b><i></i><em>{{ number_format((float) $menuMacros['fat'], 1, ',', '.') }}g</em>
                                     </span>
                                 </div>
                             @endif
-                            <div class="prime-rx-meal-preview">
+                            <div class="mg-rx-meal-preview">
                                 @foreach($menu->meals->take(3) as $meal)
                                     @php $mealMacros = $meal->computedMacros(); @endphp
-                                    <div class="prime-rx-meal-row">
+                                    <div class="mg-rx-meal-row">
                                         <span>
                                             <strong>{{ $meal->name }}</strong>
                                             @if($meal->time_label)<small>{{ $meal->time_label }}</small>@endif
@@ -329,24 +329,24 @@
                                                 @endforeach
                                             </em>
                                         </span>
-                                        <span class="prime-rx-mini-chip prime-rx-mini-chip--blue">{{ (int) $mealMacros['calories'] }} kcal</span>
+                                        <span class="mg-rx-mini-chip mg-rx-mini-chip--blue">{{ (int) $mealMacros['calories'] }} kcal</span>
                                     </div>
                                 @endforeach
                                 @if($menu->meals->count() > 3)
-                                    <span class="prime-rx-more">+{{ $menu->meals->count() - 3 }} refeições no plano.</span>
+                                    <span class="mg-rx-more">+{{ $menu->meals->count() - 3 }} refeições no plano.</span>
                                 @endif
                             </div>
                         @endif
                     </div>
                 </div>
-                <div class="prime-card-actions">
-                    <span class="prime-chip prime-rx-status {{ $deliveryBadge[$diet->delivery_status] ?? '' }}">{{ $deliveryLabels[$diet->delivery_status] ?? $diet->delivery_status }}</span>
-                    <button type="button" class="prime-icon-btn" title="Visualizar" data-bs-toggle="modal" data-bs-target="#dietViewModal{{ $diet->id }}"><i class="ri-eye-line"></i></button>
-                    <a href="{{ route('diet-prescriptions.print', $diet) }}" class="prime-icon-btn" title="Gerar PDF / Imprimir" target="_blank" rel="noopener"><i class="ri-printer-line"></i></a>
-                    <button type="button" class="prime-icon-btn" title="Editar" data-bs-toggle="modal" data-bs-target="#dietEditModal{{ $diet->id }}"><i class="ri-pencil-line"></i></button>
+                <div class="mg-card-actions">
+                    <span class="mg-chip mg-rx-status {{ $deliveryBadge[$diet->delivery_status] ?? '' }}">{{ $deliveryLabels[$diet->delivery_status] ?? $diet->delivery_status }}</span>
+                    <button type="button" class="mg-icon-btn" title="Visualizar" data-bs-toggle="modal" data-bs-target="#dietViewModal{{ $diet->id }}"><i class="ri-eye-line"></i></button>
+                    <a href="{{ route('diet-prescriptions.print', $diet) }}" class="mg-icon-btn" title="Gerar PDF / Imprimir" target="_blank" rel="noopener"><i class="ri-printer-line"></i></a>
+                    <button type="button" class="mg-icon-btn" title="Editar" data-bs-toggle="modal" data-bs-target="#dietEditModal{{ $diet->id }}"><i class="ri-pencil-line"></i></button>
                     <div class="dropdown">
-                        <button class="prime-icon-btn" data-bs-toggle="dropdown" type="button"><i class="ri-more-2-fill"></i></button>
-                        <div class="dropdown-menu dropdown-menu-end prime-dropdown">
+                        <button class="mg-icon-btn" data-bs-toggle="dropdown" type="button"><i class="ri-more-2-fill"></i></button>
+                        <div class="dropdown-menu dropdown-menu-end mg-dropdown">
                             @if(($diet->status ?? null) !== 'sent')
                                 <form method="POST" action="{{ route('diet-prescriptions.send', $diet) }}">
                                     @csrf
@@ -361,21 +361,21 @@
             </article>
 
             <div class="modal fade" id="dietViewModal{{ $diet->id }}" tabindex="-1">
-                <div class="modal-dialog modal-lg modal-dialog-centered prime-rx-modal">
+                <div class="modal-dialog modal-lg modal-dialog-centered mg-rx-modal">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">{{ $diet->title }}</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
-                            <div class="prime-rx-chip-row mb-3">
-                                <span class="prime-rx-mini-chip {{ $deliveryBadge[$diet->delivery_status] ?? '' }}">{{ $deliveryLabels[$diet->delivery_status] ?? $diet->delivery_status }}</span>
-                                <span class="prime-rx-mini-chip">{{ $menu?->name ?? 'Plano personalizado' }}</span>
+                            <div class="mg-rx-chip-row mb-3">
+                                <span class="mg-rx-mini-chip {{ $deliveryBadge[$diet->delivery_status] ?? '' }}">{{ $deliveryLabels[$diet->delivery_status] ?? $diet->delivery_status }}</span>
+                                <span class="mg-rx-mini-chip">{{ $menu?->name ?? 'Plano personalizado' }}</span>
                                 @if($menuMacros)
-                                    <span class="prime-rx-mini-chip prime-rx-mini-chip--blue">{{ number_format((float) $menuMacros['calories'], 0, ',', '.') }} kcal</span>
-                                    <span class="prime-rx-mini-chip">P {{ number_format((float) $menuMacros['protein'], 1, ',', '.') }}g</span>
-                                    <span class="prime-rx-mini-chip">C {{ number_format((float) $menuMacros['carbs'], 1, ',', '.') }}g</span>
-                                    <span class="prime-rx-mini-chip">G {{ number_format((float) $menuMacros['fat'], 1, ',', '.') }}g</span>
+                                    <span class="mg-rx-mini-chip mg-rx-mini-chip--blue">{{ number_format((float) $menuMacros['calories'], 0, ',', '.') }} kcal</span>
+                                    <span class="mg-rx-mini-chip">P {{ number_format((float) $menuMacros['protein'], 1, ',', '.') }}g</span>
+                                    <span class="mg-rx-mini-chip">C {{ number_format((float) $menuMacros['carbs'], 1, ',', '.') }}g</span>
+                                    <span class="mg-rx-mini-chip">G {{ number_format((float) $menuMacros['fat'], 1, ',', '.') }}g</span>
                                 @endif
                             </div>
                             @if($diet->notes)
@@ -385,13 +385,13 @@
                                 <div class="d-grid gap-3">
                                     @foreach($menu->meals as $meal)
                                         @php $mealMacros = $meal->computedMacros(); @endphp
-                                        <div class="prime-rx-view-meal">
+                                        <div class="mg-rx-view-meal">
                                             <div class="d-flex justify-content-between gap-2">
                                                 <strong>{{ $meal->name }} @if($meal->time_label)<span class="text-muted">· {{ $meal->time_label }}</span>@endif</strong>
-                                                <span class="prime-rx-mini-chip prime-rx-mini-chip--blue">{{ (int) $mealMacros['calories'] }} kcal</span>
+                                                <span class="mg-rx-mini-chip mg-rx-mini-chip--blue">{{ (int) $mealMacros['calories'] }} kcal</span>
                                             </div>
                                             <div class="table-responsive mt-2">
-                                                <table class="table table-sm mb-0 prime-rx-table">
+                                                <table class="table table-sm mb-0 mg-rx-table">
                                                     <thead>
                                                         <tr>
                                                             <th>Alimento</th>
@@ -425,7 +425,7 @@
                             @endif
                         </div>
                         <div class="modal-footer">
-                            <a href="{{ route('diet-prescriptions.print', $diet) }}" class="prime-btn-primary prime-rx-btn" target="_blank" rel="noopener">
+                            <a href="{{ route('diet-prescriptions.print', $diet) }}" class="mg-btn-primary mg-rx-btn" target="_blank" rel="noopener">
                                 <i class="ri-printer-line me-1"></i> Gerar PDF / Imprimir
                             </a>
                         </div>
@@ -434,7 +434,7 @@
             </div>
 
             <div class="modal fade" id="dietEditModal{{ $diet->id }}" tabindex="-1">
-                <div class="modal-dialog modal-dialog-centered prime-rx-modal">
+                <div class="modal-dialog modal-dialog-centered mg-rx-modal">
                     <form method="POST" action="{{ route('diet-prescriptions.update', $diet) }}" class="modal-content">
                         @csrf
                         @method('PUT')
@@ -444,12 +444,12 @@
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label class="prime-field-label">Título</label>
-                                <input type="text" name="title" class="prime-field prime-rx-input" value="{{ $diet->title }}" required>
+                                <label class="mg-field-label">Título</label>
+                                <input type="text" name="title" class="mg-field mg-rx-input" value="{{ $diet->title }}" required>
                             </div>
                             <div class="mb-3">
-                                <label class="prime-field-label">Cardápio base</label>
-                                <select name="diet_menu_id" class="prime-field prime-rx-input">
+                                <label class="mg-field-label">Cardápio base</label>
+                                <select name="diet_menu_id" class="mg-field mg-rx-input">
                                     <option value="">Personalizado sem cardápio</option>
                                     @foreach($dietMenuOptions as $menuOption)
                                         <option value="{{ $menuOption->id }}" @selected((int) $diet->diet_menu_id === (int) $menuOption->id)>{{ $menuOption->name }}</option>
@@ -457,53 +457,53 @@
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label class="prime-field-label">Agendar para</label>
-                                <input type="datetime-local" name="scheduled_at" class="prime-field prime-rx-input" value="{{ optional($diet->scheduled_at)->format('Y-m-d\TH:i') }}">
+                                <label class="mg-field-label">Agendar para</label>
+                                <input type="datetime-local" name="scheduled_at" class="mg-field mg-rx-input" value="{{ optional($diet->scheduled_at)->format('Y-m-d\TH:i') }}">
                             </div>
                             <div class="mb-3">
-                                <label class="prime-field-label">Observações</label>
-                                <textarea name="notes" class="prime-field prime-rx-input" rows="2">{{ $diet->notes }}</textarea>
+                                <label class="mg-field-label">Observações</label>
+                                <textarea name="notes" class="mg-field mg-rx-input" rows="2">{{ $diet->notes }}</textarea>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="prime-btn-ghost prime-rx-btn" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="prime-btn-primary prime-rx-btn">Salvar alterações</button>
+                            <button type="button" class="mg-btn-ghost mg-rx-btn" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="mg-btn-primary mg-rx-btn">Salvar alterações</button>
                         </div>
                     </form>
                 </div>
             </div>
         @empty
-            <div class="prime-empty-state prime-empty-state--compact prime-rx-empty">
+            <div class="mg-empty-state mg-empty-state--compact mg-rx-empty">
                 <i class="ri-restaurant-line"></i>
                 <p>Nenhum plano alimentar cadastrado.</p>
-                <button type="button" class="prime-btn-primary prime-rx-btn" data-bs-toggle="modal" data-bs-target="#dietModal">Nova prescrição</button>
+                <button type="button" class="mg-btn-primary mg-rx-btn" data-bs-toggle="modal" data-bs-target="#dietModal">Nova prescrição</button>
             </div>
         @endforelse
         </div>
     </section>
 
-    <section id="diet-records" class="prime-tab-section">
-        <div class="prime-tab-section__head">
+    <section id="diet-records" class="mg-tab-section">
+        <div class="mg-tab-section__head">
             <h3>Registros alimentares</h3>
         </div>
-        <div class="prime-prescription-list">
+        <div class="mg-prescription-list">
         @forelse($dietLogs as $entry)
-            <article class="prime-prescription-card prime-rx-card">
-                <div class="prime-prescription-card__main">
-                    <span class="prime-rx-card__icon"><i class="ri-book-open-line"></i></span>
-                    <div class="prime-rx-card__content">
-                        <div class="prime-prescription-card__eyebrow">{{ $entry->logged_at?->format('d/m/Y') }}</div>
-                        <h3 class="prime-prescription-card__title">{{ $entry->title }}</h3>
-                        <div class="prime-prescription-card__meta">
+            <article class="mg-prescription-card mg-rx-card">
+                <div class="mg-prescription-card__main">
+                    <span class="mg-rx-card__icon"><i class="ri-book-open-line"></i></span>
+                    <div class="mg-rx-card__content">
+                        <div class="mg-prescription-card__eyebrow">{{ $entry->logged_at?->format('d/m/Y') }}</div>
+                        <h3 class="mg-prescription-card__title">{{ $entry->title }}</h3>
+                        <div class="mg-prescription-card__meta">
                             @if($entry->rating)<span>{{ $entry->rating }}/5</span>@endif
                             @if($entry->comment)<span>{{ $entry->comment }}</span>@endif
                         </div>
                     </div>
                 </div>
-                <span class="prime-chip prime-rx-status prime-chip--info">Registro</span>
+                <span class="mg-chip mg-rx-status mg-chip--info">Registro</span>
             </article>
         @empty
-            <div class="prime-empty-state prime-empty-state--compact prime-rx-empty">
+            <div class="mg-empty-state mg-empty-state--compact mg-rx-empty">
                 <i class="ri-book-open-line"></i>
                 <p>Nenhum registro alimentar encontrado.</p>
             </div>
@@ -513,7 +513,7 @@
 </div>
 
 <div class="modal fade" id="dietModal" tabindex="-1">
-    <div class="modal-dialog modal-xl modal-dialog-centered prime-rx-modal prime-rx-modal--wide">
+    <div class="modal-dialog modal-xl modal-dialog-centered mg-rx-modal mg-rx-modal--wide">
         <form method="POST" action="{{ route('members.diet.store', $member) }}" class="modal-content" data-diet-builder>
             @csrf
             <div class="modal-header">
@@ -524,14 +524,14 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <div class="prime-rx-form-grid">
+                <div class="mg-rx-form-grid">
                     <div>
-                        <label class="prime-field-label">Título da prescrição</label>
-                        <input type="text" name="title" class="prime-field prime-rx-input" placeholder="Ex: Cutting semana 2" required>
+                        <label class="mg-field-label">Título da prescrição</label>
+                        <input type="text" name="title" class="mg-field mg-rx-input" placeholder="Ex: Cutting semana 2" required>
                     </div>
                     <div>
-                        <label class="prime-field-label">Cardápio base</label>
-                        <select name="diet_menu_id" class="prime-field prime-rx-input">
+                        <label class="mg-field-label">Cardápio base</label>
+                        <select name="diet_menu_id" class="mg-field mg-rx-input">
                             <option value="">Sem cardápio base</option>
                             @foreach($dietMenuOptions as $menuOption)
                                 @php $macros = $menuOption->computedMacros(); @endphp
@@ -540,67 +540,67 @@
                                 </option>
                             @endforeach
                         </select>
-                        <div class="prime-rx-help">Adicionar refeições abaixo cria um cardápio personalizado.</div>
+                        <div class="mg-rx-help">Adicionar refeições abaixo cria um cardápio personalizado.</div>
                     </div>
                     <div>
-                        <label class="prime-field-label">Nome do cardápio personalizado</label>
-                        <input type="text" name="menu_name" class="prime-field prime-rx-input" placeholder="Ex: Dieta {{ $member->name }} — semana 1">
+                        <label class="mg-field-label">Nome do cardápio personalizado</label>
+                        <input type="text" name="menu_name" class="mg-field mg-rx-input" placeholder="Ex: Dieta {{ $member->name }} — semana 1">
                     </div>
                     <div>
-                        <label class="prime-field-label">Agendar para</label>
-                        <input type="datetime-local" name="scheduled_at" class="prime-field prime-rx-input" value="{{ now()->format('Y-m-d\TH:i') }}">
+                        <label class="mg-field-label">Agendar para</label>
+                        <input type="datetime-local" name="scheduled_at" class="mg-field mg-rx-input" value="{{ now()->format('Y-m-d\TH:i') }}">
                     </div>
-                    <div class="prime-rx-form-span">
-                        <label class="prime-field-label">Observações ao aluno</label>
-                        <textarea name="notes" class="prime-field prime-rx-input" rows="2" placeholder="Ex: beber 2,5L de água, ajustar sal conforme orientação..."></textarea>
+                    <div class="mg-rx-form-span">
+                        <label class="mg-field-label">Observações ao aluno</label>
+                        <textarea name="notes" class="mg-field mg-rx-input" rows="2" placeholder="Ex: beber 2,5L de água, ajustar sal conforme orientação..."></textarea>
                     </div>
                 </div>
 
-                <div class="prime-rx-builder">
-                    <div class="prime-rx-builder__head">
+                <div class="mg-rx-builder">
+                    <div class="mg-rx-builder__head">
                         <div>
-                            <div class="prime-rx-builder__title">Refeições e alimentos</div>
-                            <p class="prime-rx-builder__hint">Filtre o catálogo, ajuste gramas e veja kcal/proteína/carbo/gordura em tempo real.</p>
+                            <div class="mg-rx-builder__title">Refeições e alimentos</div>
+                            <p class="mg-rx-builder__hint">Filtre o catálogo, ajuste gramas e veja kcal/proteína/carbo/gordura em tempo real.</p>
                         </div>
-                        <button type="button" class="prime-btn-ghost prime-rx-btn" data-add-diet-meal @disabled($dietFoodCatalog->isEmpty())>
+                        <button type="button" class="mg-btn-ghost mg-rx-btn" data-add-diet-meal @disabled($dietFoodCatalog->isEmpty())>
                             <i class="ri-add-line"></i> Adicionar refeição
                         </button>
                     </div>
 
                     @if($dietFoodCatalog->isEmpty())
-                        <div class="prime-rx-alert prime-rx-alert--warn">
+                        <div class="mg-rx-alert mg-rx-alert--warn">
                             Cadastre alimentos no catálogo antes de montar refeições detalhadas.
                             <a href="{{ route('library.diet.foods') }}" class="alert-link">Abrir catálogo</a>
                         </div>
                     @else
-                        <div class="prime-rx-macro-strip" data-diet-macro-summary>
-                            <span class="prime-rx-macro-pill prime-rx-macro-pill--calories">
+                        <div class="mg-rx-macro-strip" data-diet-macro-summary>
+                            <span class="mg-rx-macro-pill mg-rx-macro-pill--calories">
                                 <small>Kcal</small>
                                 <strong data-total-calories>0</strong>
                             </span>
-                            <span class="prime-rx-macro-pill prime-rx-macro-pill--protein" data-macro-bar="protein" style="--macro-fill: 0%">
+                            <span class="mg-rx-macro-pill mg-rx-macro-pill--protein" data-macro-bar="protein" style="--macro-fill: 0%">
                                 <small>Proteína</small>
                                 <strong data-total-protein>0g</strong>
                                 <i></i>
                             </span>
-                            <span class="prime-rx-macro-pill prime-rx-macro-pill--carbs" data-macro-bar="carbs" style="--macro-fill: 0%">
+                            <span class="mg-rx-macro-pill mg-rx-macro-pill--carbs" data-macro-bar="carbs" style="--macro-fill: 0%">
                                 <small>Carbo</small>
                                 <strong data-total-carbs>0g</strong>
                                 <i></i>
                             </span>
-                            <span class="prime-rx-macro-pill prime-rx-macro-pill--fat" data-macro-bar="fat" style="--macro-fill: 0%">
+                            <span class="mg-rx-macro-pill mg-rx-macro-pill--fat" data-macro-bar="fat" style="--macro-fill: 0%">
                                 <small>Gordura</small>
                                 <strong data-total-fat>0g</strong>
                                 <i></i>
                             </span>
                         </div>
-                        <div class="prime-rx-meals-container" data-diet-meals-container></div>
+                        <div class="mg-rx-meals-container" data-diet-meals-container></div>
                     @endif
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="prime-btn-ghost prime-rx-btn" data-bs-dismiss="modal">Cancelar</button>
-                <button type="submit" class="prime-btn-primary prime-rx-btn"><i class="ri-save-line me-1"></i> Salvar prescrição</button>
+                <button type="button" class="mg-btn-ghost mg-rx-btn" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="mg-btn-primary mg-rx-btn"><i class="ri-save-line me-1"></i> Salvar prescrição</button>
             </div>
         </form>
     </div>
@@ -691,30 +691,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const findFood = (id) => foods.find((food) => String(food.id) === String(id));
 
     const foodRowTemplate = (currentMealIndex, currentFoodIndex) => `
-        <div class="prime-rx-food-row" data-diet-food-row>
-            <div class="prime-rx-food-cell prime-rx-food-cell--food">
-                <label class="prime-field-label">Alimento</label>
-                <div class="prime-rx-food-picker">
-                    <input type="search" class="prime-field prime-rx-input prime-rx-quiet-field" placeholder="Filtrar..." data-diet-food-search>
-                    <select name="meals[${currentMealIndex}][foods][${currentFoodIndex}][diet_food_id]" class="prime-field prime-rx-input prime-rx-quiet-field" data-diet-food-select required>
+        <div class="mg-rx-food-row" data-diet-food-row>
+            <div class="mg-rx-food-cell mg-rx-food-cell--food">
+                <label class="mg-field-label">Alimento</label>
+                <div class="mg-rx-food-picker">
+                    <input type="search" class="mg-field mg-rx-input mg-rx-quiet-field" placeholder="Filtrar..." data-diet-food-search>
+                    <select name="meals[${currentMealIndex}][foods][${currentFoodIndex}][diet_food_id]" class="mg-field mg-rx-input mg-rx-quiet-field" data-diet-food-select required>
                         ${foodOptions()}
                     </select>
                 </div>
             </div>
-            <div class="prime-rx-food-cell">
-                <label class="prime-field-label">g</label>
-                <input name="meals[${currentMealIndex}][foods][${currentFoodIndex}][quantity_in_grams]" type="number" min="1" step="1" class="prime-field prime-rx-input prime-rx-quiet-field" value="100" data-diet-food-grams required>
+            <div class="mg-rx-food-cell">
+                <label class="mg-field-label">g</label>
+                <input name="meals[${currentMealIndex}][foods][${currentFoodIndex}][quantity_in_grams]" type="number" min="1" step="1" class="mg-field mg-rx-input mg-rx-quiet-field" value="100" data-diet-food-grams required>
             </div>
-            <div class="prime-rx-food-cell prime-rx-food-cell--macros">
-                <label class="prime-field-label">Macros</label>
-                <div class="prime-rx-food-macros" data-diet-food-macros>0 kcal</div>
+            <div class="mg-rx-food-cell mg-rx-food-cell--macros">
+                <label class="mg-field-label">Macros</label>
+                <div class="mg-rx-food-macros" data-diet-food-macros>0 kcal</div>
             </div>
-            <div class="prime-rx-food-cell">
-                <label class="prime-field-label">Notas</label>
-                <input name="meals[${currentMealIndex}][foods][${currentFoodIndex}][notes]" class="prime-field prime-rx-input prime-rx-quiet-field" placeholder="opcional">
+            <div class="mg-rx-food-cell">
+                <label class="mg-field-label">Notas</label>
+                <input name="meals[${currentMealIndex}][foods][${currentFoodIndex}][notes]" class="mg-field mg-rx-input mg-rx-quiet-field" placeholder="opcional">
             </div>
-            <div class="prime-rx-food-cell prime-rx-food-cell--action">
-                <button type="button" class="prime-icon-btn" data-remove-diet-food title="Remover alimento">
+            <div class="mg-rx-food-cell mg-rx-food-cell--action">
+                <button type="button" class="mg-icon-btn" data-remove-diet-food title="Remover alimento">
                     <i class="ri-delete-bin-line"></i>
                 </button>
             </div>
@@ -795,32 +795,32 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentMealIndex = mealIndex;
 
         mealsContainer.insertAdjacentHTML('beforeend', `
-            <div class="prime-rx-meal-builder" data-diet-meal data-meal-index="${currentMealIndex}">
-                <div class="prime-rx-meal-builder__head">
+            <div class="mg-rx-meal-builder" data-diet-meal data-meal-index="${currentMealIndex}">
+                <div class="mg-rx-meal-builder__head">
                     <strong>Refeição ${currentMealIndex + 1}</strong>
                     <div class="d-flex align-items-center gap-2">
-                        <span class="prime-rx-meal-total" data-diet-meal-total>0 kcal · P 0,0g · C 0,0g · G 0,0g</span>
-                        <button type="button" class="prime-icon-btn" data-remove-diet-meal title="Remover refeição">
+                        <span class="mg-rx-meal-total" data-diet-meal-total>0 kcal · P 0,0g · C 0,0g · G 0,0g</span>
+                        <button type="button" class="mg-icon-btn" data-remove-diet-meal title="Remover refeição">
                             <i class="ri-delete-bin-line"></i>
                         </button>
                     </div>
                 </div>
-                <div class="prime-rx-meal-grid">
+                <div class="mg-rx-meal-grid">
                     <div>
-                        <label class="prime-field-label">Nome</label>
-                        <input name="meals[${currentMealIndex}][name]" class="prime-field prime-rx-input prime-rx-quiet-field" placeholder="Ex: Café da manhã" required>
+                        <label class="mg-field-label">Nome</label>
+                        <input name="meals[${currentMealIndex}][name]" class="mg-field mg-rx-input mg-rx-quiet-field" placeholder="Ex: Café da manhã" required>
                     </div>
                     <div>
-                        <label class="prime-field-label">Horário</label>
-                        <input name="meals[${currentMealIndex}][time_label]" class="prime-field prime-rx-input prime-rx-quiet-field" placeholder="07:00">
+                        <label class="mg-field-label">Horário</label>
+                        <input name="meals[${currentMealIndex}][time_label]" class="mg-field mg-rx-input mg-rx-quiet-field" placeholder="07:00">
                     </div>
                     <div>
-                        <label class="prime-field-label">Notas</label>
-                        <input name="meals[${currentMealIndex}][notes]" class="prime-field prime-rx-input prime-rx-quiet-field" placeholder="opcional">
+                        <label class="mg-field-label">Notas</label>
+                        <input name="meals[${currentMealIndex}][notes]" class="mg-field mg-rx-input mg-rx-quiet-field" placeholder="opcional">
                     </div>
                 </div>
-                <div class="prime-rx-foods" data-diet-foods data-next-food-index="0"></div>
-                <button type="button" class="prime-btn-ghost prime-rx-btn prime-rx-add-food" data-add-diet-food>
+                <div class="mg-rx-foods" data-diet-foods data-next-food-index="0"></div>
+                <button type="button" class="mg-btn-ghost mg-rx-btn mg-rx-add-food" data-add-diet-food>
                     <i class="ri-add-line"></i> Adicionar alimento
                 </button>
             </div>

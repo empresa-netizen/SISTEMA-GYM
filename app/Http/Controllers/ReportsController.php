@@ -8,13 +8,13 @@ class ReportsController extends Controller
 {
     public function index(): View
     {
-        return view('prime.reports.index');
+        return view('mgteam.reports.index');
     }
 
     public function profile(): View
     {
         $user = auth()->user();
 
-        return view('prime.reports.profile', compact('user'));
+        return view('mgteam.reports.profile', compact('user'));
     }
 }

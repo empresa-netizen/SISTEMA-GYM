@@ -1,6 +1,6 @@
 # MGTEAM FITNESS & HEALTH — Plataforma Coach
 
-Réplica fiel do [Prime Coaching](https://app.primecoaching.com.br) com marca **MGTEAM FITNESS & HEALTH**.
+Réplica fiel do [Referencia Visual](referencia-visual-local) com marca **MGTEAM FITNESS & HEALTH**.
 
 ## Acesso local
 
@@ -43,4 +43,4 @@ Config central em `config/brand.php`:
 
 ## Referência visual
 
-Compare sempre com `app.primecoaching.com.br` (tema escuro, rail sidebar, cards operacionais).
+Compare sempre com `referencia-visual-local` (tema escuro, rail sidebar, cards operacionais).

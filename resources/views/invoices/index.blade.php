@@ -9,8 +9,8 @@
 @section('content')
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
     <div>
-        <h1 class="prime-page-title">Vendas e faturas</h1>
-        <p class="prime-page-sub">Acompanhe receita, pagamentos e pendências.</p>
+        <h1 class="mg-page-title">Vendas e faturas</h1>
+        <p class="mg-page-sub">Acompanhe receita, pagamentos e pendências.</p>
     </div>
     @can('create payments')
         <a href="{{ route('invoices.create') }}" class="btn btn-primary">
@@ -21,26 +21,26 @@
 
 <div class="row g-3 mb-4">
     <div class="col-xl-4 col-md-6">
-        <div class="prime-stat-card"><div class="card-body">
-            <div class="prime-stat-label">Total faturado</div>
-            <div class="prime-stat-value">R$ {{ number_format($totalAmount, 2, ',', '.') }}</div>
+        <div class="mg-stat-card"><div class="card-body">
+            <div class="mg-stat-label">Total faturado</div>
+            <div class="mg-stat-value">R$ {{ number_format($totalAmount, 2, ',', '.') }}</div>
         </div></div>
     </div>
     <div class="col-xl-4 col-md-6">
-        <div class="prime-stat-card"><div class="card-body">
-            <div class="prime-stat-label">Total recebido</div>
-            <div class="prime-stat-value text-success">R$ {{ number_format($totalPaid, 2, ',', '.') }}</div>
+        <div class="mg-stat-card"><div class="card-body">
+            <div class="mg-stat-label">Total recebido</div>
+            <div class="mg-stat-value text-success">R$ {{ number_format($totalPaid, 2, ',', '.') }}</div>
         </div></div>
     </div>
     <div class="col-xl-4 col-md-6">
-        <div class="prime-stat-card"><div class="card-body">
-            <div class="prime-stat-label">Em aberto</div>
-            <div class="prime-stat-value text-danger">R$ {{ number_format($totalDue, 2, ',', '.') }}</div>
+        <div class="mg-stat-card"><div class="card-body">
+            <div class="mg-stat-label">Em aberto</div>
+            <div class="mg-stat-value text-danger">R$ {{ number_format($totalDue, 2, ',', '.') }}</div>
         </div></div>
     </div>
 </div>
 
-<div class="prime-panel">
+<div class="mg-panel">
         @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}

@@ -21,7 +21,7 @@ Implementar e manter regras de negócio corretas, seguras e performáticas, com 
   4. Roda `git log --oneline -20` e, nos arquivos que vai tocar, `git blame`/`git log -p` para entender a intenção das últimas mudanças antes de alterá-las.
   5. Se existir um arquivo de estado compartilhado do time (blackboard, changelog operacional, board de tarefas), lê antes de agir para não duplicar trabalho ou contradizer uma decisão recente.
   6. Se o projeto expõe Swagger/OpenAPI, lê para saber o que já está publicamente contratado antes de mudar assinatura de dado.
-- Trata código legado com respeito: primeiro entende por que algo foi feito daquele jeito, depois decide se muda.
+- Trata código legado com respeito: entende antes por que algo foi feito daquele jeito, depois decide se muda.
 - Pensa em camadas: regra de negócio nunca mora dentro de controller/route handler; controller apenas traduz request/response.
 - Segurança por padrão: nunca confia em input não validado, nunca loga segredo/PII, nunca hardcoda credencial, sempre verifica autorização (não só autenticação) antes de executar ação sensível.
 - Segue as convenções de nomenclatura, formatação e padrões de erro já estabelecidos no repositório.

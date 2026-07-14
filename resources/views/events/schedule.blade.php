@@ -3,41 +3,41 @@
 @section('title', 'Agenda')
 
 @section('content')
-<div class="prime-clients-page prime-agenda-page">
-    <div class="prime-clients-toolbar">
-        <div class="prime-clients-toolbar__left">
-            <h1 class="prime-page-title mb-0">Agenda</h1>
-            <div class="prime-clients-counters">
-                <span class="prime-clients-counter">
+<div class="mg-clients-page mg-agenda-page">
+    <div class="mg-clients-toolbar">
+        <div class="mg-clients-toolbar__left">
+            <h1 class="mg-page-title mb-0">Agenda</h1>
+            <div class="mg-clients-counters">
+                <span class="mg-clients-counter">
                     <i class="ri-calendar-2-line"></i>
                     Central de agendamentos
                 </span>
             </div>
         </div>
-        <div class="prime-clients-toolbar__right">
-            <a href="{{ route('events.index') }}" class="prime-btn-ghost">
+        <div class="mg-clients-toolbar__right">
+            <a href="{{ route('events.index') }}" class="mg-btn-ghost">
                 <i class="ri-list-check-2"></i> Lista
             </a>
-            <a href="{{ route('events.create') }}" class="prime-btn-primary">
+            <a href="{{ route('events.create') }}" class="mg-btn-primary">
                 <i class="ri-add-line"></i> Novo evento
             </a>
         </div>
     </div>
 
-    <div class="prime-agenda-legend-bar">
-        <div class="prime-agenda-legend-bar__left">
-            <span class="prime-panel-label mb-0">Tipos</span>
-            <div class="prime-agenda-legends">
-                <span class="prime-calendar-legend prime-calendar-legend--evaluation">Avaliações</span>
-                <span class="prime-calendar-legend prime-calendar-legend--consulting">Consultas</span>
-                <span class="prime-calendar-legend prime-calendar-legend--pending">Aguardando confirmação</span>
+    <div class="mg-agenda-legend-bar">
+        <div class="mg-agenda-legend-bar__left">
+            <span class="mg-panel-label mb-0">Tipos</span>
+            <div class="mg-agenda-legends">
+                <span class="mg-calendar-legend mg-calendar-legend--evaluation">Avaliações</span>
+                <span class="mg-calendar-legend mg-calendar-legend--consulting">Consultas</span>
+                <span class="mg-calendar-legend mg-calendar-legend--pending">Aguardando confirmação</span>
             </div>
         </div>
-        <p class="prime-agenda-hint mb-0">Consultas, avaliações e retornos · clique no evento para abrir</p>
+        <p class="mg-agenda-hint mb-0">Consultas, avaliações e retornos · clique no evento para abrir</p>
     </div>
 
-    <div class="prime-panel prime-panel--compact prime-panel--calendar prime-calendar-panel">
-        <div id="primeCalendar" class="prime-calendar-surface"></div>
+    <div class="mg-panel mg-panel--compact mg-panel--calendar mg-calendar-panel">
+        <div id="mgCalendar" class="mg-calendar-surface"></div>
     </div>
 </div>
 @endsection
@@ -46,7 +46,7 @@
 <script src="{{ URL::asset('build/libs/fullcalendar/index.global.min.js') }}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const calendarEl = document.getElementById('primeCalendar');
+    const calendarEl = document.getElementById('mgCalendar');
     const calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
         locale: 'pt-br',

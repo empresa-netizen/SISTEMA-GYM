@@ -13,25 +13,25 @@ use Illuminate\Support\Facades\File;
 beforeEach(function () {
     $this->importPath = storage_path('app/imports');
     $this->importFiles = [
-        'prime_exercises.json',
-        'prime_foods.json',
-        'prime_member.json',
-        'prime_workouts.json',
-        'prime_diets.json',
+        'mgteam_exercises.json',
+        'mgteam_foods.json',
+        'mgteam_member.json',
+        'mgteam_workouts.json',
+        'mgteam_diets.json',
     ];
-    $this->primeImportBackup = [];
+    $this->mgImportBackup = [];
 
     File::ensureDirectoryExists($this->importPath);
 
     foreach ($this->importFiles as $fileName) {
         $path = $this->importPath.DIRECTORY_SEPARATOR.$fileName;
-        $this->primeImportBackup[$fileName] = File::exists($path) ? File::get($path) : null;
+        $this->mgImportBackup[$fileName] = File::exists($path) ? File::get($path) : null;
         File::delete($path);
     }
 });
 
 afterEach(function () {
-    foreach ($this->primeImportBackup as $fileName => $contents) {
+    foreach ($this->mgImportBackup as $fileName => $contents) {
         $path = $this->importPath.DIRECTORY_SEPARATOR.$fileName;
 
         if ($contents === null) {
@@ -44,10 +44,10 @@ afterEach(function () {
     }
 });
 
-it('imports Marcelo Guerreiro payloads from Prime JSON files', function () {
+it('imports Marcelo Guerreiro payloads from MGTEAM JSON files', function () {
     $owner = createOwner(['email' => AdminCredentials::CANONICAL_EMAIL]);
 
-    File::put($this->importPath.'/prime_member.json', json_encode([
+    File::put($this->importPath.'/mgteam_member.json', json_encode([
         'member' => [
             'name' => 'Marcelo Guerreiro',
             'email' => 'marcelo.guerreiro@example.test',
@@ -56,15 +56,15 @@ it('imports Marcelo Guerreiro payloads from Prime JSON files', function () {
         ],
     ], JSON_THROW_ON_ERROR));
 
-    File::put($this->importPath.'/prime_exercises.json', json_encode([
+    File::put($this->importPath.'/mgteam_exercises.json', json_encode([
         ['name' => 'Supino reto', 'vimeo_id' => 123, 'duration_seconds' => 45],
     ], JSON_THROW_ON_ERROR));
 
-    File::put($this->importPath.'/prime_foods.json', json_encode([
+    File::put($this->importPath.'/mgteam_foods.json', json_encode([
         ['name' => 'Arroz branco', 'food_group' => 'Carboidratos', 'calories' => 130, 'protein' => 2.7, 'carbs' => 28, 'fat' => 0.3],
     ], JSON_THROW_ON_ERROR));
 
-    File::put($this->importPath.'/prime_workouts.json', json_encode([
+    File::put($this->importPath.'/mgteam_workouts.json', json_encode([
         [
             'name' => 'Treino A',
             'activities' => [
@@ -73,7 +73,7 @@ it('imports Marcelo Guerreiro payloads from Prime JSON files', function () {
         ],
     ], JSON_THROW_ON_ERROR));
 
-    File::put($this->importPath.'/prime_diets.json', json_encode([
+    File::put($this->importPath.'/mgteam_diets.json', json_encode([
         [
             'name' => 'Dieta base',
             'meals' => [

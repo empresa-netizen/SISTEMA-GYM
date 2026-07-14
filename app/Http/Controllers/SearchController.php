@@ -45,6 +45,6 @@ class SearchController extends Controller
                 ->get();
         }
 
-        return view('prime.search', compact('q', 'members', 'workouts', 'invoices'));
+        return view('mgteam.search', compact('q', 'members', 'workouts', 'invoices'));
     }
 }

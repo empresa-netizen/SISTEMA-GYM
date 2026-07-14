@@ -1,0 +1,670 @@
+:root,
+[data-mg-theme="dark"] {
+    --mg-sage: #A8CDB7;
+    --mg-dark: #24332D;
+    --mg-cream: #F6F5F0;
+    --mg-neutral: #CFC9BE;
+    --mg-mid: #6B746D;
+    --mg-mark: #727E67;
+    --mg-bg: #1a2420;
+    --mg-bg-elevated: #24332D;
+    --mg-card: #2a3832;
+    --mg-card-border: rgba(168, 205, 183, 0.16);
+    --mg-blue: #A8CDB7;
+    --mg-blue-hover: #8fbaa1;
+    --mg-text: #F6F5F0;
+    --mg-muted: #A8B0A9;
+    --mg-input: #1a2420;
+    --mg-auth-gradient:
+        linear-gradient(135deg, rgba(36, 51, 45, 0.92) 0%, rgba(26, 36, 32, 0.96) 48%, rgba(36, 51, 45, 0.9) 100%),
+        repeating-linear-gradient(
+            -32deg,
+            transparent 0 28px,
+            rgba(168, 205, 183, 0.035) 28px 56px
+        ),
+        #1a2420;
+    --mg-choice-bg: rgba(42, 56, 50, 0.92);
+    --mg-icon-btn-bg: rgba(36, 51, 45, 0.88);
+    --mg-link: #A8CDB7;
+    --mg-btn-text: #24332D;
+}
+
+[data-mg-theme="light"] {
+    --mg-sage: #A8CDB7;
+    --mg-dark: #24332D;
+    --mg-cream: #F6F5F0;
+    --mg-neutral: #CFC9BE;
+    --mg-mid: #6B746D;
+    --mg-mark: #727E67;
+    --mg-bg: #F6F5F0;
+    --mg-bg-elevated: #ffffff;
+    --mg-card: #ffffff;
+    --mg-card-border: rgba(36, 51, 45, 0.1);
+    --mg-blue: #727E67;
+    --mg-blue-hover: #5f6a55;
+    --mg-text: #24332D;
+    --mg-muted: #6B746D;
+    --mg-input: #ffffff;
+    --mg-auth-gradient: radial-gradient(ellipse at top, #E8F0EA 0%, var(--mg-bg) 55%);
+    --mg-choice-bg: #ffffff;
+    --mg-icon-btn-bg: rgba(255, 255, 255, 0.92);
+    --mg-link: #5d8a6f;
+    --mg-btn-text: #F6F5F0;
+}
+
+* { box-sizing: border-box; }
+
+body.mg-auth {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Work Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--mg-auth-gradient);
+    color: var(--mg-text);
+    -webkit-font-smoothing: antialiased;
+}
+
+.mg-topbar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 20;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+}
+
+.mg-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid var(--mg-card-border);
+    border-radius: 0.75rem;
+    background: var(--mg-icon-btn-bg);
+    color: var(--mg-text);
+    cursor: pointer;
+}
+
+.mg-lang {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 0.9rem;
+    border: 1px solid var(--mg-card-border);
+    border-radius: 0.75rem;
+    background: var(--mg-icon-btn-bg);
+    color: var(--mg-text);
+    font-size: 0.875rem;
+}
+
+.mg-shell {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5rem 1.25rem 2rem;
+}
+
+.mg-center {
+    width: 100%;
+    max-width: 42rem;
+    text-align: center;
+}
+
+.mg-logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.75rem;
+    text-decoration: none;
+    color: inherit;
+}
+
+.mg-logo-img {
+    display: block;
+    max-width: min(100%, 18rem);
+    height: auto;
+    object-fit: contain;
+}
+
+.mg-logo-mark {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--mg-sage), var(--mg-mark));
+    color: var(--mg-dark);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1.1rem;
+}
+
+.mg-logo-text strong {
+    display: block;
+    font-size: 1.35rem;
+    line-height: 1;
+    letter-spacing: -0.03em;
+}
+
+.mg-logo-text span {
+    display: block;
+    margin-top: 0.15rem;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    color: var(--mg-muted);
+    line-height: 1.2;
+    max-width: 12rem;
+}
+
+.mg-eyebrow {
+    margin: 0 0 0.85rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--mg-sage);
+}
+
+.mg-title {
+    font-family: "Instrument Serif", Georgia, serif;
+    font-size: clamp(2rem, 5vw, 2.85rem);
+    font-weight: 400;
+    line-height: 1.08;
+    margin: 0 0 0.65rem;
+}
+
+.mg-subtitle {
+    margin: 0 0 1.5rem;
+    color: var(--mg-muted);
+}
+
+.mg-subtitle--serif {
+    font-family: "Instrument Serif", Georgia, serif;
+    font-size: clamp(1.15rem, 2.5vw, 1.45rem);
+    color: var(--mg-cream);
+    margin-bottom: 0.85rem;
+}
+
+.mg-subtitle--serif em,
+.mg-auth-slogan em {
+    font-style: italic;
+    color: var(--mg-sage);
+    text-decoration-color: var(--mg-sage);
+    text-decoration-line: underline;
+    text-decoration-thickness: 0.14em;
+    text-underline-offset: 0.2em;
+}
+
+[data-mg-theme="light"] .mg-subtitle--serif {
+    color: var(--mg-dark);
+}
+
+.mg-choice,
+.mg-panel-card {
+    width: 100%;
+    text-align: left;
+    border: 1px solid var(--mg-card-border);
+    border-radius: 1rem;
+    background: var(--mg-choice-bg);
+    padding: 1.1rem 1.15rem;
+    color: inherit;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.2s, background 0.2s;
+}
+
+.mg-choice + .mg-choice,
+.mg-panel-card + .mg-panel-card {
+    margin-top: 0.85rem;
+}
+
+.mg-choice:hover,
+.mg-panel-card:hover {
+    border-color: rgba(168, 205, 183, 0.55);
+    transform: translateY(-1px);
+}
+
+.mg-choice-inner,
+.mg-panel-inner {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.mg-choice-icon {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 0.85rem;
+    background: rgba(168, 205, 183, 0.16);
+    color: var(--mg-sage);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.mg-choice h2,
+.mg-panel-card h3 {
+    margin: 0 0 0.25rem;
+    font-size: 1rem;
+}
+
+.mg-choice p,
+.mg-panel-card p {
+    margin: 0;
+    color: var(--mg-muted);
+    font-size: 0.875rem;
+    line-height: 1.45;
+}
+
+.mg-chevron {
+    margin-left: auto;
+    color: var(--mg-muted);
+}
+
+.mg-shell .mg-panel {
+    display: none;
+    width: 100%;
+    max-width: 34rem;
+    margin: 0 auto;
+}
+
+.mg-shell .mg-panel.is-active {
+    display: block;
+}
+
+.mg-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 1.25rem;
+    border: 0;
+    background: transparent;
+    color: var(--mg-muted);
+    cursor: pointer;
+    padding: 0;
+}
+
+.mg-panel-card a.mg-btn,
+a.mg-btn,
+button.mg-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.9rem 1.1rem;
+    border-radius: 0.35rem;
+    border: 0;
+    background: var(--mg-sage);
+    color: var(--mg-btn-text);
+    font-weight: 700;
+    font-size: 0.92rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.mg-btn:hover {
+    background: var(--mg-blue-hover);
+    color: var(--mg-btn-text);
+    box-shadow: 0 12px 28px -10px rgba(168, 205, 183, 0.55);
+}
+
+.mg-btn-outline {
+    background: transparent;
+    border: 1px solid rgba(168, 205, 183, 0.35);
+    color: var(--mg-text);
+    box-shadow: none;
+}
+
+.mg-btn-outline:hover {
+    background: rgba(168, 205, 183, 0.1);
+    color: var(--mg-text);
+}
+
+.mg-auth-split {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+@media (min-width: 992px) {
+    .mg-auth-split {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.mg-auth-brand {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    position: relative;
+    overflow: hidden;
+    background:
+        linear-gradient(160deg, rgba(26, 36, 32, 0.55) 0%, rgba(36, 51, 45, 0.82) 100%),
+        url("../brand/capa-facebook.png") center / cover no-repeat,
+        var(--mg-bg-elevated);
+}
+
+.mg-auth-brand::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        -32deg,
+        transparent 0 36px,
+        rgba(168, 205, 183, 0.04) 36px 72px
+    );
+    pointer-events: none;
+}
+
+@media (min-width: 992px) {
+    .mg-auth-brand {
+        display: flex;
+    }
+}
+
+.mg-auth-brand-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 26rem;
+    text-align: center;
+}
+
+.mg-auth-brand-logo {
+    width: min(100%, 17rem);
+    height: auto;
+    margin: 0 auto 1.75rem;
+    display: block;
+}
+
+.mg-auth-slogan {
+    margin: 0 0 1.5rem;
+    font-family: "Instrument Serif", Georgia, serif;
+    font-size: clamp(1.55rem, 2.4vw, 2.1rem);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--mg-cream);
+}
+
+.mg-auth-handle {
+    margin: 0;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    color: var(--mg-sage);
+    font-weight: 600;
+}
+
+.mg-auth-brand .mg-logo-mark {
+    width: 7rem;
+    height: 7rem;
+    font-size: 2rem;
+}
+
+.mg-auth-form-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5rem 1.25rem 2rem;
+}
+
+.mg-form-card {
+    width: 100%;
+    max-width: 26rem;
+}
+
+.mg-form-brand-mobile {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+}
+
+@media (min-width: 992px) {
+    .mg-form-brand-mobile {
+        display: none;
+    }
+}
+
+.mg-form-icon {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 999px;
+    background: rgba(168, 205, 183, 0.16);
+    color: var(--mg-sage);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.mg-form-card h1 {
+    margin: 0 0 0.35rem;
+    font-family: "Instrument Serif", Georgia, serif;
+    font-size: 1.85rem;
+    font-weight: 400;
+}
+
+.mg-form-card .mg-subtitle {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.mg-field {
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.mg-field label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.875rem;
+    color: var(--mg-muted);
+}
+
+.mg-field input {
+    width: 100%;
+    padding: 0.8rem 0.95rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--mg-card-border);
+    background: var(--mg-input);
+    color: var(--mg-text);
+}
+
+.mg-field input:focus {
+    outline: none;
+    border-color: rgba(168, 205, 183, 0.7);
+    box-shadow: 0 0 0 3px rgba(168, 205, 183, 0.18);
+}
+
+.mg-field .invalid-feedback,
+.mg-alert {
+    margin-top: 0.5rem;
+    padding: 0.75rem 0.9rem;
+    border-radius: 0.75rem;
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    color: #fecaca;
+    font-size: 0.875rem;
+}
+
+.mg-alert--success {
+    background: rgba(168, 205, 183, 0.14);
+    border-color: rgba(168, 205, 183, 0.35);
+    color: #d7ecdf;
+}
+
+.mg-link-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: -0.25rem 0 1rem;
+    font-size: 0.875rem;
+}
+
+.mg-link-row a,
+.mg-footer-link a {
+    color: var(--mg-link);
+    text-decoration: none;
+}
+
+.mg-footer-link {
+    margin-top: 1.25rem;
+    text-align: center;
+    color: var(--mg-muted);
+    font-size: 0.875rem;
+}
+
+.mg-password-wrap {
+    position: relative;
+}
+
+.mg-password-wrap button {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 0;
+    background: transparent;
+    color: var(--mg-muted);
+    cursor: pointer;
+}
+
+.mg-dashboard-hero {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(15, 23, 42, 0.4));
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    border-radius: 1rem;
+    padding: 1.5rem;
+}
+
+.mg-stat-card {
+    border-radius: var(--mg-radius-lg, 1.125rem);
+    border: 1px solid var(--mg-card-border);
+    background: var(--mg-card);
+    height: 100%;
+}
+
+.mg-stat-card .card-body {
+    padding: 1.25rem;
+}
+
+.mg-stat-label {
+    color: #64748b;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.mg-stat-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0.35rem 0 0;
+}
+
+.mg-sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.35rem 0;
+    color: inherit;
+    text-decoration: none;
+}
+
+.mg-sidebar-brand .mg-logo-mark {
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.75rem;
+}
+
+.mg-sidebar-brand strong {
+    display: block;
+    font-size: 0.95rem;
+    line-height: 1.1;
+}
+
+.mg-sidebar-brand span {
+    display: block;
+    font-size: 0.55rem;
+    letter-spacing: 0.22em;
+    opacity: 0.65;
+}
+
+/* Authenticated app — MGTEAM dark */
+body.mg-app {
+    background: var(--mg-bg);
+    color: var(--mg-text);
+}
+
+body.mg-app .main-content {
+    background: var(--mg-bg);
+}
+
+body.mg-app .page-content {
+    background: transparent;
+}
+
+body.mg-app .card,
+body.mg-app .mg-stat-card {
+    background: var(--mg-card);
+    border-color: var(--mg-card-border);
+    color: var(--mg-text);
+}
+
+body.mg-app .mg-stat-label,
+body.mg-app .text-muted {
+    color: var(--mg-muted) !important;
+}
+
+body.mg-app .mg-stat-value,
+body.mg-app h1, body.mg-app h2, body.mg-app h3,
+body.mg-app h4, body.mg-app h5, body.mg-app h6 {
+    color: var(--mg-text);
+}
+
+body.mg-app .form-control,
+body.mg-app .form-select {
+    background: var(--mg-input);
+    border-color: var(--mg-card-border);
+    color: var(--mg-text);
+}
+
+body.mg-app .table {
+    --bs-table-bg: transparent;
+    --bs-table-color: var(--mg-text);
+    --bs-table-border-color: var(--mg-card-border);
+}
+
+body.mg-app .navbar-menu {
+    background: var(--mg-bg-elevated);
+    border-right: 1px solid var(--mg-card-border);
+}
+
+body.mg-app #page-topbar {
+    background: var(--mg-bg-elevated);
+    border-bottom: 1px solid var(--mg-card-border);
+}
+
+body.mg-app .menu-title span,
+body.mg-app .nav-link {
+    color: var(--mg-muted);
+}
+
+body.mg-app .nav-link.active,
+body.mg-app .nav-link:hover {
+    color: var(--mg-text);
+}
+
+body.mg-app a.text-body {
+    color: var(--mg-text) !important;
+}
+
+body.mg-app .border {
+    border-color: var(--mg-card-border) !important;
+}

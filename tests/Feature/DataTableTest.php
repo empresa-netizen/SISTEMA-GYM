@@ -164,7 +164,7 @@ describe('CategoryDataTable', function () {
 | MembershipPlan Index Tests
 |--------------------------------------------------------------------------
 | These tests verify the membership plans listing page loads correctly with
-| the Prime card UI (no Yajra DataTable).
+| the MGTEAM card UI (no Yajra DataTable).
 */
 
 describe('MembershipPlanIndex', function () {
@@ -173,10 +173,10 @@ describe('MembershipPlanIndex', function () {
         $this->owner->assignRole('owner');
     });
 
-    test('loads membership plan listing page with prime cards', function () {
+    test('loads membership plan listing page with MGTEAM cards', function () {
         MembershipPlan::create([
             'parent_id' => $this->owner->id,
-            'name' => 'Prime Plan',
+            'name' => 'MGTEAM Plan',
             'price' => 199,
             'duration_type' => 'monthly',
             'duration_value' => 1,
@@ -187,8 +187,8 @@ describe('MembershipPlanIndex', function () {
             ->get(route('membership-plans.index'))
             ->assertOk()
             ->assertSee('Meus produtos')
-            ->assertSee('Prime Plan')
-            ->assertSee('prime-product-card');
+            ->assertSee('MGTEAM Plan')
+            ->assertSee('mg-product-card');
     });
 
     test('unauthenticated user cannot access membership plan index', function () {

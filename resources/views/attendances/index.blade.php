@@ -9,8 +9,8 @@
 @section('content')
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
     <div>
-        <h1 class="prime-page-title">Frequência</h1>
-        <p class="prime-page-sub">Controle de check-in e check-out dos alunos.</p>
+        <h1 class="mg-page-title">Frequência</h1>
+        <p class="mg-page-sub">Controle de check-in e check-out dos alunos.</p>
     </div>
     <div class="d-flex gap-2">
         <a href="{{ route('attendances.report') }}" class="btn btn-outline-secondary btn-sm">
@@ -24,26 +24,26 @@
 
 <div class="row g-2 mb-4">
     <div class="col-md-4">
-        <div class="prime-stat-mini">
+        <div class="mg-stat-mini">
             <span>Visitas hoje</span>
             <strong>{{ $todayStats['total'] }}</strong>
         </div>
     </div>
     <div class="col-md-4">
-        <div class="prime-stat-mini">
+        <div class="mg-stat-mini">
             <span>Na academia agora</span>
             <strong>{{ $todayStats['checked_in'] }}</strong>
         </div>
     </div>
     <div class="col-md-4">
-        <div class="prime-stat-mini">
+        <div class="mg-stat-mini">
             <span>Check-out hoje</span>
             <strong>{{ $todayStats['checked_out'] }}</strong>
         </div>
     </div>
 </div>
 
-<div class="prime-panel" style="height:auto">
+<div class="mg-panel" style="height:auto">
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}

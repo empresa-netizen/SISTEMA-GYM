@@ -17,7 +17,7 @@ class UserDataTable extends DataTable
     /**
      * Build the DataTable class.
      *
-     * @param QueryBuilder<User> $query Results from query() method.
+     * @param  QueryBuilder<User>  $query  Results from query() method.
      */
     public function dataTable($query)
     {
@@ -28,14 +28,14 @@ class UserDataTable extends DataTable
                 $initial = mb_strtoupper(mb_substr($query->name, 0, 1));
                 $html = '<div class="d-flex align-items-center">
                         <div class="flex-shrink-0 me-2">
-                            <div class="prime-collaborator-avatar">' . e($initial) . '</div>
+                            <div class="mg-collaborator-avatar">'.e($initial).'</div>
                     </div>
                     <div class="flex-grow-1">';
 
-                $html .= '<div class="prime-collaborator-name">' . e($query->name) . '</div>';
+                $html .= '<div class="mg-collaborator-name">'.e($query->name).'</div>';
 
                 if ($query->id == auth()->id()) {
-                    $html .= '<span class="prime-collaborator-badge ms-1">Você</span>';
+                    $html .= '<span class="mg-collaborator-badge ms-1">Você</span>';
                 }
 
                 $html .= '</div>
@@ -44,14 +44,15 @@ class UserDataTable extends DataTable
                 return $html;
             })
             ->editColumn('roles', function ($query) {
-                if (!$query->roles || $query->roles->isEmpty()) {
-                    return '<span class="prime-status-pill prime-status-pill--pending">Sem perfil</span>';
+                if (! $query->roles || $query->roles->isEmpty()) {
+                    return '<span class="mg-status-pill mg-status-pill--pending">Sem perfil</span>';
                 }
 
                 $badges = '';
                 foreach ($query->roles as $role) {
-                    $badges .= '<span class="prime-role-pill me-1">' . e($this->roleLabel($role->name)) . '</span>';
+                    $badges .= '<span class="mg-role-pill me-1">'.e($this->roleLabel($role->name)).'</span>';
                 }
+
                 return $badges;
             })
             ->addColumn('status', function ($query) {
@@ -107,7 +108,7 @@ class UserDataTable extends DataTable
     {
         return $this->builder()
             ->setTableId('user-table')
-            ->addTableClass('datatables-basic table prime-collaborators-table')
+            ->addTableClass('datatables-basic table mg-collaborators-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->responsive(false)
@@ -144,7 +145,7 @@ class UserDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'User_' . date('YmdHis');
+        return 'User_'.date('YmdHis');
     }
 
     private function roleLabel(string $role): string
@@ -160,10 +161,10 @@ class UserDataTable extends DataTable
     private function statusBadge(User $user): string
     {
         if ($user->email_verified_at) {
-            return '<span class="prime-status-pill prime-status-pill--active">Ativo</span>';
+            return '<span class="mg-status-pill mg-status-pill--active">Ativo</span>';
         }
 
-        return '<span class="prime-status-pill prime-status-pill--pending">Pendente</span>';
+        return '<span class="mg-status-pill mg-status-pill--pending">Pendente</span>';
     }
 
     private function actionButtons(User $user): string
@@ -171,22 +172,22 @@ class UserDataTable extends DataTable
         $items = '';
 
         if (auth()->user()->can('edit users')) {
-            $items .= '<li><a href="' . route('users.edit', $user) . '" class="dropdown-item"><i class="ri-pencil-line me-2"></i>Editar</a></li>';
-            $items .= '<li><a href="' . route('users.edit', $user) . '#password" class="dropdown-item"><i class="ri-lock-password-line me-2"></i>Alterar senha</a></li>';
+            $items .= '<li><a href="'.route('users.edit', $user).'" class="dropdown-item"><i class="ri-pencil-line me-2"></i>Editar</a></li>';
+            $items .= '<li><a href="'.route('users.edit', $user).'#password" class="dropdown-item"><i class="ri-lock-password-line me-2"></i>Alterar senha</a></li>';
         }
 
         if (auth()->user()->can('delete users') && $user->id != auth()->id()) {
-            $items .= '<li><button type="button" onclick="deleteRow(`' . route('users.destroy', $user) . '`,`' . csrf_token() . '`,`user-table`)" class="dropdown-item text-danger"><i class="ri-delete-bin-line me-2"></i>Excluir</button></li>';
+            $items .= '<li><button type="button" onclick="deleteRow(`'.route('users.destroy', $user).'`,`'.csrf_token().'`,`user-table`)" class="dropdown-item text-danger"><i class="ri-delete-bin-line me-2"></i>Excluir</button></li>';
         }
 
         if ($items === '') {
             $items = '<li><span class="dropdown-item text-muted">Sem ações</span></li>';
         }
 
-        return '<div class="dropdown prime-action-menu">'
-            . '<button class="prime-kebab" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Ações do colaborador"><i class="ri-more-2-fill"></i></button>'
-            . '<ul class="dropdown-menu dropdown-menu-end">'
-            . $items
-            . '</ul></div>';
+        return '<div class="dropdown mg-action-menu">'
+            .'<button class="mg-kebab" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Ações do colaborador"><i class="ri-more-2-fill"></i></button>'
+            .'<ul class="dropdown-menu dropdown-menu-end">'
+            .$items
+            .'</ul></div>';
     }
 }

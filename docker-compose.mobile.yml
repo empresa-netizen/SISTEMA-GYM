@@ -1,8 +1,8 @@
-# Stack mobile Prime — rode com: ./scripts/mobile-up.sh
+# Stack mobile MGTEAM — rode com: ./scripts/mobile-up.sh
 services:
   mobile-db:
     image: postgres:16-alpine
-    container_name: prime_mobile_db
+    container_name: mgteam_mobile_db
     restart: unless-stopped
     environment:
       POSTGRES_USER: trabalho
@@ -11,7 +11,7 @@ services:
     ports:
       - "5433:5432"
     volumes:
-      - prime_mobile_pgdata:/var/lib/postgresql/data
+      - mgteam_mobile_pgdata:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U trabalho -d coachpro"]
       interval: 5s
@@ -24,7 +24,7 @@ services:
   mobile-api:
     profiles: ["legacy-api"]
     image: node:22-bookworm
-    container_name: prime_mobile_api
+    container_name: mgteam_mobile_api
     restart: unless-stopped
     working_dir: /app
     ports:
@@ -37,7 +37,7 @@ services:
       DIRECT_DATABASE_URL: postgresql://trabalho:123456@mobile-db:5432/coachpro?schema=public
     volumes:
       - ../../../CLAUDE/mgteam-api:/app
-      - prime_mobile_api_nm:/app/node_modules
+      - mgteam_mobile_api_nm:/app/node_modules
     depends_on:
       mobile-db:
         condition: service_healthy
@@ -51,7 +51,7 @@ services:
 
   mobile-aluno:
     image: node:22-bookworm
-    container_name: prime_mobile_aluno
+    container_name: mgteam_mobile_aluno
     restart: unless-stopped
     working_dir: /app
     ports:
@@ -63,7 +63,7 @@ services:
       CI: "1"
     volumes:
       - ../../../CLAUDE/mgteam-app:/app
-      - prime_mobile_aluno_nm:/app/node_modules
+      - mgteam_mobile_aluno_nm:/app/node_modules
     depends_on:
       - mobile-db
     command: >
@@ -74,7 +74,7 @@ services:
 
   mobile-pro:
     image: node:22-bookworm
-    container_name: prime_mobile_pro
+    container_name: mgteam_mobile_pro
     restart: unless-stopped
     working_dir: /app
     ports:
@@ -86,7 +86,7 @@ services:
       CI: "1"
     volumes:
       - ../../../CLAUDE/mgteam-pro-app:/app
-      - prime_mobile_pro_nm:/app/node_modules
+      - mgteam_mobile_pro_nm:/app/node_modules
     depends_on:
       - mobile-db
     command: >
@@ -96,7 +96,7 @@ services:
       "
 
 volumes:
-  prime_mobile_pgdata:
-  prime_mobile_api_nm:
-  prime_mobile_aluno_nm:
-  prime_mobile_pro_nm:
+  mgteam_mobile_pgdata:
+  mgteam_mobile_api_nm:
+  mgteam_mobile_aluno_nm:
+  mgteam_mobile_pro_nm:

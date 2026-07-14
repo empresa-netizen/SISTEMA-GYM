@@ -288,7 +288,7 @@ export default function StudentCommunityScreen() {
             <Text style={styles.emptyIcon}>🤝</Text>
             <Text style={[styles.emptyTitle, { color: colors.text }]}>Nenhum post neste grupo</Text>
             <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
-              Seja a primeira pessoa a compartilhar um check-in com a comunidade.
+              Inaugure o mural compartilhando um check-in com a comunidade.
             </Text>
           </View>
         }

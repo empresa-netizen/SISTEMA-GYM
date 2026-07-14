@@ -5,8 +5,8 @@
 @section('content')
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
     <div>
-        <h1 class="prime-page-title">Nova prescrição</h1>
-        <p class="prime-page-sub">Monte um treino para o seu cliente.</p>
+        <h1 class="mg-page-title">Nova prescrição</h1>
+        <p class="mg-page-sub">Monte um treino para o seu cliente.</p>
     </div>
     <a href="{{ route('workouts.index') }}" class="btn btn-outline-secondary btn-sm">
         <i class="ri-arrow-left-line me-1"></i> Voltar
@@ -17,8 +17,8 @@
     @csrf
     <div class="row">
         <div class="col-lg-8">
-            <div class="prime-panel mb-3">
-                <div class="prime-panel-label mb-3">INFORMAÇÕES DO TREINO</div>
+            <div class="mg-panel mb-3">
+                <div class="mg-panel-label mb-3">INFORMAÇÕES DO TREINO</div>
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label for="name" class="form-label">Nome do treino <span class="text-danger">*</span></label>
@@ -69,9 +69,9 @@
                 </div>
             </div>
 
-            <div class="prime-panel mb-3">
+            <div class="mg-panel mb-3">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div class="prime-panel-label mb-0">EXERCÍCIOS</div>
+                    <div class="mg-panel-label mb-0">EXERCÍCIOS</div>
                     <button type="button" class="btn btn-sm btn-primary" onclick="addActivity()">
                         <i class="ri-add-line"></i> Adicionar exercício
                     </button>

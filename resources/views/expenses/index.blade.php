@@ -9,8 +9,8 @@
 @section('content')
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
     <div>
-        <h1 class="prime-page-title">Despesas</h1>
-        <p class="prime-page-sub">Controle de gastos e saídas financeiras.</p>
+        <h1 class="mg-page-title">Despesas</h1>
+        <p class="mg-page-sub">Controle de gastos e saídas financeiras.</p>
     </div>
     <a href="{{ route('expenses.create') }}" class="btn btn-primary">
         <i class="ri-add-line me-1"></i> Nova despesa
@@ -19,14 +19,14 @@
 
 <div class="row g-2 mb-4">
     <div class="col-md-12">
-        <div class="prime-stat-mini">
+        <div class="mg-stat-mini">
             <span>Total de despesas</span>
             <strong class="text-danger">R$ {{ number_format($totalExpenses, 2, ',', '.') }}</strong>
         </div>
     </div>
 </div>
 
-<div class="prime-panel" style="height:auto">
+<div class="mg-panel" style="height:auto">
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}

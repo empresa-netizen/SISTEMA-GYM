@@ -3,15 +3,15 @@
 @section('title', 'Planos de Assinatura')
 
 @section('content')
-<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2 prime-page-header">
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2 mg-page-header">
     <div>
-        <h1 class="prime-page-title">Planos de Assinatura</h1>
-        <p class="prime-page-sub">Escolha o plano ideal para sua jornada na MGTEAM FITNESS &amp; HEALTH.</p>
+        <h1 class="mg-page-title">Planos de Assinatura</h1>
+        <p class="mg-page-sub">Escolha o plano ideal para sua jornada na MGTEAM FITNESS &amp; HEALTH.</p>
     </div>
 </div>
 
-<div class="prime-panel">
-    <div class="prime-panel-body">
+<div class="mg-panel">
+    <div class="mg-panel-body">
         <div class="text-center mb-5">
             <h3 class="mb-3">Encontre o plano ideal para voce</h3>
             <p class="text-muted">Selecione uma assinatura e comece agora com a MGTEAM FITNESS &amp; HEALTH.</p>

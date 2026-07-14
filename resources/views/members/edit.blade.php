@@ -10,8 +10,8 @@
 
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
     <div>
-        <h1 class="prime-page-title">{{ $member->name }}</h1>
-        <p class="prime-page-sub">{{ $member->member_id }} · Editar cadastro</p>
+        <h1 class="mg-page-title">{{ $member->name }}</h1>
+        <p class="mg-page-sub">{{ $member->member_id }} · Editar cadastro</p>
     </div>
     <div class="d-flex gap-2">
         <a href="{{ route('members.show', $member) }}" class="btn btn-outline-primary btn-sm">Ver perfil</a>
@@ -25,8 +25,8 @@
     @csrf
     @method('PUT')
 
-    <div class="prime-panel mb-3">
-        <div class="prime-panel-label mb-3">DADOS PESSOAIS</div>
+    <div class="mg-panel mb-3">
+        <div class="mg-panel-label mb-3">DADOS PESSOAIS</div>
         <div>
             <div class="row g-3">
                 <div class="col-md-6">
@@ -76,8 +76,8 @@
         </div>
     </div>
 
-    <div class="prime-panel mb-3">
-        <div class="prime-panel-label mb-3">CONTATO DE EMERGÊNCIA</div>
+    <div class="mg-panel mb-3">
+        <div class="mg-panel-label mb-3">CONTATO DE EMERGÊNCIA</div>
         <div>
             <div class="row g-3">
                 <div class="col-md-6">
@@ -96,8 +96,8 @@
         </div>
     </div>
 
-    <div class="prime-panel mb-3">
-        <div class="prime-panel-label mb-3">PLANO E ASSINATURA</div>
+    <div class="mg-panel mb-3">
+        <div class="mg-panel-label mb-3">PLANO E ASSINATURA</div>
         <div>
             <div class="row g-3">
                 <div class="col-md-6">

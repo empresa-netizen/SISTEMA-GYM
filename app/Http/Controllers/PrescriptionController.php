@@ -73,7 +73,7 @@ class PrescriptionController extends Controller
                 'title' => $workout->name,
                 'type' => 'Treino',
                 'status' => $workout->status,
-                'chip' => 'prime-chip--info',
+                'chip' => 'mg-chip--info',
                 'url' => route('workouts.show', $workout),
             ]));
         }
@@ -87,9 +87,9 @@ class PrescriptionController extends Controller
                 'type' => 'Dieta',
                 'status' => $diet->delivery_status ?? $diet->status,
                 'chip' => match ($diet->delivery_status) {
-                    'DELIVERED' => 'prime-chip--success',
-                    'LATE' => 'prime-chip--danger',
-                    default => 'prime-chip--warn',
+                    'DELIVERED' => 'mg-chip--success',
+                    'LATE' => 'mg-chip--danger',
+                    default => 'mg-chip--warn',
                 },
                 'url' => $diet->member ? route('members.show', [$diet->member, 'tab' => 'prescriptions']) : route('prescriptions.index'),
             ]));
@@ -133,6 +133,6 @@ class PrescriptionController extends Controller
             'late' => $rows->where('status', 'LATE')->count(),
         ];
 
-        return view('prime.prescriptions.index', compact('prescriptions', 'filters', 'stats', 'days'));
+        return view('mgteam.prescriptions.index', compact('prescriptions', 'filters', 'stats', 'days'));
     }
 }

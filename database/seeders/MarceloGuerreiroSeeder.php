@@ -20,11 +20,11 @@ use RuntimeException;
 class MarceloGuerreiroSeeder extends Seeder
 {
     private const IMPORT_FILES = [
-        'exercises' => 'prime_exercises.json',
-        'foods' => 'prime_foods.json',
-        'member' => 'prime_member.json',
-        'workouts' => 'prime_workouts.json',
-        'diets' => 'prime_diets.json',
+        'exercises' => 'mgteam_exercises.json',
+        'foods' => 'mgteam_foods.json',
+        'member' => 'mgteam_member.json',
+        'workouts' => 'mgteam_workouts.json',
+        'diets' => 'mgteam_diets.json',
     ];
 
     public function run(): void
@@ -56,7 +56,7 @@ class MarceloGuerreiroSeeder extends Seeder
             ?? User::role('owner')->first();
 
         if (! $owner) {
-            throw new RuntimeException('Nenhum usuário owner encontrado. Rode PrimeCoachUserSeeder/UserSeeder antes do MarceloGuerreiroSeeder.');
+            throw new RuntimeException('Nenhum usuário owner encontrado. Rode MgteamUserSeeder/UserSeeder antes do MarceloGuerreiroSeeder.');
         }
 
         return $owner;
@@ -80,7 +80,7 @@ class MarceloGuerreiroSeeder extends Seeder
         if (collect($payloads)->filter()->isEmpty()) {
             $expected = collect(self::IMPORT_FILES)->values()->implode(', ');
 
-            throw new RuntimeException("Nenhum JSON real do Primecoaching encontrado em storage/app/imports. Arquivos esperados: {$expected}.");
+            throw new RuntimeException("Nenhum JSON real do MGTEAM encontrado em storage/app/imports. Arquivos esperados: {$expected}.");
         }
 
         return $payloads;
@@ -232,7 +232,7 @@ class MarceloGuerreiroSeeder extends Seeder
     private function upsertMember(User $owner, array $payload): Member
     {
         $email = $this->text($payload, ['email', 'mail', 'contato.email'])
-            ?: 'marcelo.guerreiro+prime-import@mgteam.local';
+            ?: 'marcelo.guerreiro+mg-import@mgteam.local';
 
         return Member::withoutGlobalScopes()->updateOrCreate(
             [
@@ -275,7 +275,7 @@ class MarceloGuerreiroSeeder extends Seeder
                 'vimeo_url' => $this->text($item, ['vimeo_url', 'video_url', 'video.url', 'url']),
                 'embed_url' => $this->text($item, ['embed_url', 'embedUrl', 'video.embed_url']),
                 'duration_seconds' => $this->integer($item, ['duration_seconds', 'duration', 'video.duration_seconds']),
-                'source' => $this->text($item, ['source']) ?: 'primecoaching',
+                'source' => $this->text($item, ['source']) ?: 'mgteam',
             ]);
 
             $count++;
@@ -334,7 +334,7 @@ class MarceloGuerreiroSeeder extends Seeder
         $count = 0;
 
         foreach ($items as $item) {
-            $name = $this->text($item, ['name', 'title', 'nome']) ?: 'Treino Primecoaching';
+            $name = $this->text($item, ['name', 'title', 'nome']) ?: 'Treino MGTEAM';
 
             $workout = Workout::withoutGlobalScopes()->updateOrCreate(
                 [
@@ -385,7 +385,7 @@ class MarceloGuerreiroSeeder extends Seeder
         $count = 0;
 
         foreach ($items as $item) {
-            $name = $this->text($item, ['name', 'title', 'nome']) ?: 'Dieta Primecoaching';
+            $name = $this->text($item, ['name', 'title', 'nome']) ?: 'Dieta MGTEAM';
 
             $menu = DietMenu::withoutGlobalScopes()->updateOrCreate(
                 [
@@ -545,7 +545,7 @@ class MarceloGuerreiroSeeder extends Seeder
 
         return $alternatives->isEmpty()
             ? null
-            : "Alternativas Prime:\n".$alternatives->implode("\n");
+            : "Alternativas MGTEAM:\n".$alternatives->implode("\n");
     }
 
     /**
@@ -700,7 +700,7 @@ class MarceloGuerreiroSeeder extends Seeder
 
         return $this->compactNotes([
             $this->text($foodPayload, ['notes', 'observations', 'observacoes']),
-            $unit && ! $this->isGramUnit($unit) && $quantity > 0 ? "Quantidade Prime: {$quantity} {$unit}" : null,
+            $unit && ! $this->isGramUnit($unit) && $quantity > 0 ? "Quantidade MGTEAM: {$quantity} {$unit}" : null,
         ]);
     }
 

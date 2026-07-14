@@ -5,8 +5,8 @@
 @section('content')
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
     <div>
-        <h1 class="prime-page-title">Editar treino</h1>
-        <p class="prime-page-sub">{{ $workout->name }} · {{ $workout->workout_id }}</p>
+        <h1 class="mg-page-title">Editar treino</h1>
+        <p class="mg-page-sub">{{ $workout->name }} · {{ $workout->workout_id }}</p>
     </div>
     <a href="{{ route('workouts.show', $workout) }}" class="btn btn-outline-secondary btn-sm">
         <i class="ri-arrow-left-line me-1"></i> Voltar

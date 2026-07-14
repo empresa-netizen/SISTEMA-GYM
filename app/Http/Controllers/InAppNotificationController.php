@@ -16,7 +16,7 @@ class InAppNotificationController extends Controller
             ->latest()
             ->paginate(30);
 
-        return view('prime.notifications.index', compact('notifications'));
+        return view('mgteam.notifications.index', compact('notifications'));
     }
 
     public function markRead(Request $request, string $id): JsonResponse|RedirectResponse

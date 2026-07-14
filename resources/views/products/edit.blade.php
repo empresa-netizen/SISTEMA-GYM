@@ -4,14 +4,14 @@
 
 @section('content')
 <div class="mb-4">
-    <h1 class="prime-page-title">Editar produto</h1>
-    <p class="prime-section-label mb-1">Atualize os dados do catálogo da {{ config('brand.name', 'MGTEAM FITNESS & HEALTH') }}.</p>
+    <h1 class="mg-page-title">Editar produto</h1>
+    <p class="mg-section-label mb-1">Atualize os dados do catálogo da {{ config('brand.name', 'MGTEAM FITNESS & HEALTH') }}.</p>
 </div>
 
 <div class="row">
     <div class="col-lg-8">
-        <div class="prime-panel">
-            <div class="prime-panel-body">
+        <div class="mg-panel">
+            <div class="mg-panel-body">
                 <h5 class="mb-3">Produto: {{ $product->name }}</h5>
                 <form action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -144,10 +144,10 @@
                     </div>
 
                     <div class="mt-4 d-flex flex-wrap gap-2">
-                        <button type="submit" class="prime-btn">
+                        <button type="submit" class="mg-btn">
                             <i class="ri-save-line me-1"></i> Salvar alterações
                         </button>
-                        <a href="{{ route('products.index') }}" class="prime-btn prime-btn-outline">
+                        <a href="{{ route('products.index') }}" class="mg-btn mg-btn-outline">
                             <i class="ri-close-line me-1"></i> Cancelar
                         </a>
                     </div>

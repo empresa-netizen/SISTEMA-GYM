@@ -4,57 +4,57 @@
     $photosByDate = $comparePhotos->groupBy(fn ($photo) => $photo->created_at->format('Y-m-d'));
 @endphp
 
-<div class="prime-tab-block">
-    <div class="prime-tab-block__head">
+<div class="mg-tab-block">
+    <div class="mg-tab-block__head">
         <div>
-            <p class="prime-section-label mb-1">Evolução visual</p>
-            <h2 class="prime-tab-block__title">Fotos <span class="prime-title-count">{{ $comparePhotos->count() }}</span></h2>
+            <p class="mg-section-label mb-1">Evolução visual</p>
+            <h2 class="mg-tab-block__title">Fotos <span class="mg-title-count">{{ $comparePhotos->count() }}</span></h2>
         </div>
-        <div class="prime-tab-actions">
-            <button type="button" class="prime-btn-ghost" data-bs-toggle="modal" data-bs-target="#comparePhotosModal" @disabled($comparePhotos->count() < 2)>
+        <div class="mg-tab-actions">
+            <button type="button" class="mg-btn-ghost" data-bs-toggle="modal" data-bs-target="#comparePhotosModal" @disabled($comparePhotos->count() < 2)>
                 <i class="ri-split-cells-horizontal"></i> Comparar fotos
             </button>
-            <a href="#photo-upload" class="prime-btn-primary">
+            <a href="#photo-upload" class="mg-btn-primary">
                 <i class="ri-add-line"></i> Adicionar fotos
             </a>
         </div>
     </div>
 
-    <form id="photo-upload" method="POST" action="{{ route('members.photos.store', $member) }}" enctype="multipart/form-data" class="prime-dense-form prime-photo-upload mb-4">
+    <form id="photo-upload" method="POST" action="{{ route('members.photos.store', $member) }}" enctype="multipart/form-data" class="mg-dense-form mg-photo-upload mb-4">
         @csrf
-        <div class="prime-clients-filters__grid">
+        <div class="mg-clients-filters__grid">
             <div>
-                <label class="prime-field-label">Arquivo</label>
-                <input type="file" name="photo" class="prime-field" accept="image/*" required>
+                <label class="mg-field-label">Arquivo</label>
+                <input type="file" name="photo" class="mg-field" accept="image/*" required>
             </div>
             <div>
-                <label class="prime-field-label">Tipo</label>
-                <select name="type" class="prime-field">
+                <label class="mg-field-label">Tipo</label>
+                <select name="type" class="mg-field">
                     @foreach($typeLabels as $k => $v)<option value="{{ $k }}">{{ $v }}</option>@endforeach
                 </select>
             </div>
             <div>
-                <label class="prime-field-label">Legenda</label>
-                <input type="text" name="caption" class="prime-field" placeholder="Opcional">
+                <label class="mg-field-label">Legenda</label>
+                <input type="text" name="caption" class="mg-field" placeholder="Opcional">
             </div>
-            <div class="prime-clients-filters__actions">
-                <button class="prime-btn-primary">Adicionar fotos</button>
+            <div class="mg-clients-filters__actions">
+                <button class="mg-btn-primary">Adicionar fotos</button>
             </div>
         </div>
     </form>
 
     @forelse($photosByDate as $date => $photos)
-        <section class="prime-photo-date-group">
-            <div class="prime-photo-date-group__head">
+        <section class="mg-photo-date-group">
+            <div class="mg-photo-date-group__head">
                 <h3>{{ \Carbon\Carbon::parse($date)->format('d/m/Y') }}</h3>
                 <span>{{ $photos->count() }} foto{{ $photos->count() === 1 ? '' : 's' }}</span>
             </div>
-            <div class="prime-photo-grid">
+            <div class="mg-photo-grid">
                 @foreach($photos as $photo)
-                    <figure class="prime-photo-card">
+                    <figure class="mg-photo-card">
                         <img src="{{ $photo->url }}" alt="{{ $photo->caption }}">
                         <figcaption>
-                            <span class="prime-chip">{{ $typeLabels[$photo->type] ?? $photo->type }}</span>
+                            <span class="mg-chip">{{ $typeLabels[$photo->type] ?? $photo->type }}</span>
                             @if($photo->caption)<span>{{ $photo->caption }}</span>@endif
                         </figcaption>
                     </figure>
@@ -62,10 +62,10 @@
             </div>
         </section>
     @empty
-        <div class="prime-empty-state prime-empty-state--compact">
+        <div class="mg-empty-state mg-empty-state--compact">
             <i class="ri-image-line"></i>
             <p>Nenhuma foto enviada.</p>
-            <a href="#photo-upload" class="prime-btn-primary">Adicionar fotos</a>
+            <a href="#photo-upload" class="mg-btn-primary">Adicionar fotos</a>
         </div>
     @endforelse
 </div>
@@ -106,13 +106,13 @@
                     </div>
                     <div id="comparePhotosPreview" class="row g-3 d-none">
                         <div class="col-md-6">
-                            <figure class="prime-photo-card mb-0">
+                            <figure class="mg-photo-card mb-0">
                                 <img id="comparePreviewA" src="" alt="Foto A">
                                 <figcaption id="compareCaptionA"></figcaption>
                             </figure>
                         </div>
                         <div class="col-md-6">
-                            <figure class="prime-photo-card mb-0">
+                            <figure class="mg-photo-card mb-0">
                                 <img id="comparePreviewB" src="" alt="Foto B">
                                 <figcaption id="compareCaptionB"></figcaption>
                             </figure>

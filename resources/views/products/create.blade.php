@@ -4,14 +4,14 @@
 
 @section('content')
 <div class="mb-4">
-    <h1 class="prime-page-title">Cadastrar produto</h1>
-    <p class="prime-section-label mb-1">Novo item para o estoque da {{ config('brand.name', 'MGTEAM FITNESS & HEALTH') }}.</p>
+    <h1 class="mg-page-title">Cadastrar produto</h1>
+    <p class="mg-section-label mb-1">Novo item para o estoque da {{ config('brand.name', 'MGTEAM FITNESS & HEALTH') }}.</p>
 </div>
 
 <div class="row">
     <div class="col-lg-8">
-        <div class="prime-panel">
-            <div class="prime-panel-body">
+        <div class="mg-panel">
+            <div class="mg-panel-body">
                 <h5 class="mb-3">Informações do produto</h5>
                 <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -140,10 +140,10 @@
                     </div>
 
                     <div class="mt-4 d-flex flex-wrap gap-2">
-                        <button type="submit" class="prime-btn">
+                        <button type="submit" class="mg-btn">
                             <i class="ri-save-line me-1"></i> Cadastrar produto
                         </button>
-                        <a href="{{ route('products.index') }}" class="prime-btn prime-btn-outline">
+                        <a href="{{ route('products.index') }}" class="mg-btn mg-btn-outline">
                             <i class="ri-close-line me-1"></i> Cancelar
                         </a>
                     </div>

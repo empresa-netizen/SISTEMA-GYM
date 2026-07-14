@@ -9,15 +9,15 @@
 @section('content')
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
     <div>
-        <h1 class="prime-page-title">Aulas</h1>
-        <p class="prime-page-sub">Gerencie turmas, horários e capacidade.</p>
+        <h1 class="mg-page-title">Aulas</h1>
+        <p class="mg-page-sub">Gerencie turmas, horários e capacidade.</p>
     </div>
     <a href="{{ route('gym-classes.create') }}" class="btn btn-primary">
         <i class="ri-add-line me-1"></i> Nova aula
     </a>
 </div>
 
-<div class="prime-panel" style="height:auto">
+<div class="mg-panel" style="height:auto">
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
